@@ -1,0 +1,15 @@
+export const charClasses = [
+    'Bárbaro',
+    'Bardo',
+    'Cavaleiro',
+    'Clérigo',
+    'Combatente',
+    'Druida',
+    'Explorador',
+    'Ilusionista',
+    'Lutador',
+    'Mago',
+    'Paladino',
+    'Trapaceiro',
+    'Assassino',
+]
