@@ -178,7 +178,7 @@ export default function Home() {
       // Para humanos, o limite é diferente mas os atributos obrigatórios da classe são os mesmos
       const isHuman = selectedRace.toLowerCase().startsWith('humano');
       if (isHuman) {
-      // Para humanos, ainda marca os atributos obrigatórios da classe
+        // Para humanos, ainda marca os atributos obrigatórios da classe
         const newPrimeStates = { ...primeAttributeStates };
 
         if (selectedClass) {
@@ -197,7 +197,7 @@ export default function Home() {
       const currentCount = Object.values(primeAttributeStates).filter(state => state.checked).length;
 
       if (currentCount > maxPrimes) {
-      // Se excede o limite, mantém apenas os atributos obrigatórios da classe
+        // Se excede o limite, mantém apenas os atributos obrigatórios da classe
         const newPrimeStates = { ...primeAttributeStates };
         Object.keys(newPrimeStates).forEach(key => {
           newPrimeStates[key].checked = primes.includes(key);
@@ -373,39 +373,6 @@ export default function Home() {
     }
   };
 
-  // Função para coletar dados do personagem
-  const getCharacterData = () => {
-    const selectedPrimes = Object.entries(primeAttributeStates)
-      .filter(([_, state]) => state.checked)
-      .map(([attr, _]) => attr.charAt(0).toUpperCase() + attr.slice(1));
-
-    return {
-      race: selectedRace,
-      characterClass: selectedClass,
-      gender: gender,
-      age: age,
-      height: height,
-      weight: weight,
-      description: description,
-      attributes: finalAttributes,
-      modifiers: {
-        forca: calculateModifier(finalAttributes.forca),
-        inteligencia: calculateModifier(finalAttributes.inteligencia),
-        sabedoria: calculateModifier(finalAttributes.sabedoria),
-        destreza: calculateModifier(finalAttributes.destreza),
-        constitution: calculateModifier(finalAttributes.constitution),
-        carisma: calculateModifier(finalAttributes.carisma)
-      },
-      totalModifier: totalModifier,
-      primeAttributes: selectedPrimes,
-      hp: hp,
-      treasure: treasure,
-      carryingCapacity: carryingCapacity,
-      spells: showSpells ? spells : null,
-      rollAttempts: rollAttempts
-    };
-  };
-
   // Função para formatar mensagem do Discord
   const formatDiscordMessage = (characterData: any) => {
     const { race, characterClass, gender, age, height, weight, description, attributes, modifiers, totalModifier, primeAttributes, hp, treasure, carryingCapacity, spells, rollAttempts } = characterData;
@@ -544,188 +511,186 @@ export default function Home() {
   const maxPrimes = getMaxPrimeAttributes();
 
   return (
-    <div>
-      <main className="m-0 mx-auto max-w-3xl border min-h-screen flex flex-col gap-8 p-4">
-        <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight text-balance">C&C: Gerador de personagem</h1>
+    <div className="flex flex-col gap-8 p-4 pt-8">
+      <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight text-balance">C&C: Gerador de personagem</h1>
 
-        <CharGen.TextInput
-          label="Webhook do Discord"
-          id="discordWebhook"
-          value={discordWebhook}
-          onChange={setDiscordWebhook}
+      <CharGen.TextInput
+        label="Webhook do Discord"
+        id="discordWebhook"
+        value={discordWebhook}
+        onChange={setDiscordWebhook}
+      />
+
+      <div id="attributes" className="grid grid-cols-3 gap-4">
+        <CharGen.NumberInput
+          label="Força"
+          id="strength"
+          value={finalAttributes.forca}
+          onChange={(val) => {
+            const newBase = { ...baseAttributes, forca: val };
+            setBaseAttributes(newBase);
+          }}
         />
+        <CharGen.NumberInput
+          label="Inteligência"
+          id="intelligence"
+          value={finalAttributes.inteligencia}
+          onChange={(val) => {
+            const newBase = { ...baseAttributes, inteligencia: val };
+            setBaseAttributes(newBase);
+          }}
+        />
+        <CharGen.NumberInput
+          label="Sabedoria"
+          id="wisdom"
+          value={finalAttributes.sabedoria}
+          onChange={(val) => {
+            const newBase = { ...baseAttributes, sabedoria: val };
+            setBaseAttributes(newBase);
+          }}
+        />
+        <CharGen.NumberInput
+          label="Destreza"
+          id="dexterity"
+          value={finalAttributes.destreza}
+          onChange={(val) => {
+            const newBase = { ...baseAttributes, destreza: val };
+            setBaseAttributes(newBase);
+          }}
+        />
+        <CharGen.NumberInput
+          label="Constituição"
+          id="constitution"
+          value={finalAttributes.constitution}
+          onChange={(val) => {
+            const newBase = { ...baseAttributes, constitution: val };
+            setBaseAttributes(newBase);
+          }}
+        />
+        <CharGen.NumberInput
+          label="Carisma"
+          id="charisma"
+          value={finalAttributes.carisma}
+          onChange={(val) => {
+            const newBase = { ...baseAttributes, carisma: val };
+            setBaseAttributes(newBase);
+          }}
+        />
+      </div>
 
-        <div id="attributes" className="grid grid-cols-3 gap-4">
-          <CharGen.NumberInput
-            label="Força"
-            id="strength"
-            value={finalAttributes.forca}
-            onChange={(val) => {
-              const newBase = { ...baseAttributes, forca: val };
-              setBaseAttributes(newBase);
-            }}
-          />
-          <CharGen.NumberInput
-            label="Inteligência"
-            id="intelligence"
-            value={finalAttributes.inteligencia}
-            onChange={(val) => {
-              const newBase = { ...baseAttributes, inteligencia: val };
-              setBaseAttributes(newBase);
-            }}
-          />
-          <CharGen.NumberInput
-            label="Sabedoria"
-            id="wisdom"
-            value={finalAttributes.sabedoria}
-            onChange={(val) => {
-              const newBase = { ...baseAttributes, sabedoria: val };
-              setBaseAttributes(newBase);
-            }}
-          />
-          <CharGen.NumberInput
-            label="Destreza"
-            id="dexterity"
-            value={finalAttributes.destreza}
-            onChange={(val) => {
-              const newBase = { ...baseAttributes, destreza: val };
-              setBaseAttributes(newBase);
-            }}
-          />
-          <CharGen.NumberInput
-            label="Constituição"
-            id="constitution"
-            value={finalAttributes.constitution}
-            onChange={(val) => {
-              const newBase = { ...baseAttributes, constitution: val };
-              setBaseAttributes(newBase);
-            }}
-          />
-          <CharGen.NumberInput
-            label="Carisma"
-            id="charisma"
-            value={finalAttributes.carisma}
-            onChange={(val) => {
-              const newBase = { ...baseAttributes, carisma: val };
-              setBaseAttributes(newBase);
-            }}
-          />
+      <div className="flex gap-4 items-center justify-between">
+        <Button
+          type="button"
+          onClick={handleRollAttributes}
+        >
+          Rolar atributos
+        </Button>
+        <div className="flex gap-10">
+          <p className="flex gap-1">
+            <span>Mod. total:</span>
+            <Badge variant={totalModifier < 0 ? 'destructive' : totalModifier > 0 ? 'default' : 'secondary'}>
+              {totalModifier > 0 ? `+${totalModifier}` : totalModifier}
+            </Badge>
+          </p>
+          <p className="flex gap-1">
+            <span>Tentativas:</span>
+            <Badge>{rollAttempts}x</Badge>
+          </p>
+        </div>
+      </div>
+
+      <hr />
+
+      <div className="grid grid-cols-2 gap-4">
+        <CharGen.TextSelect
+          placeholder="Selecione uma raça"
+          label="Raça"
+          values={charRaces}
+          value={selectedRace ?? ''}
+          disabled={!canSelectRaceClass}
+          onChange={(raceId) => {
+            setSelectedRace(raceId);
+          }}
+        />
+        <CharGen.TextSelect
+          placeholder="Selecione uma classe"
+          label="Classe"
+          values={charClasses}
+          value={selectedClass ?? ''}
+          disabled={!canSelectRaceClass}
+          onChange={(classId) => {
+            setSelectedClass(classId);
+          }}
+        />
+      </div>
+
+      <div>
+        <p><span>Atributos Prime selecionados:</span> <Badge variant={selectedPrimeCount > maxPrimes ? 'destructive' : 'default'}>{selectedPrimeCount}/{maxPrimes}</Badge></p>
+        <div className="grid grid-cols-3 gap-4 mt-4">
+          {Object.entries(primeAttributeStates).map(([attr, state]) => {
+            // Atributos obrigatórios da classe se aplicam a todas as raças
+            const isRequired = Boolean(selectedClass &&
+              (primeAttributes[selectedClass] || []).includes(attr));
+            const isDisabled = Boolean(isRequired);
+
+            return (
+              <LabeledCheckbox
+                key={attr}
+                value={state.checked}
+                label={state.label}
+                onChange={() => togglePrimeAttribute(attr)}
+                disabled={isDisabled}
+                required={isRequired}
+              />
+            );
+          })}
         </div>
 
-        <div className="flex gap-4 items-center justify-between">
-          <Button
-            type="button"
-            onClick={handleRollAttributes}
-          >
-            Rolar atributos
-          </Button>
-          <div className="flex gap-10">
-            <p className="flex gap-1">
-              <span>Mod. total:</span>
-              <Badge variant={totalModifier < 0 ? 'destructive' : totalModifier > 0 ? 'default' : 'secondary'}>
-                {totalModifier > 0 ? `+${totalModifier}` : totalModifier}
-              </Badge>
-            </p>
-            <p className="flex gap-1">
-              <span>Tentativas:</span>
-              <Badge>{rollAttempts}x</Badge>
-            </p>
-          </div>
-        </div>
+        <Button
+          className="mt-4"
+          onClick={handleRollFinalDetails}
+          disabled={!canRollFinalDetails}
+        >
+          Rolar detalhes finais
+        </Button>
+      </div>
 
-        <hr />
-
-        <div className="grid grid-cols-2 gap-4">
-          <CharGen.TextSelect
-            placeholder="Selecione uma raça"
-            label="Raça"
-            values={charRaces}
-            value={selectedRace ?? ''}
-            disabled={!canSelectRaceClass}
-            onChange={(raceId) => {
-              setSelectedRace(raceId);
-            }}
-          />
-          <CharGen.TextSelect
-            placeholder="Selecione uma classe"
-            label="Classe"
-            values={charClasses}
-            value={selectedClass ?? ''}
-            disabled={!canSelectRaceClass}
-            onChange={(classId) => {
-              setSelectedClass(classId);
-            }}
-          />
-        </div>
-
+      {showSpells && (
         <div>
-          <p><span>Atributos Prime selecionados:</span> <Badge variant={selectedPrimeCount > maxPrimes ? 'destructive' : 'default'}>{selectedPrimeCount}/{maxPrimes}</Badge></p>
-          <div className="grid grid-cols-3 gap-4 mt-4">
-            {Object.entries(primeAttributeStates).map(([attr, state]) => {
-              // Atributos obrigatórios da classe se aplicam a todas as raças
-              const isRequired = Boolean(selectedClass &&
-                (primeAttributes[selectedClass] || []).includes(attr));
-              const isDisabled = Boolean(isRequired);
-
-              return (
-                <LabeledCheckbox
-                  key={attr}
-                  value={state.checked}
-                  label={state.label}
-                  onChange={() => togglePrimeAttribute(attr)}
-                  disabled={isDisabled}
-                  required={isRequired}
-                />
-              );
-            })}
-          </div>
-
-          <Button
-            className="mt-4"
-            onClick={handleRollFinalDetails}
-            disabled={!canRollFinalDetails}
-          >
-            Rolar detalhes finais
-          </Button>
-        </div>
-
-        {showSpells && (
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Magias Conhecidas</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <h4 className="font-medium mb-2">Nível 0 ({spells.level0.length})</h4>
-                <ul className="list-disc list-inside text-sm space-y-1">
-                  {spells.level0.map((spell, idx) => (
-                    <li key={idx}>{spell}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-medium mb-2">Nível 1 ({spells.level1.length})</h4>
-                <ul className="list-disc list-inside text-sm space-y-1">
-                  {spells.level1.map((spell, idx) => (
-                    <li key={idx}>{spell}</li>
-                  ))}
-                </ul>
-              </div>
+          <h3 className="text-lg font-semibold mb-4">Magias Conhecidas</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <h4 className="font-medium mb-2">Nível 0 ({spells.level0.length})</h4>
+              <ul className="list-disc list-inside text-sm space-y-1">
+                {spells.level0.map((spell, idx) => (
+                  <li key={idx}>{spell}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-medium mb-2">Nível 1 ({spells.level1.length})</h4>
+              <ul className="list-disc list-inside text-sm space-y-1">
+                {spells.level1.map((spell, idx) => (
+                  <li key={idx}>{spell}</li>
+                ))}
+              </ul>
             </div>
           </div>
-        )}
-
-        <hr />
-
-        <div className="grid grid-cols-4 gap-4">
-          <CharGen.TextInput disabled label="PV" id="hp" value={hp} />
-          <CharGen.TextInput disabled label="Tesouro inicial" id="treasure" value={treasure} />
-          <CharGen.TextInput disabled label="Idade" id="age" value={age} />
-          <CharGen.TextInput disabled label="Altura" id="height" value={height} />
-          <CharGen.TextInput disabled label="Peso" id="weight" value={weight} />
-          <CharGen.TextInput disabled label="Gênero" id="gender" value={gender} />
-          <CharGen.TextInput disabled label="Descrição" id="description" value={description} />
-          <CharGen.TextInput disabled label="Sobrecarga" id="carryingCapacity" value={carryingCapacity} />
         </div>
-      </main>
+      )}
+
+      <hr />
+
+      <div className="grid grid-cols-4 gap-4">
+        <CharGen.TextInput disabled label="PV" id="hp" value={hp} />
+        <CharGen.TextInput disabled label="Tesouro inicial" id="treasure" value={treasure} />
+        <CharGen.TextInput disabled label="Idade" id="age" value={age} />
+        <CharGen.TextInput disabled label="Altura" id="height" value={height} />
+        <CharGen.TextInput disabled label="Peso" id="weight" value={weight} />
+        <CharGen.TextInput disabled label="Gênero" id="gender" value={gender} />
+        <CharGen.TextInput disabled label="Descrição" id="description" value={description} />
+        <CharGen.TextInput disabled label="Sobrecarga" id="carryingCapacity" value={carryingCapacity} />
+      </div>
     </div>
   );
 }
