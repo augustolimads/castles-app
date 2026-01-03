@@ -1,3 +1,5 @@
+'use client'
+
 import {
     Sidebar,
     SidebarContent,
@@ -8,14 +10,14 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { HardHat, Home, PersonStanding } from "lucide-react"
-
+import { HardHat, ShoppingBasket, User2Icon } from "lucide-react"
+import { usePathname } from "next/navigation"
 // Menu items.
 const items = [
     {
         title: "Gerador de personagem",
         url: "/",
-        icon: PersonStanding,
+        icon: User2Icon,
     },
     {
         title: "Gerador de NPC",
@@ -30,9 +32,9 @@ const items = [
         color: "text-gray-400"
     },
     {
-        title: "Dress game",
-        url: "/em-breve",
-        icon: HardHat,
+        title: "Mercado",
+        url: "/mercado",
+        icon: ShoppingBasket,
         color: "text-gray-400"
     },
     {
@@ -50,6 +52,8 @@ const items = [
 ]
 
 export function AppSidebar() {
+    const pathname = usePathname()
+
     return (
         <Sidebar>
             <SidebarHeader>
@@ -65,7 +69,7 @@ export function AppSidebar() {
                         <SidebarMenu>
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild>
+                                    <SidebarMenuButton asChild isActive={pathname === item.url}>
                                         <a href={item.url} className={item.color}>
                                             <item.icon />
                                             <span>{item.title}</span>

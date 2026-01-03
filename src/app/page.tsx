@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import * as CharGen from "@/modules/char-gen";
+import * as CharGen from "@/modules/char-gen/ui";
 import { LabeledCheckbox } from "@/modules/char-gen/ui/labeled-checkbox";
 import { charClasses } from "@/modules/data/charClasses";
 import { charRaces } from "@/modules/data/charRaces";
@@ -511,7 +511,7 @@ export default function Home() {
   const maxPrimes = getMaxPrimeAttributes();
 
   return (
-    <div className="flex flex-col gap-8 p-4 pt-8">
+    <div className="flex flex-col gap-8 pt-8">
       <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight text-balance">C&C: Gerador de personagem</h1>
 
       <CharGen.TextInput

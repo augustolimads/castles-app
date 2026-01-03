@@ -32,11 +32,13 @@ export default function RootLayout({
       >
         <SidebarProvider>
           <AppSidebar />
-          <main className="relative w-full max-w-3xl">
-            <div className="absolute">
-            <SidebarTrigger />
+          <main className="relative w-full max-w-6xl">
+            <div className="fixed">
+              <SidebarTrigger />
             </div>
-            {children}
+            <div className="p-4 pt-0 md:p-10 md:pt-0">
+              {children}
+            </div>
           </main>
         </SidebarProvider>
         <Toaster />
