@@ -1,10 +1,9 @@
-import * as Market from "@/modules/market/ui"
+import { MarketContent } from "@/modules/market/ui/market-content"
 
 function Mercado() {
   return (
     <div>
-      <Market.Header />
-      <Market.Grid />
+      <MarketContent />
     </div>
   )
 }
