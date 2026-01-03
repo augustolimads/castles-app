@@ -870,16 +870,16 @@ export const spellsByClass = {
     1: ['abençoar', 'abençoar água', 'comando', 'curar ferimentos leves', 'descobrir portas secretas', 'escudo divino', 'manto invisível à mortos-vivos', 'proteção contra disposição', 'remover medo', 'resistir a um elemento', 'revelar mortos-vivos', 'santuário', 'tempestade sonora']
   },
   'druida': {
-    0: ['Criar água', 'descobrir veneno', 'discernir disposição', 'discernir magia', 'luz', 'primeiros socorros', 'purificar', 'resistir ao frio/calor'],
-    1: ['chamar relâmpago', 'conjurar animal (pequeno)', 'curar ferimentos leves', 'encontrar armadilhas e perigos', 'falar com animais', 'floresta em crescimento', 'moldar pedra', 'neblina', 'proteção contra disposição', 'remover medo', 'resistir a um elemento', 'santuário']
+    0: ['Conhecer o caminho', 'Criar água', 'descobrir veneno', 'discernir disposição', 'luz', 'primeiros socorros', 'purificar', 'resistir ao frio/calor'],
+    1: ['Acalmar animais', 'Alarme', 'Aura das fadas', 'Bom fruto', 'Bordão mágico', 'Descobrir armadilhas e poços', 'Descobrir portas secretas', 'Elo animal', 'Funda mágica', 'Invisibilidade a animais', 'Obscurecer com névoa', 'Passo da trilha selvagem', 'Vegetação enredadora']
   },
   'mago': {
-    0: ['apagamento', 'armadura arcana', 'bruxaria', 'consertar', 'criar água', 'luz', 'mãos mágicas', 'mensagem', 'miscelânea', 'projetar imagem menor', 'raio de gelo', 'sonho inquieto', 'truque da mente'],
-    1: ['armadura de mago', 'arma mágica menor', 'compreensão de idiomas', 'concealment (obscurecimento)', 'detect magic (detectar magia)', 'disguise self (disfarçar-se)', 'enfeitiçar pessoa', 'escudo arcano', 'imagem silenciosa', 'mísseis mágicos', 'neblina', 'proteção contra disposição', 'sono', 'trovão estrondoso']
+    0: ['Abrir/fechar', 'Alcance arcano', 'Consertar', 'Descobrir veneno', 'Discernir magia', 'Luz', 'Mensagem', 'Orbes dançantes', 'Prestidigitação', 'Resistir ao frio/calor', 'Runa arcana', 'Som fantasma'],
+    1: ['Alterar-se menor', 'Alterar tamanho', 'Apagar', 'Armadura arcana', 'Chamas ardentes', 'Choque', 'Compreensão', 'Decifrar escrita arcana', 'Disco flutuante', 'Encantar humanóide', 'Escudo', 'Identificar', 'Invocar familiar', 'Leve como uma pena', 'Mísseis arcanos', 'Passo da aranha', 'Proteção contra disposição', 'Salto', 'Servo invisível', 'Sono', 'Travar barras ou portão']
   },
   'ilusionista': {
-    0: ['apagamento', 'armadura arcana', 'bruxaria', 'consertar', 'criar água', 'luz', 'mãos mágicas', 'mensagem', 'miscelânea', 'projetar imagem menor', 'raio de gelo', 'sonho inquieto', 'truque da mente'],
-    1: ['armadura de mago', 'arma mágica menor', 'compreensão de idiomas', 'concealment (obscurecimento)', 'detect magic (detectar magia)', 'disguise self (disfarçar-se)', 'enfeitiçar pessoa', 'escudo arcano', 'imagem silenciosa', 'mísseis mágicos', 'neblina', 'proteção contra disposição', 'sono', 'trovão estrondoso']
+    0: ['Consertar', 'Discernir ilusão', 'Glamour arcano', 'Influenciar', 'Luz', 'Marca do dragão', 'Mensagem', 'Orbes dançantes', 'Prestidigitação', 'Primeiros socorros', 'Runa arcana', 'Som fantasma'],
+    1: ['Açoite sombrio menor', 'Alterar-se menor', 'Apagar', 'Armadura arcana', 'Armadura do dragão' , 'Atordoar', 'Aura indetectável', 'Cães ilusórios', 'Cores', 'Decifrar escrita arcana', 'Encantar humanóide', 'Força temporária de Ward', 'Hipnotismo', 'Ilusão', 'Ilusão silenciosa', 'Imagem de dragão', 'Nublar visão', 'Obscurecer com névoa', 'reflexo feérico', 'Trevas', 'Ventriloquismo', 'Ver o invisível']
   }
 };
 
