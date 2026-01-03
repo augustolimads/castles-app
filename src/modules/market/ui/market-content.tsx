@@ -1,15 +1,16 @@
 'use client';
 
+import { CartProvider } from '@/hooks/use-cart';
 import { Suspense } from 'react';
 import { Grid } from './grid';
 import { Header } from './header';
 
 function MarketContentInner() {
   return (
-    <>
+      <CartProvider>
       <Header />
       <Grid itemsPerPage={12} />
-    </>
+      </CartProvider>
   );
 }
 

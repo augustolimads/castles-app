@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
+import { CartDrawer } from "@/components/ui/cart-drawer";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -179,9 +180,11 @@ export function Header() {
                     {/* <Button variant="outline" title="coleções e favoritos">
                     <HeartIcon />
                 </Button> */}
-                    <Button variant="outline" title="carrinho de compras" className="cursor-pointer">
-                        <ShoppingBasket />
-                    </Button>
+                    <CartDrawer>
+                        <Button variant="outline" title="carrinho de compras" className="cursor-pointer">
+                            <ShoppingBasket />
+                        </Button>
+                    </CartDrawer>
                 </div>
             </div>
             <div className="relative w-full block lg:hidden">

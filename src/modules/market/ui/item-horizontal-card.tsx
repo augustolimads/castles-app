@@ -1,8 +1,10 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useCart } from "@/hooks/use-cart";
 import { CircleDollarSignIcon, ShoppingBasket, WeightIcon } from "lucide-react";
 import Image from "next/image";
+import { useCallback } from "react";
 
 type ItemHorizontalCardProps = {
   item: {
@@ -21,6 +23,12 @@ type ItemHorizontalCardProps = {
 };
 
 export function ItemHorizontalCard({ item }: ItemHorizontalCardProps) {
+  const { addItem } = useCart();
+
+  const handleAddToCart = useCallback(() => {
+    addItem(item);
+  }, [addItem, item]);
+
   return (
     <Card className="p-2">
       <div className="gap-4 flex flex-row">
@@ -59,7 +67,7 @@ export function ItemHorizontalCard({ item }: ItemHorizontalCardProps) {
           <CircleDollarSignIcon size={16} className="text-amber-500" />
           <span className="flex w-full items-center font-semibold text-sm">{item.gold} PO</span>
         </div>
-        <Button className="w-1/2 cursor-pointer">
+        <Button className="w-1/2 cursor-pointer" onClick={handleAddToCart}>
           <ShoppingBasket />
           <span className="text-xs">Adicionar</span>
         </Button>
