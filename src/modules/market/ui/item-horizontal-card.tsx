@@ -54,12 +54,12 @@ export function ItemHorizontalCard({ item }: ItemHorizontalCardProps) {
           </div>
         </div>
       </div>
-      <div id="item-horizontal-footer" className="flex gap-2 mt-2 items-center">
-        <div className="flex items-center gap-1">
+      <div id="item-horizontal-footer" className="flex gap-2 mt-2 justify-between items-center">
+        <div className="flex flex-1 items-center gap-1">
           <CircleDollarSignIcon size={16} className="text-amber-500" />
           <span className="flex w-full items-center font-semibold text-sm">{item.gold} PO</span>
         </div>
-        <Button className="flex-1 cursor-pointer">
+        <Button className="w-1/2 cursor-pointer">
           <ShoppingBasket />
           <span className="text-xs">Adicionar</span>
         </Button>

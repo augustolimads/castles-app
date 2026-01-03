@@ -5,10 +5,11 @@ import { useMemo, useState } from 'react';
 interface UsePaginationProps {
   data: any[];
   itemsPerPage: number;
+    initialPage?: number;
 }
 
-export function usePagination({ data, itemsPerPage }: UsePaginationProps) {
-  const [currentPage, setCurrentPage] = useState(1);
+export function usePagination({ data, itemsPerPage, initialPage = 1 }: UsePaginationProps) {
+    const [currentPage, setCurrentPage] = useState(initialPage);
 
   const paginationInfo = useMemo(() => {
     const totalItems = data.length;
