@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "ui": "npx shadcn@latest add"
+    "ui": "npx shadcn@latest add",
+    "gen:items": "node src/modules/market/csvToJson.ts"
   },
   "dependencies": {
     "@dice-roller/rpg-dice-roller": "^5.5.1",
