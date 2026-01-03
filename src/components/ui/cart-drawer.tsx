@@ -58,7 +58,7 @@ export function CartDrawer({ children }: CartDrawerProps) {
                   <div className="flex gap-3">
                     <div className="flex-shrink-0">
                       <Image
-                        src={`/${item.icon}.webp`}
+                        src={`/icons/${item.icon}.webp`}
                         alt={item.name}
                         width={48}
                         height={48}

@@ -112,10 +112,15 @@ export function Header() {
         updateSearchParams({ sort: sortId });
     }, [updateSearchParams]);
 
+    const handleClearAllFilters = useCallback(() => {
+        setSearchInputValue('');
+        updateSearchParams({ category: 'all', search: '', sort: '' });
+    }, [updateSearchParams]);
+
     return (
         <header className="sticky top-2 left-0 right-0 bg-secondary py-2 px-2 border rounded-lg flex flex-col gap-2">
             <div className="flex items-center justify-between">
-                <div className="flex gap-2 flex-1 items-center">
+                <div className="flex gap-8 flex-1 items-center">
                     <SidebarTrigger variant='outline' size='lg' className="p-4" />
                     <div className="relative w-72 hidden lg:block">
                         <Search className="absolute top-2 left-2 pointer-events-none" size={20} color="gray" />
@@ -127,59 +132,72 @@ export function Header() {
                             onChange={(e) => handleSearchChange(e.target.value)}
                         />
                     </div>
-                </div>
-                <div className="flex items-center gap-4">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger className="cursor-pointer font-semibold">
-                            <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3">
-                                {currentCategory ?
-                                    categories.find(cat => cat.id === currentCategory)?.label || 'Categorias' :
-                                    'Categorias'
-                                }
-                            </span>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuItem onClick={() => handleCategorySelect('all')}>
-                                Todas as categorias
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            {categories.map(category => (
-                                <DropdownMenuItem
-                                    key={category.id}
-                                    onClick={() => handleCategorySelect(category.id)}
-                                >
-                                    {category.label}
+                    <div className="flex gap-4 items-center">
+                        <span>Filtros:</span>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className="cursor-pointer font-semibold">
+                                <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3">
+                                    {currentCategory ?
+                                        categories.find(cat => cat.id === currentCategory)?.label || 'Categorias' :
+                                        'Categorias'
+                                    }
+                                </span>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem onClick={() => handleCategorySelect('all')}>
+                                    Todas as categorias
                                 </DropdownMenuItem>
-                            ))}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                                <DropdownMenuSeparator />
+                                {categories.map(category => (
+                                    <DropdownMenuItem
+                                        key={category.id}
+                                        onClick={() => handleCategorySelect(category.id)}
+                                    >
+                                        {category.label}
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
 
-                    <DropdownMenu>
-                        <DropdownMenuTrigger className="cursor-pointer font-semibold">
-                            <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3">
-                                {currentSort ?
-                                    sortOptions.find(sort => sort.id === currentSort)?.label || 'Ordenação' :
-                                    'Ordenação'
-                                }
-                            </span>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuItem onClick={() => handleSortSelect('')}>
-                                Padrão
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            {sortOptions.map(sortOption => (
-                                <DropdownMenuItem
-                                    key={sortOption.id}
-                                    onClick={() => handleSortSelect(sortOption.id)}
-                                >
-                                    {sortOption.label}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className="cursor-pointer font-semibold">
+                                <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3">
+                                    {currentSort ?
+                                        sortOptions.find(sort => sort.id === currentSort)?.label || 'Ordenação' :
+                                        'Ordenação'
+                                    }
+                                </span>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem onClick={() => handleSortSelect('')}>
+                                    Padrão
                                 </DropdownMenuItem>
-                            ))}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                                <DropdownMenuSeparator />
+                                {sortOptions.map(sortOption => (
+                                    <DropdownMenuItem
+                                        key={sortOption.id}
+                                        onClick={() => handleSortSelect(sortOption.id)}
+                                    >
+                                        {sortOption.label}
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+
+                        <Button
+                            variant="link"
+                            size="sm"
+                            onClick={handleClearAllFilters}
+                            className="h-9 px-3 cursor-pointer"
+                            title="Limpar todos os filtros"
+                        >
+                            <span className="hidden sm:inline-block ml-1">Limpar</span>
+                        </Button>
+                    </div>
+                </div>
+                <div className="flex items-center gap-4 xl:hidden">
                     <CartDrawer>
-                        <Button variant="outline" title="carrinho de compras" className="cursor-pointer xl:hidden">
+                        <Button variant="outline" title="carrinho de compras" className="cursor-pointer">
                             <ShoppingBasket />
                         </Button>
                     </CartDrawer>

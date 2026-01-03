@@ -12,7 +12,7 @@ function MarketContentInner() {
       <Header />
           <div className="flex gap-6 min-h-screen">
               <div className="flex-1 min-w-0">
-                  <Grid itemsPerPage={12} />
+                  <Grid itemsPerPage={20} />
               </div>
               <CartSidebar />
           </div>

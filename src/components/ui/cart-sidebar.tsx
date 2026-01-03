@@ -41,14 +41,14 @@ export function CartSidebar() {
                     <div className="flex gap-3">
                       <div className="flex-shrink-0">
                         <Image
-                          src={`/${item.icon}.webp`}
+                          src={`/icons/${item.icon}.webp`}
                           alt={item.name}
                           width={40}
                           height={40}
                           className="rounded-md"
                         />
                       </div>
-                      
+
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start">
                           <h4 className="font-medium text-sm truncate">{item.name}</h4>
@@ -61,11 +61,11 @@ export function CartSidebar() {
                             <Trash2 size={12} />
                           </Button>
                         </div>
-                        
+
                         {item.effect && (
                           <p className="text-xs text-muted-foreground mt-1 truncate">{item.effect}</p>
                         )}
-                        
+
                         <div className="flex items-center justify-between mt-2">
                           <div className="flex gap-2 text-xs">
                             {(item.gold || 0) > 0 && (
@@ -81,7 +81,7 @@ export function CartSidebar() {
                               </div>
                             )}
                           </div>
-                          
+
                           <div className="flex items-center gap-1">
                             <Button
                               variant="outline"
@@ -106,18 +106,6 @@ export function CartSidebar() {
                     </div>
                   </div>
                 ))}
-                
-                {items.length > 1 && (
-                  <Button
-                    variant="outline"
-                    onClick={clearCart}
-                    className="w-full text-destructive hover:text-destructive text-xs"
-                    size="sm"
-                  >
-                    <Trash2 size={14} className="mr-1" />
-                    Limpar
-                  </Button>
-                )}
               </div>
             )}
           </div>
@@ -132,7 +120,7 @@ export function CartSidebar() {
                   </span>
                   <span className="font-semibold">{totalGold} PO</span>
                 </div>
-                
+
                 <div className="flex justify-between items-center">
                   <span className="flex items-center gap-1">
                     <WeightIcon size={14} className="text-blue-500" />
@@ -140,10 +128,20 @@ export function CartSidebar() {
                   </span>
                   <span className="font-semibold">{totalEV}</span>
                 </div>
-                
+
                 <Separator className="my-3" />
-                
-                <Button className="w-full" size="sm">
+                {items.length > 1 && (
+                  <Button
+                    variant="outline"
+                    onClick={clearCart}
+                    className="w-full text-destructive hover:text-destructive text-xs"
+                    size="sm"
+                  >
+                    <Trash2 size={14} className="mr-1" />
+                    Limpar
+                  </Button>
+                )}
+                <Button className="w-full" size="sm" disabled>
                   Finalizar Compra
                 </Button>
               </div>

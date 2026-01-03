@@ -23,7 +23,7 @@ export function ItemCard() {
           </Badge>
         </div>
           <Image
-            src="/dagger-black.webp"
+            src="/icons/dagger-black.webp"
             alt="Produto Exemplo"
             fill
             className="h-full w-full rounded-t-lg object-cover dar:brightness-[0.2] dark:grayscale"

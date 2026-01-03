@@ -1,258 +1,1096 @@
-id,type,name,effect,gold,ev,obs,tags,proficience,icon
-ID-2-20260102211820,alojamento,Estalagem comum,,,,,,,dagger-black
-ID-3-20260102211820,alojamento,Estalagem Boa,,,,,,,dagger-black
-ID-4-20260102211820,alojamento,Estalagem Pobre,,,,,,,dagger-black
-ID-5-20260102211820,alojamento,Sala comunal (apenas o andar),,,,,,,dagger-black
-ID-6-20260102211820,alojamento,Comum (piso de palha),,,,,,,dagger-black
-ID-7-20260102211820,alojamento,1 cama sem mobiliário,,,,,,,dagger-black
-ID-8-20260102211820,alojamento,2 camas sem mobiliário,,,,,,,dagger-black
-ID-9-20260102211820,alojamento,4 camas sem mobiliário,,,,,,,dagger-black
-ID-10-20260102211820,alojamento,5+ Camas sem mobiliário (+15 PP por cama extra),,,,,,,dagger-black
-ID-11-20260102211820,alojamento,1 Cama mobiliada,,,,,,,dagger-black
-ID-12-20260102211820,alojamento,2 Camas mobiliadas,,,,,,,dagger-black
-ID-13-20260102211820,alojamento,4 Camas mobiliadas,,,,,,,dagger-black
-ID-14-20260102211820,alojamento,5+ Camas mobiliadas (+1 PO por cama extra),,,,,,,dagger-black
-ID-15-20260102211820,alojamento,Suíte sem mobília,,,,,,,dagger-black
-ID-16-20260102211820,alojamento,Suíte mobiliada,,,,,,,dagger-black
-ID-17-20260102211820,arma,Adaga,dano 1d4,2,2,,,"assassino,trapaceiro",dagger-black
-ID-18-20260102211820,arma,Alabarda,dano 1d10,10,5,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-19-20260102211820,arma,Cestus,dano +1,1,1,,,,dagger-black
-ID-20-20260102211820,arma,Cutelo,dano 1d4,5,2,,,,dagger-black
-ID-21-20260102211820,arma,Espada Bastarda,dano 1d10,25,4,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-22-20260102211820,arma,Espada Broadsword,dano 2d4,12,4,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-23-20260102211820,arma,Espada Cimitarra,dano 1d6,15,3,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-24-20260102211820,arma,Espada Curta,dano 1d6,10,2,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-25-20260102211820,arma,Espada de Gancho,dano 1d4+1,25,3,,,"assassino,bárbaro,combatente,druid,explorador,ilusionista,mago,paladino,trapaceiro",dagger-black
-ID-26-20260102211820,arma,Espada Longa,dano 1d8,15,3,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-27-20260102211820,arma,Espada Rapieira,dano 1d6,20,3,,,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",dagger-black
-ID-28-20260102211820,arma,Foice de Guerra,dano 2d4,18,4,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-29-20260102211820,arma,Garfo Fauchard,dano 1d8,15,5,,,"assassino,bárbaro,combatente,druid,explorador,paladino",dagger-black
-ID-30-20260102211820,arma,Garfo militar,dano 1d8,10,5,,,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",dagger-black
-ID-31-20260102211820,arma,Gato de nove caudas,dano 1d3,9,2,,,,dagger-black
-ID-32-20260102211820,arma,Lança Partisan,dano 1d8,10,5,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-33-20260102211820,arma,Lança Pesada,dano 1d8,10,7,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-34-20260102211820,arma,Maça Pesada,dano 1d8,12,4,,,"assassino,bárbaro,combatente,druid,explorador,paladino",dagger-black
-ID-35-20260102211820,arma,Machado Barbado,dano 3d4,20,4,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-36-20260102211820,arma,Machado Bardiche,dano 2d4,15,4,,,"assassino,bárbaro,combatente,druid,explorador,paladino",dagger-black
-ID-37-20260102211820,arma,Machado de arremesso,dano 1d6,4,2,,,,dagger-black
-ID-38-20260102211820,arma,Machado de Batalha,dano 1d8,10,3,,,"assassino,bárbaro,combatente,druid,explorador,paladino,trapaceiro",dagger-black
-ID-39-20260102211820,arma,Machado de duas mãos,dano 1d12,20,4,,,"assassino,bárbaro,combatente,druid,explorador,paladino",dagger-black
-ID-40-20260102211820,arma,"Machado, perfurador",dano 1d8+1,17,3,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-41-20260102211820,arma,Mangual Leve,dano 1d8,8,3,,,"assassino,bárbaro,combatente,druid,explorador,paladino,trapaceiro",dagger-black
-ID-42-20260102211820,arma,Mangual Pesado,dano 1d10,15,4,,,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",dagger-black
-ID-43-20260102211820,arma,Marreta,dano 1d10,12,5,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-44-20260102211820,arma,Morningstar,dano 2d4,8,3,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-45-20260102211820,arma,Picareta bico de corvo,dano 1d6,15,2,,,"assassino,bárbaro,combatente,druid,explorador,paladino,trapaceiro",dagger-black
-ID-46-20260102211820,arma,Podão ou gancho,dano 2d4,12,5,,,,dagger-black
-ID-47-20260102211820,arma,Punhos de bronze,dano 1d3,1,1,,,,dagger-black
-ID-48-20260102211820,arma,Tridente,dano 1d8,10,5,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-49-20260102211820,arma,Cajado,,,,,,,dagger-black
-ID-50-20260102211820,arma,Chicote,,,,,,,dagger-black
-ID-51-20260102211820,arma,Clava,,,,,,,dagger-black
-ID-52-20260102211820,arma,Clava pesada,,,,,,,dagger-black
-ID-53-20260102211820,arma,Cutelo longo,,,,,,,dagger-black
-ID-54-20260102211820,arma,"Espada larga, 9 anéis",,,,,,,dagger-black
-ID-55-20260102211820,arma,Espada Cimitarra grande,,,,,,,dagger-black
-ID-56-20260102211820,arma,Espada de duas mãos,,,,,,,dagger-black
-ID-57-20260102211820,arma,Espada Falcione,,,,,,,dagger-black
-ID-58-20260102211820,arma,Espada Flamberg,,,,,,,dagger-black
-ID-59-20260102211820,arma,Espada Gancho,,,,,,,dagger-black
-ID-60-20260102211820,arma,Espada larga,,,,,,,dagger-black
-ID-61-20260102211820,arma,Faca,,,,,,,dagger-black
-ID-62-20260102211820,arma,Forcado Militar,,,,,,,dagger-black
-ID-63-20260102211820,arma,"Gancho, haste",,,,,,,dagger-black
-ID-64-20260102211820,arma,Glaive,,,,,,,dagger-black
-ID-65-20260102211820,arma,Godentag,,,,,,,dagger-black
-ID-66-20260102211820,arma,Guisarme,,,,,,,dagger-black
-ID-67-20260102211820,arma,Katar,,,,,,,dagger-black
-ID-68-20260102211820,arma,Lança,,,,,,,dagger-black
-ID-69-20260102211820,arma,Lança de lobo,,,,,,,dagger-black
-ID-70-20260102211820,arma,Lança leve,,,,,,,dagger-black
-ID-71-20260102211820,arma,Lança longa,,,,,,,dagger-black
-ID-72-20260102211820,arma,Maça grande,,,,,,,dagger-black
-ID-73-20260102211820,arma,Maça leve,,,,,,,dagger-black
-ID-74-20260102211820,arma,Maça estrela,,,,,,,dagger-black
-ID-75-20260102211820,arma,Machete,,,,,,,dagger-black
-ID-76-20260102211820,arma,Main Gauche,,,,,,,dagger-black
-ID-77-20260102211820,arma,Malho,,,,,,,dagger-black
-ID-78-20260102211820,arma,Manopla farpada,,,,,,,dagger-black
-ID-79-20260102211820,arma,Martelo de Lucerna,,,,,,,dagger-black
-ID-80-20260102211820,arma,Martelo de guerra,,,,,,,dagger-black
-ID-81-20260102211820,arma,Martelo leve,,,,,,,dagger-black
-ID-82-20260102211820,arma,Pegador,,,,,,,dagger-black
-ID-83-20260102211820,arma,Picareta de Guerra,,,,,,,dagger-black
-ID-84-20260102211820,arma,Picareta Leve,,,,,,,dagger-black
-ID-85-20260102211820,arma,Picareta Pesada,,,,,,,dagger-black
-ID-86-20260102211820,arma,Pique,,,,,,,dagger-black
-ID-87-20260102211820,arma,Poniard,,,,,,,dagger-black
-ID-88-20260102211820,arma,Porrete,,,,,,,dagger-black
-ID-89-20260102211820,arma,Punhal,,,,,,,dagger-black
-ID-90-20260102211820,arma,Punho,,,,,,,dagger-black
-ID-91-20260102211820,arma,Ranseur,,,,,,,dagger-black
-ID-92-20260102211820,arma,Sabre,,,,,,,dagger-black
-ID-93-20260102211820,arma,Sodegarami,,,,,,,dagger-black
-ID-94-20260102211820,armadura,Armadura Acolchoada,CA +1,5,2,,,trapaceiro,dagger-black
-ID-95-20260102211820,armadura,Armadura Completa,CA +8,1000,4,,,,dagger-black
-ID-96-20260102211820,armadura,Armadura de Couro,CA +2,10,2,,,"bárbaro,cavaleiro,clerigo,combatente,paladino,trapaceiro",dagger-black
-ID-97-20260102211820,armadura,Armadura de Placas,CA +7,600,4,,,,dagger-black
-ID-98-20260102211820,armadura,Brigandina,CA +4,85,4,,,"bardo,bárbaro,cavaleiro,clerigo,combatente,druid,explorador,paladino",dagger-black
-ID-99-20260102211820,armadura,Camisa de cota de Malha,CA +4,100,3,,,"bárbaro,cavaleiro,clerigo,combatente,explorador,paladino",dagger-black
-ID-100-20260102211820,armadura,Casaco de Couro,CA +1,7,2,,,"bárbaro,cavaleiro,clerigo,combatente,paladino,trapaceiro",dagger-black
-ID-101-20260102211820,armadura,Conjunto completo (4),CA +7,650,4,,,,dagger-black
-ID-102-20260102211820,armadura,Conjunto Grego (1),CA +5,120,4,,,"bardo,bárbaro,cavaleiro,clerigo,combatente,druid,paladino",dagger-black
-ID-103-20260102211820,armadura,Conjunto Grego (2),CA +6,230,4,,,"assassino,bardo,bárbaro,cavaleiro,clerigo,combatente,druid,explorador,paladino",dagger-black
-ID-104-20260102211820,armadura,Conjunto Romano (3),CA +6,240,4,,,"assassino,bardo,bárbaro,cavaleiro,clerigo,combatente,druid,explorador,paladino",dagger-black
-ID-105-20260102211820,armadura,Cota de Anéis,CA +3,30,3,,,"bárbaro,cavaleiro,clerigo,combatente,paladino",dagger-black
-ID-106-20260102211820,armadura,Cota de bandas,CA +6,250,4,,,"bardo,bárbaro,cavaleiro,clerigo,combatente,explorador,paladino",dagger-black
-ID-107-20260102211820,armadura,Cota de Escamas,CA +4,50,4,,,"bardo,bárbaro,cavaleiro,clerigo,combatente,explorador,paladino",dagger-black
-ID-108-20260102211820,armadura,Cota de Malha Completa,CA +6,200,4,,,,dagger-black
-ID-109-20260102211820,armadura,Cota de Placas,CA +5,100,4,,,"assassino,bardo,bárbaro,cavaleiro,clerigo,combatente,druid,explorador,paladino",dagger-black
-ID-110-20260102211820,armadura,Cota de talas,CA +6,200,4,,,"assassino,bardo,bárbaro,cavaleiro,clerigo,combatente,druid,explorador,paladino",dagger-black
-ID-111-20260102211820,armadura,Couro Batido,CA +3,25,3,,,"bárbaro,cavaleiro,clerigo,combatente,paladino,trapaceiro",dagger-black
-ID-112-20260102211820,armadura,Couro Cozido,CA +4,45,4,,,"bárbaro,cavaleiro,clerigo,combatente,paladino,trapaceiro",dagger-black
-ID-113-20260102211820,armadura,Hussarda Polonesa,CA +8,1750,3,,,,dagger-black
-ID-114-20260102211820,armadura,Laminar de Couro,CA +3,55,2,,,"bárbaro,cavaleiro,clerigo,combatente,paladino,trapaceiro",dagger-black
-ID-115-20260102211820,armadura,Loriga de Cota de Malha,CA +5,150,4,,,"bardo,bárbaro,cavaleiro,clerigo,combatente,explorador,paladino",dagger-black
-ID-116-20260102211820,armadura,Peitoral de Aço,CA +5,300,3,,,"bárbaro,cavaleiro,clerigo,combatente,explorador,paladino",dagger-black
-ID-117-20260102211820,armadura,Peitoral de Bronze,CA +4,95,3,,,"bardo,bárbaro,cavaleiro,clerigo,combatente,explorador,paladino",dagger-black
-ID-118-20260102211820,armadura,Peles,CA +3,20,4,,,"bárbaro,cavaleiro,clerigo,combatente,paladino",dagger-black
-ID-119-20260102211820,barco,,,,,,,,dagger-black
-ID-120-20260102211820,distancia,Arco Curto,dano 1d6 /18m,30,3,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-121-20260102211820,distancia,Arco Longo,dano 1d6 /30m,75,4,,,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",dagger-black
-ID-122-20260102211820,distancia,Arco Longo Composto,dano 1d8 /33m,100,4,,,"assassino,bárbaro,combatente,druid,explorador,paladino,trapaceiro",dagger-black
-ID-123-20260102211820,distancia,Azagaia,dano 1d4 /9m,1,3,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-124-20260102211820,distancia,Besta de Mão,dano 1d4 /9m,100,2,,,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",dagger-black
-ID-125-20260102211820,distancia,Besta Leve,dano 1d6 /24m,35,4,,,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",dagger-black
-ID-126-20260102211820,distancia,Besta Pesada,dano 1d10 /36m,50,5,,,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",dagger-black
-ID-127-20260102211820,distancia,Bolas,dano 1d4 /6m,5,2,,,"assassino,bárbaro,combatente,druid,explorador,paladino,trapaceiro",dagger-black
-ID-128-20260102211820,distancia,Dardo,dano 1d3 /6m,0.5,1,,,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",dagger-black
-ID-129-20260102211820,distancia,Funda,dano 1d4 /15m,,1,,,"assassino,bárbaro,combatente,druid,explorador,ilusionista,mago,paladino,trapaceiro",dagger-black
-ID-130-20260102211820,distancia,Arpão,dano 1d6 /6m,1,5,,,"assassino,bárbaro,combatente,druid,explorador,paladino",dagger-black
-ID-131-20260102211820,distancia,Zarabatana,dano 1 /3m,1,3,,,"assassino,bárbaro,combatente,druid,explorador,paladino",dagger-black
-ID-132-20260102211820,distancia,Pedra,dano 1d2 /9m,0,,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-133-20260102211820,distancia,Aclis,dano 1d4 /6m,1,2,,,,dagger-black
-ID-134-20260102211820,distancia,Boleadeira,dano 1d4 /6m,5,2,,,,dagger-black
-ID-135-20260102211820,elmo,Armete,CA +6,10,1,,,"bárbaro,cleric,fighter,knight,paladin",dagger-black
-ID-136-20260102211820,elmo,Barbuta,CA+4,15,1,,,"bárbaro,cleric,fighter,knight,paladin",dagger-black
-ID-137-20260102211820,elmo,Benin,CA+2,8,1,,,"bárbaro,cleric,fighter,knight,paladin",dagger-black
-ID-138-20260102211820,elmo,Casquete,CA+2,10,1,,,"bárbaro,cleric,fighter,knight,paladin",dagger-black
-ID-139-20260102211820,elmo,Chapéu de guerra,CA+2,7,1,,,"bárbaro,cleric,fighter,knight,paladin",dagger-black
-ID-140-20260102211820,elmo,"Coifa, cota de malha",CA+4,15,1,,,"bárbaro,cleric,fighter,knight,paladin,ranger",dagger-black
-ID-141-20260102211820,elmo,"Coifa, couro",CA+1,4,1,,,"assassin,bard,bárbaro,cleric,druid,fighter,knight,paladin,ranger,trapaceiro",dagger-black
-ID-142-20260102211820,elmo,"Elmo, grande",CA+7,20,2,,,"bárbaro,cleric,fighter,knight,paladin",dagger-black
-ID-143-20260102211820,elmo,"Elmo, normal",CA+5,10,1,,,"bárbaro,cleric,fighter,knight,paladin",dagger-black
-ID-144-20260102211820,elmo,"Elmo, Normando",CA+3,8,1,,,"bárbaro,cleric,fighter,knight,paladin",dagger-black
-ID-145-20260102211820,elmo,"Elmo, pote",CA+2,5,1,,,"bárbaro,cleric,fighter,knight,paladin",dagger-black
-ID-146-20260102211820,equipamento,"Água benta, frasco",,,,,,,dagger-black
-ID-147-20260102211820,equipamento,Algemas,,,,,,,dagger-black
-ID-148-20260102211820,equipamento,"Aljava, dúzia",,,,,,,dagger-black
-ID-149-20260102211820,equipamento,"Aljava, vinte",,,,,,,dagger-black
-ID-150-20260102211820,equipamento,Apito,,,,,,,dagger-black
-ID-151-20260102211820,equipamento,Armadilha grande de metal,,,,,,,dagger-black
-ID-152-20260102211820,equipamento,Armadilha média de metal,,,,,,,dagger-black
-ID-153-20260102211820,equipamento,Armadilha pequena de metal,,,,,,,dagger-black
-ID-154-20260102211820,equipamento,Balde,,,,,,,dagger-black
-ID-155-20260102211820,equipamento,Bandagens (2 ferimentos),,,,,,,dagger-black
-ID-156-20260102211820,equipamento,Bandolim,,,,,,,dagger-black
-ID-157-20260102211820,escudo,Broquel,CA +1 (1),2,2,,,todos,dagger-black
-ID-158-20260102211820,escudo,"Grande, Aço",CA +1 (3),20,4,,,todos,dagger-black
-ID-159-20260102211820,escudo,"Grande, Madeira",CA +1 (3),7,4,,,todos,dagger-black
-ID-160-20260102211820,escudo,"Médio, Aço",CA +1 (2),15,3,,,todos,dagger-black
-ID-161-20260102211820,escudo,"Médio, Madeira",CA +1 (2),5,3,,,todos,dagger-black
-ID-162-20260102211820,escudo,Pavis,CA +6 (4),55,12,,,todos,dagger-black
-ID-163-20260102211820,escudo,"Pequeno, Aço",CA +1 (1),9,2,,,todos,dagger-black
-ID-164-20260102211820,escudo,"Pequeno, Madeira",CA +1 (1),3,2,,,todos,dagger-black
-ID-165-20260102211820,estabulo,"Curral, 1 Carroça",,,,,,,dagger-black
-ID-166-20260102211820,estabulo,"Canil, 1 animal",,,,,,,dagger-black
-ID-167-20260102211820,estabulo,"Estábulo, 1 Cavalo",,,,,,,dagger-black
-ID-168-20260102211820,estabulo,"Estábulo, Camelo",,,,,,,dagger-black
-ID-169-20260102211820,estabulo,"Estábulo, Javali",,,,,,,dagger-black
-ID-170-20260102211820,estabulo,"Estábulo, Exótico (urso, etc.)",,,,,,,dagger-black
-ID-171-20260102211820,municao,Flechas (20),,,,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-172-20260102211820,municao,Flechas de Prata,,,,,,"assassino,bárbaro,combatente,druid,explorador,paladino",dagger-black
-ID-173-20260102211820,municao,Virotes (12),,,,,,"assassino,bárbaro,combatente,explorador,paladino",dagger-black
-ID-174-20260102211820,municao,Flechas (12),,,,,,,dagger-black
-ID-175-20260102211820,provisoes,"Cerveja Ale, Caneca",,,,,,,dagger-black
-ID-176-20260102211820,provisoes,"Cerveja, Caneca",,,,,,,dagger-black
-ID-177-20260102211820,provisoes,"Queijo, peça",,,,,,,dagger-black
-ID-178-20260102211820,provisoes,"grãos, saco",,,,,,,dagger-black
-ID-179-20260102211820,provisoes,"Licor, Barril",,,,,,,dagger-black
-ID-180-20260102211820,provisoes,"Licor, Dose",,,,,,,dagger-black
-ID-181-20260102211820,provisoes,"Hidromel, Caneca",,,,,,,dagger-black
-ID-182-20260102211820,provisoes,Rações (1 dia),,,,,,,dagger-black
-ID-183-20260102211820,provisoes,Rações (1 semana),,,,,,,dagger-black
-ID-184-20260102211820,provisoes,"Refeição de taberna, comum",,,,,,,dagger-black
-ID-185-20260102211820,provisoes,"Refeição de taberna, boa",,,,,,,dagger-black
-ID-186-20260102211820,provisoes,"Folhas de chá, meio quilo",,,,,,,dagger-black
-ID-187-20260102211820,provisoes,Tabaco (meio quilo),,,,,,,dagger-black
-ID-188-20260102211820,provisoes,Vinho comum (garrafa),,,,,,,dagger-black
-ID-189-20260102211820,provisoes,Vinho fino (garrafa),,,,,,,dagger-black
-ID-190-20260102211820,provisoes,"Refeição leve (peixe, pães, frutas, queijo)",,,,,,,dagger-black
-ID-191-20260102211820,provisoes,"Refeição pesada (carnes, vegetais, pães, manteiga)",,,,,,,dagger-black
-ID-192-20260102211820,provisoes,"Extravagante (carnes, pudins, frutas frias)",,,,,,,dagger-black
-ID-193-20260102211820,provisoes,Cerveja clara,,,,,,,dagger-black
-ID-194-20260102211820,provisoes,Cerveja escura,,,,,,,dagger-black
-ID-195-20260102211820,provisoes,Cerveja lager,,,,,,,dagger-black
-ID-196-20260102211820,provisoes,Vinho vermelho/branco (garrafa),,,,,,,dagger-black
-ID-197-20260102211820,provisoes,Vinho Kathys Branco,,,,,,,dagger-black
-ID-198-20260102211820,roupas,Anel de sinete,,,,,,,dagger-black
-ID-199-20260102211820,roupas,Baldrico,,,,,,,dagger-black
-ID-200-20260102211820,roupas,Batina,,,,,,,dagger-black
-ID-201-20260102211820,roupas,Bijuterias,,,,,,,dagger-black
-ID-202-20260102211820,roupas,Boné/chapéu,,,,,,,dagger-black
-ID-203-20260102211820,roupas,Botas macias,,,,,,,dagger-black
-ID-204-20260102211820,roupas,Botas pesadas,,,,,,,dagger-black
-ID-205-20260102211820,roupas,Cachecol,,,,,,,dagger-black
-ID-206-20260102211820,roupas,Calças,,,,,,,dagger-black
-ID-207-20260102211820,roupas,Calças justas,,,,,,,dagger-black
-ID-208-20260102211820,roupas,Capa,,,,,,,dagger-black
-ID-209-20260102211820,roupas,Capuz,,,,,,,dagger-black
-ID-210-20260102211820,roupas,Cinto,,,,,,,dagger-black
-ID-211-20260102211820,roupas,Cinturão,,,,,,,dagger-black
-ID-212-20260102211820,roupas,Colete,,,,,,,dagger-black
-ID-213-20260102211820,roupas,Gibão,,,,,,,dagger-black
-ID-214-20260102211820,roupas,Jaleco,,,,,,,dagger-black
-ID-215-20260102211820,roupas,Kaftan,,,,,,,dagger-black
-ID-216-20260102211820,roupas,Luvas de couro,,,,,,,dagger-black
-ID-217-20260102211820,roupas,Luvas de tecido,,,,,,,dagger-black
-ID-218-20260102211820,roupas,Manto,,,,,,,dagger-black
-ID-219-20260102211820,roupas,Manto curto,,,,,,,dagger-black
-ID-220-20260102211820,roupas,"Roupas de inverno, conjunto",,,,,,,dagger-black
-ID-221-20260102211820,roupas,Saia,,,,,,,dagger-black
-ID-222-20260102211820,roupas,Sapatos comuns,,,,,,,dagger-black
-ID-223-20260102211820,roupas,Túnica,,,,,,,dagger-black
-ID-224-20260102211820,roupas,Túnica longa,,,,,,,dagger-black
-ID-225-20260102211820,roupas,Vestido,,,,,,,dagger-black
-ID-226-20260102211820,roupas,Vestido de Serviço,,,,,,,dagger-black
-ID-227-20260102211820,transporte,Alforjes,,,,,,,dagger-black
-ID-228-20260102211820,transporte,Arreio,,,,,,,dagger-black
-ID-229-20260102211820,transporte,Barco a remo,,,,,,,dagger-black
-ID-230-20260102211820,transporte,Barco longo,,,,,,,dagger-black
-ID-231-20260102211820,transporte,Biga,,,,,,,dagger-black
-ID-232-20260102211820,transporte,Boi,,,,,,,dagger-black
-ID-233-20260102211820,transporte,Bote,,,,,,,dagger-black
-ID-234-20260102211820,transporte,Bote pequeno,,,,,,,dagger-black
-ID-235-20260102211820,transporte,Burro,,,,,,,dagger-black
-ID-236-20260102211820,transporte,Canoa,,,,,,,dagger-black
-ID-237-20260102211820,transporte,Carroça,,,,,,,dagger-black
-ID-238-20260102211820,transporte,Carroão,,,,,,,dagger-black
-ID-239-20260102211820,transporte,Carruagem,,,,,,,dagger-black
-ID-240-20260102211820,transporte,Cavalo de guerra leve,,,,,,,dagger-black
-ID-241-20260102211820,transporte,Cavalo de guerra pesado,,,,,,,dagger-black
-ID-242-20260102211820,transporte,Cavalo de passeio,,,,,,,dagger-black
-ID-243-20260102211820,transporte,Cavalo de tração,,,,,,,dagger-black
-ID-244-20260102211820,transporte,"Cota de montaria, couro",,,,,,,dagger-black
-ID-245-20260102211820,transporte,"Cota de montaria, couro curtido",,,,,,,dagger-black
-ID-246-20260102211820,transporte,"Cota de montaria, malha",,,,,,,dagger-black
-ID-247-20260102211820,transporte,"Cota de montaria, peles",,,,,,,dagger-black
-ID-248-20260102211820,transporte,"Cota de montaria, placas",,,,,,,dagger-black
-ID-249-20260102211820,transporte,Freio e rédeas,,,,,,,dagger-black
-ID-250-20260102211820,transporte,Jangada,,,,,,,dagger-black
-ID-251-20260102211820,transporte,Manta de sela,,,,,,,dagger-black
-ID-252-20260102211820,transporte,Morsa,,,,,,,dagger-black
-ID-253-20260102211820,transporte,Mula,,,,,,,dagger-black
-ID-254-20260102211820,transporte,Pônei,,,,,,,dagger-black
-ID-255-20260102211820,transporte,Pônei de guerra,,,,,,,dagger-black
-ID-256-20260102211820,transporte,Ração (por dia),,,,,,,dagger-black
-ID-257-20260102211820,transporte,Sela,,,,,,,dagger-black
-ID-258-20260102211820,transporte,Trenó,,,,,,,dagger-black
+id,type,name,gold,ev,obs,effect,proficience,icon
+ID-2-20260103155224,alojamento,1 Cama mobiliada,1,,,,,tavern
+ID-3-20260103155224,alojamento,1 cama sem mobiliário,0.8,,,,,tavern
+ID-4-20260103155224,alojamento,2 Camas mobiliadas,2,,,,,tavern
+ID-5-20260103155224,alojamento,2 camas sem mobiliário,1.5,,,,,tavern
+ID-6-20260103155224,alojamento,4 Camas mobiliadas,10,,,,,tavern
+ID-7-20260103155224,alojamento,4 camas sem mobiliário,5,,,,,tavern
+ID-8-20260103155224,alojamento,5+ Camas mobiliadas (+1 PO por cama extra),1,,,,,tavern
+ID-9-20260103155224,alojamento,5+ Camas sem mobiliário (+15 PP por cama extra),1.5,,,,,tavern
+ID-10-20260103155224,distancia,Aclis,1,2,,dano 1d4 /6m,,bow
+ID-11-20260103155224,arma,Adaga,2,2,1,dano 1d4 /6m,"assassino,trapaceiro",dagger
+ID-12-20260103155224,equipamento,"Água benta, frasco",30,1,,,,torch
+ID-13-20260103155224,arma,Alabarda,10,5,"10,12",dano 1d10,"assassino,bárbaro,combatente,explorador,paladino",dagger
+ID-14-20260103155224,transporte,Alforjes,4,3,,,,wheel
+ID-15-20260103155224,equipamento,Algemas,15,1,,,,torch
+ID-16-20260103155224,equipamento,"Aljava, dúzia",2,2,,,,torch
+ID-17-20260103155224,equipamento,"Aljava, vinte",4,2,,,,torch
+ID-18-20260103155224,roupas,Anel de sinete,15,,,,,hood
+ID-19-20260103155224,equipamento,Apito,0.5,0,,,,torch
+ID-20-20260103155224,distancia,Arco Curto,30,3,,dano 1d6 /18m,"assassino,bárbaro,combatente,explorador,paladino",bow
+ID-21-20260103155224,distancia,Arco Longo,75,4,,dano 1d6 /30m,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",bow
+ID-22-20260103155224,distancia,Arco Longo Composto,100,4,,dano 1d8 /33m,"assassino,bárbaro,combatente,druid,explorador,paladino,trapaceiro",bow
+ID-23-20260103155224,equipamento,Armadilha grande de metal,35,9,,,,torch
+ID-24-20260103155224,equipamento,Armadilha média de metal,15,6,,,,torch
+ID-25-20260103155224,equipamento,Armadilha pequena de metal,7,3,capacidade 3,,,torch
+ID-26-20260103155224,armadura,Armadura Acolchoada,5,2,,CA +1,trapaceiro,armor
+ID-27-20260103155224,armadura,Armadura Completa,1000,4,,CA +8,,armor
+ID-28-20260103155224,armadura,Armadura de Couro,10,2,,CA +2,"bárbaro,cavaleiro,clerigo,combatente,paladino,trapaceiro",armor
+ID-29-20260103155224,armadura,Armadura de Placas,600,4,,CA +7,,armor
+ID-30-20260103155224,elmo,Armete,10,1,,CA+6,"bárbaro,cleric,fighter,knight,paladin",helm
+ID-31-20260103155224,distancia,Arpão,1,5,,dano 1d6 /6m,"assassino,bárbaro,combatente,druid,explorador,paladino",bow
+ID-32-20260103155224,transporte,Arreio,1,2,,,,wheel
+ID-33-20260103155224,distancia,Azagaia,1,3,,dano 1d4 /9m,"assassino,bárbaro,combatente,explorador,paladino",bow
+ID-34-20260103155224,equipamento,Balde,0.5,2,,,,torch
+ID-35-20260103155224,roupas,Baldrico,0.2,,,,,hood
+ID-36-20260103155224,equipamento,Bandagens (2 ferimentos),1,0,,,,torch
+ID-37-20260103155224,equipamento,Bandolim,10,2,,,,torch
+ID-38-20260103155224,elmo,Barbuta,15,1,,CA+4,"bárbaro,cleric,fighter,knight,paladin",helm
+ID-39-20260103155224,transporte,Barco a remo,50,25,,,,wheel
+ID-40-20260103155224,transporte,Barco longo,500,,,,,wheel
+ID-41-20260103155224,roupas,Batina,0.5,2,,,,hood
+ID-42-20260103155224,elmo,Benin,8,1,,CA+2,"bárbaro,cleric,fighter,knight,paladin",helm
+ID-43-20260103155224,distancia,Besta de Mão,100,2,,dano 1d4 /9m,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",bow
+ID-44-20260103155224,distancia,Besta Leve,35,4,,dano 1d6 /24m,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",bow
+ID-45-20260103155224,distancia,Besta Pesada,50,5,,dano 1d10 /36m,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",bow
+ID-46-20260103155224,transporte,Biga,200,,,,,wheel
+ID-47-20260103155224,roupas,Bijuterias,0,,,,,hood
+ID-48-20260103155224,transporte,Boi,18,,,,,wheel
+ID-49-20260103155224,distancia,Bolas,5,2,,dano 1d4 /6m,"assassino,bárbaro,combatente,druid,explorador,paladino,trapaceiro",bow
+ID-50-20260103155224,distancia,Boleadeira,5,2,,dano 1d4 /6m,,bow
+ID-51-20260103155224,roupas,Boné/chapéu,0.4,,,,,hood
+ID-52-20260103155224,roupas,Botas macias,0.4,,,,,hood
+ID-53-20260103155224,roupas,Botas pesadas,1,1,,,,hood
+ID-54-20260103155224,transporte,Bote,300,,,,,wheel
+ID-55-20260103155224,transporte,Bote pequeno,250,,,,,wheel
+ID-56-20260103155224,armadura,Brigandina,85,4,,CA +4,"bardo,bárbaro,cavaleiro,clerigo,combatente,druid,explorador,paladino",armor
+ID-57-20260103155224,escudo,Broquel,2,2,,CA +1 (1),todos,shield
+ID-58-20260103155224,transporte,Burro,8,,,,,wheel
+ID-59-20260103155224,roupas,Cachecol,0.05,,,,,hood
+ID-60-20260103155224,arma,Cajado,0,4,,dano 1d6,,dagger
+ID-61-20260103155224,roupas,Calças,0.4,1,,,,hood
+ID-62-20260103155224,roupas,Calças justas,0.5,2,,,,hood
+ID-63-20260103155224,armadura,Camisa de cota de Malha,100,3,,CA +4,"bárbaro,cavaleiro,clerigo,combatente,explorador,paladino",armor
+ID-64-20260103155224,estabulo,"Canil, 1 animal",0.1,,,,,horses
+ID-65-20260103155224,transporte,Canoa,35,23,,,,wheel
+ID-66-20260103155224,roupas,Capa,0.8,,,,,hood
+ID-67-20260103155224,roupas,Capuz,0.2,3,,,,hood
+ID-68-20260103155224,transporte,Carroção,35,,,,,wheel
+ID-69-20260103155224,transporte,Carroça,15,,,,,wheel
+ID-70-20260103155224,transporte,Carruagem,100,,,,,wheel
+ID-71-20260103155224,armadura,Casaco de Couro,7,2,,CA +1,"bárbaro,cavaleiro,clerigo,combatente,paladino,trapaceiro",armor
+ID-72-20260103155224,elmo,Casquete,10,1,,CA+2,"bárbaro,cleric,fighter,knight,paladin",helm
+ID-73-20260103155224,transporte,Cavalo de guerra leve,150,,,,,wheel
+ID-74-20260103155224,transporte,Cavalo de guerra pesado,400,,,,,wheel
+ID-75-20260103155224,transporte,Cavalo de passeio,75,,,,,wheel
+ID-76-20260103155224,transporte,Cavalo de tração,200,,,,,wheel
+ID-77-20260103155224,provisoes,"Cerveja Ale, Caneca",0.05,1,,,,food
+ID-78-20260103155224,provisoes,Cerveja clara,0.02,,,,,food
+ID-79-20260103155224,provisoes,Cerveja escura,0.05,,,,,food
+ID-80-20260103155224,provisoes,Cerveja lager,0.1,,,,,food
+ID-81-20260103155224,provisoes,"Cerveja, Caneca",0.02,1,,,,food
+ID-82-20260103155224,arma,Cestus,1,1,,dano +1,,dagger
+ID-83-20260103155224,elmo,Chapéu de guerra,7,1,,CA+2,"bárbaro,cleric,fighter,knight,paladin",helm
+ID-84-20260103155224,arma,Chicote,1,2,,dano 1d2 /4.5m,,dagger
+ID-85-20260103155224,roupas,Cinto,0.6,,,,,hood
+ID-86-20260103155224,roupas,Cinturão,0.7,1,,,,hood
+ID-87-20260103155224,arma,Clava,5,2,,dano 1d3 /6m,,dagger
+ID-88-20260103155224,arma,Clava pesada,15,2,,dano 1d6+1,,dagger
+ID-89-20260103155224,elmo,"Coifa, cota de malha",15,1,,CA+4,"bárbaro,cleric,fighter,knight,paladin,ranger",helm
+ID-90-20260103155224,elmo,"Coifa, couro",4,1,,CA+1,"assassin,bard,bárbaro,cleric,druid,fighter,knight,paladin,ranger,trapaceiro",helm
+ID-91-20260103155224,roupas,Colete,0.2,1,,,,hood
+ID-92-20260103155224,alojamento,Comum (piso de palha),0.05,,,,,tavern
+ID-93-20260103155224,armadura,Conjunto completo (4),650,4,,CA +7,,armor
+ID-94-20260103155224,armadura,Conjunto Grego (1),120,4,,CA +5,"bardo,bárbaro,cavaleiro,clerigo,combatente,druid,paladino",armor
+ID-95-20260103155224,armadura,Conjunto Grego (2),230,4,,CA +6,"assassino,bardo,bárbaro,cavaleiro,clerigo,combatente,druid,explorador,paladino",armor
+ID-96-20260103155224,armadura,Conjunto Romano (3),240,4,,CA +6,"assassino,bardo,bárbaro,cavaleiro,clerigo,combatente,druid,explorador,paladino",armor
+ID-97-20260103155224,armadura,Cota de Anéis,30,3,,CA +3,"bárbaro,cavaleiro,clerigo,combatente,paladino",armor
+ID-98-20260103155224,armadura,Cota de bandas,250,4,,CA +6,"bardo,bárbaro,cavaleiro,clerigo,combatente,explorador,paladino",armor
+ID-99-20260103155224,armadura,Cota de Escamas,50,4,,CA +4,"bardo,bárbaro,cavaleiro,clerigo,combatente,explorador,paladino",armor
+ID-100-20260103155224,armadura,Cota de Malha Completa,200,4,,CA +6,,armor
+ID-101-20260103155224,transporte,"Cota de montaria, couro",50,5,,,,wheel
+ID-102-20260103155224,transporte,"Cota de montaria, couro curtido",100,6,,,,wheel
+ID-103-20260103155224,transporte,"Cota de montaria, malha",500,6,,,,wheel
+ID-104-20260103155224,transporte,"Cota de montaria, peles",20,5,,,,wheel
+ID-105-20260103155224,transporte,"Cota de montaria, placas",4000,8,,,,wheel
+ID-106-20260103155224,armadura,Cota de Placas,100,4,,CA +5,"assassino,bardo,bárbaro,cavaleiro,clerigo,combatente,druid,explorador,paladino",armor
+ID-107-20260103155224,armadura,Cota de talas,200,4,,CA +6,"assassino,bardo,bárbaro,cavaleiro,clerigo,combatente,druid,explorador,paladino",armor
+ID-108-20260103155224,armadura,Couro Batido,25,3,,CA +3,"bárbaro,cavaleiro,clerigo,combatente,paladino,trapaceiro",armor
+ID-109-20260103155224,armadura,Couro Cozido,45,4,,CA +4,"bárbaro,cavaleiro,clerigo,combatente,paladino,trapaceiro",armor
+ID-110-20260103155224,transporte,"Curral, 1 Carroça",0.3,,,,,wheel
+ID-111-20260103155224,arma,Cutelo,5,2,,dano 1d4,,dagger
+ID-112-20260103155224,arma,Cutelo longo,8,5,"9,12",dano 2d4,,dagger
+ID-113-20260103155224,distancia,Dardo,0.5,1,,dano 1d3 /6m,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",bow
+ID-114-20260103155224,elmo,"Elmo, grande",20,2,,CA+7,"bárbaro,cleric,fighter,knight,paladin",helm
+ID-115-20260103155224,elmo,"Elmo, normal",10,1,,CA+5,"bárbaro,cleric,fighter,knight,paladin",helm
+ID-116-20260103155224,elmo,"Elmo, Normando",8,1,,CA+3,"bárbaro,cleric,fighter,knight,paladin",helm
+ID-117-20260103155224,elmo,"Elmo, pote",5,1,,CA+2,"bárbaro,cleric,fighter,knight,paladin",helm
+ID-118-20260103155224,arma,Espada Bastarda,25,4,9,dano 1d10,"assassino,bárbaro,combatente,explorador,paladino",dagger
+ID-119-20260103155224,arma,Espada Broadsword,12,4,,dano 2d4,"assassino,bárbaro,combatente,explorador,paladino",dagger
+ID-120-20260103155224,arma,Espada Cimitarra,15,3,,dano 1d6,"assassino,bárbaro,combatente,explorador,paladino",dagger
+ID-121-20260103155224,arma,Espada Cimitarra grande,55,4,,2d6,,dagger
+ID-122-20260103155224,arma,Espada Curta,10,2,,dano 1d6,"assassino,bárbaro,combatente,explorador,paladino",dagger
+ID-123-20260103155224,arma,Espada de duas mãos,30,5,10,dano 2d6,,dagger
+ID-124-20260103155224,arma,Espada de Gancho,25,3,,dano 1d4+1,"assassino,bárbaro,combatente,druid,explorador,ilusionista,mago,paladino,trapaceiro",dagger
+ID-125-20260103155224,arma,Espada Falcione,40,3,,dano 2d4,,dagger
+ID-126-20260103155224,arma,Espada Flamberg,75,4,10,2d4+2,,dagger
+ID-127-20260103155224,arma,Espada Gancho,25,3,6,1d4+1,,dagger
+ID-128-20260103155224,arma,Espada larga,12,4,,2d4,,dagger
+ID-129-20260103155224,arma,"Espada larga, 9 anéis",30,3,,dano 1d10,,dagger
+ID-130-20260103155224,arma,Espada Longa,15,3,,dano 1d8,"assassino,bárbaro,combatente,explorador,paladino",dagger
+ID-131-20260103155224,arma,Espada Rapieira,20,3,,dano 1d6,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",dagger
+ID-132-20260103155224,estabulo,"Estábulo, 1 Cavalo",0.1,,,,,horses
+ID-133-20260103155224,estabulo,"Estábulo, Camelo",0.5,,,,,horses
+ID-134-20260103155224,estabulo,"Estábulo, Exótico (urso, etc.)",1,,,,,horses
+ID-135-20260103155224,estabulo,"Estábulo, Javali",0.3,,,,,horses
+ID-136-20260103155224,alojamento,Estalagem Boa,2,,,,,tavern
+ID-137-20260103155224,alojamento,Estalagem comum,0.5,,,,,tavern
+ID-138-20260103155224,alojamento,Estalagem Pobre,0.1,,,,,tavern
+ID-139-20260103155224,provisoes,"Refeição Extravagante (carnes, pudins, frutas frias)",1,,,,,food
+ID-140-20260103155224,arma,Faca,0.3,1,1,dano 1d2 /6m,,dagger
+ID-141-20260103155224,municao,Flechas (12),1.5,1,arco,,,arrows
+ID-142-20260103155224,municao,Flechas (20),2,2,arco,,"assassino,bárbaro,combatente,explorador,paladino",arrows
+ID-143-20260103155224,municao,Flechas de Prata (2),2,1,arco,,"assassino,bárbaro,combatente,druid,explorador,paladino",arrows
+ID-144-20260103155224,arma,Foice de Guerra,18,4,,dano 2d4,"assassino,bárbaro,combatente,explorador,paladino",dagger
+ID-145-20260103155224,provisoes,"Folhas de chá, meio quilo",0.1,1,,,,food
+ID-146-20260103155224,arma,Forcado Militar,10,5,"10,12",dano 1d8,,dagger
+ID-147-20260103155224,transporte,Freio e rédeas,1,2,,,,wheel
+ID-148-20260103155224,distancia,Funda,,1,,dano 1d4 /15m,"assassino,bárbaro,combatente,druid,explorador,ilusionista,mago,paladino,trapaceiro",bow
+ID-149-20260103155224,arma,"Gancho, haste",5,4,12,dano 1d6,,dagger
+ID-150-20260103155224,arma,Garfo Fauchard,15,5,"10,12",dano 1d8 /3m,"assassino,bárbaro,combatente,druid,explorador,paladino",dagger
+ID-151-20260103155224,arma,Garfo militar,10,5,,dano 1d8,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",dagger
+ID-152-20260103155224,arma,Gato de nove caudas,9,2,,dano 1d3,,dagger
+ID-153-20260103155224,roupas,Gibão,1,1,,,,hood
+ID-154-20260103155224,arma,Glaive,8,5,10,dano 1d8 /3m,,dagger
+ID-155-20260103155224,arma,Godentag,15,3,10,dano 1d6+3,,dagger
+ID-156-20260103155224,escudo,"Grande, Aço",20,4,,CA +1 (3),todos,shield
+ID-157-20260103155224,escudo,"Grande, Madeira",7,4,,CA +1 (3),todos,shield
+ID-158-20260103155224,provisoes,"grãos, saco",,3,,,,food
+ID-159-20260103155224,arma,Guisarme,10,5,"10,12",dano 2d4 /3m,,dagger
+ID-160-20260103155224,provisoes,"Hidromel, Caneca",0.2,1,,,,food
+ID-161-20260103155224,armadura,Hussarda Polonesa,1750,3,,CA +8,,armor
+ID-162-20260103155224,roupas,Jaleco,0.3,1,,,,hood
+ID-163-20260103155224,transporte,Jangada,100,,,,,wheel
+ID-164-20260103155224,roupas,Kaftan,0.3,1,,,,hood
+ID-165-20260103155224,arma,Katar,3,2,,dano 1d4+1,,dagger
+ID-166-20260103155224,armadura,Laminar de Couro,55,2,,CA +3,"bárbaro,cavaleiro,clerigo,combatente,paladino,trapaceiro",armor
+ID-167-20260103155224,arma,Lança,1,2,7,dano 1d6 /9m,,dagger
+ID-168-20260103155224,arma,Lança de lobo,3,3,1,dano 1d8 /6m,,dagger
+ID-169-20260103155224,arma,Lança leve,6,5,7,dano 1d6,,dagger
+ID-170-20260103155224,arma,Lança longa,5,4,"1,8,12",dano 1d8 /3m,,dagger
+ID-171-20260103155224,arma,Lança Partisan,10,5,"10,12",dano 1d8 /3m,"assassino,bárbaro,combatente,explorador,paladino",dagger
+ID-172-20260103155224,arma,Lança Pesada,10,7,7,dano 1d8,"assassino,bárbaro,combatente,explorador,paladino",dagger
+ID-173-20260103155224,provisoes,"Licor, Barril",25,5,,,,food
+ID-174-20260103155224,provisoes,"Licor, Dose",0.2,,,,,food
+ID-175-20260103155224,armadura,Loriga de Cota de Malha,150,4,,CA +5,"bardo,bárbaro,cavaleiro,clerigo,combatente,explorador,paladino",armor
+ID-176-20260103155224,roupas,Luvas de couro,0.8,,,,,hood
+ID-177-20260103155224,roupas,Luvas de tecido,0.2,,,,,hood
+ID-178-20260103155224,arma,Maça estrela,8,3,,dano 2d4,,dagger
+ID-179-20260103155224,arma,Maça grande,25,4,7,dano 1d10,,dagger
+ID-180-20260103155224,arma,Maça leve,5,3,,dano 1d6,,dagger
+ID-181-20260103155224,arma,Maça Pesada,12,4,,dano 1d8,"assassino,bárbaro,combatente,druid,explorador,paladino",dagger
+ID-182-20260103155224,arma,Machado Barbado,20,4,10,dano 3d4,"assassino,bárbaro,combatente,explorador,paladino",dagger
+ID-183-20260103155224,arma,Machado Bardiche,15,4,"10,12",dano 2d4,"assassino,bárbaro,combatente,druid,explorador,paladino",dagger
+ID-184-20260103155224,arma,Machado de arremesso,4,2,1,dano 1d6,,dagger
+ID-185-20260103155224,arma,Machado de Batalha,10,3,,dano 1d8,"assassino,bárbaro,combatente,druid,explorador,paladino,trapaceiro",dagger
+ID-186-20260103155224,arma,Machado de duas mãos,20,4,10,dano 1d12,"assassino,bárbaro,combatente,druid,explorador,paladino",dagger
+ID-187-20260103155224,arma,"Machado, perfurador",17,3,,dano 1d8+1,"assassino,bárbaro,combatente,explorador,paladino",dagger
+ID-188-20260103155224,arma,Machete,1,2,,dano 1d4,,dagger
+ID-189-20260103155224,arma,Main Gauche,25,2,3,dano 1d4+1,,dagger
+ID-190-20260103155224,arma,Malho,12,5,10,dano 1d10,,dagger
+ID-191-20260103155224,arma,Mangual Leve,8,3,,dano 1d8,"assassino,bárbaro,combatente,druid,explorador,paladino,trapaceiro",dagger
+ID-192-20260103155224,arma,Mangual Pesado,15,4,10,dano 1d10,"assassino,bárbaro,combatente,explorador,paladino,trapaceiro",dagger
+ID-193-20260103155224,arma,Manopla farpada,5,1,,dano 1d3,,dagger
+ID-194-20260103155224,transporte,Manta de sela,0.5,1,,,,wheel
+ID-195-20260103155224,roupas,Manto,0.5,1,,,,hood
+ID-196-20260103155224,roupas,Manto curto,1,1,,,,hood
+ID-197-20260103155224,arma,Marreta,12,5,,dano 1d10,"assassino,bárbaro,combatente,explorador,paladino",dagger
+ID-198-20260103155224,arma,Martelo de guerra,6,4,,dano 1d8,,dagger
+ID-199-20260103155224,arma,Martelo de Lucerna,60,5,"10,12",dano 1d12,,dagger
+ID-200-20260103155224,arma,Martelo leve,1,2,1,dano 1d4 /9m,,dagger
+ID-201-20260103155224,escudo,"Médio, Aço",15,3,,CA +1 (2),todos,shield
+ID-202-20260103155224,escudo,"Médio, Madeira",5,3,,CA +1 (2),todos,shield
+ID-203-20260103155224,arma,Morningstar,8,3,,dano 2d4,"assassino,bárbaro,combatente,explorador,paladino",dagger
+ID-204-20260103155224,transporte,Morsa,350,,,,,wheel
+ID-205-20260103155224,transporte,Mula,25,,,,,wheel
+ID-206-20260103155224,escudo,Pavis,55,12,,CA +6 (4),todos,shield
+ID-207-20260103155224,distancia,Pedra,0,,,dano 1d2 /9m,"assassino,bárbaro,combatente,explorador,paladino",bow
+ID-208-20260103155224,arma,Pegador,45,4,"4,10",dano 1d4,,dagger
+ID-209-20260103155224,armadura,Peitoral de Aço,300,3,,CA +5,"bárbaro,cavaleiro,clerigo,combatente,explorador,paladino",armor
+ID-210-20260103155224,armadura,Peitoral de Bronze,95,3,,CA +4,"bardo,bárbaro,cavaleiro,clerigo,combatente,explorador,paladino",armor
+ID-211-20260103155224,armadura,Peles,20,4,,CA +3,"bárbaro,cavaleiro,clerigo,combatente,paladino",armor
+ID-212-20260103155224,escudo,"Pequeno, Aço",9,2,,CA +1 (1),todos,shield
+ID-213-20260103155224,escudo,"Pequeno, Madeira",3,2,,CA +1 (1),todos,shield
+ID-214-20260103155224,arma,Picareta bico de corvo,12,5,"2,10,12",dano 1d10,"assassino,bárbaro,combatente,druid,explorador,paladino,trapaceiro",dagger
+ID-215-20260103155224,arma,Picareta de Guerra,15,2,,dano 1d6,,dagger
+ID-216-20260103155224,arma,Picareta Leve,4,3,,dano 1d4,,dagger
+ID-217-20260103155224,arma,Picareta Pesada,8,4,,dano 1d6,,dagger
+ID-218-20260103155224,arma,Pique,5,6,"8,10,12",dano 1d8 /3m,,dagger
+ID-219-20260103155224,arma,Podão ou gancho,12,5,"10,12",dano 2d4,,dagger
+ID-220-20260103155224,transporte,Pônei,30,,,,,wheel
+ID-221-20260103155224,transporte,Pônei de guerra,100,,,,,wheel
+ID-222-20260103155224,arma,Poniard,25,1,,dano 1d4+1,,dagger
+ID-223-20260103155224,arma,Porrete,1,1,,dano 1d3,,dagger
+ID-224-20260103155224,arma,Punhal,3,1,,dano 1d4+1,,dagger
+ID-225-20260103155224,arma,Punho,0,,,dano 1d2,,dagger
+ID-226-20260103155224,arma,Punhos de bronze,1,1,,dano 1d3,,dagger
+ID-227-20260103155224,provisoes,"Queijo, peça",,,,,,food
+ID-228-20260103155224,transporte,Ração (por dia),0.05,2,,,,wheel
+ID-229-20260103155224,provisoes,Rações (1 dia),0.5,1,,,,food
+ID-230-20260103155224,provisoes,Rações (1 semana),3,4,,,,food
+ID-231-20260103155224,arma,Ranseur,8,5,"10,12",dano 2d4,,dagger
+ID-232-20260103155224,provisoes,"Refeição de taberna, boa",1,,,,,food
+ID-233-20260103155224,provisoes,"Refeição de taberna, comum",0.2,,,,,food
+ID-234-20260103155224,provisoes,"Refeição leve (peixe, pães, frutas, queijo)",0.1,,,,,food
+ID-235-20260103155224,provisoes,"Refeição pesada (carnes, vegetais, pães, manteiga)",0.3,,,,,food
+ID-236-20260103155224,roupas,"Roupas de inverno, conjunto",5,4,,,,hood
+ID-237-20260103155224,arma,Sabre,8,2,,dano 1d6,,dagger
+ID-238-20260103155224,roupas,Saia,0.4,1,,,,hood
+ID-239-20260103155224,alojamento,Sala comunal (apenas o andar),0.01,,,,,tavern
+ID-240-20260103155224,roupas,Sapatos comuns,0.2,1,,,,hood
+ID-241-20260103155224,transporte,Sela,20,5,,,,wheel
+ID-242-20260103155224,arma,Sodegarami,17,5,"5,12",dano 1d10,,dagger
+ID-243-20260103155224,alojamento,Suíte mobiliada,50,,,,,tavern
+ID-244-20260103155224,alojamento,Suíte sem mobília,25,,,,,tavern
+ID-245-20260103155224,provisoes,Tabaco (meio quilo),,,,,,food
+ID-246-20260103155224,transporte,Trenó,20,,,,,wheel
+ID-247-20260103155224,arma,Tridente,10,5,"1,12",dano 1d8 /3m,"assassino,bárbaro,combatente,explorador,paladino",dagger
+ID-248-20260103155224,roupas,Túnica,0.3,1,,,,hood
+ID-249-20260103155224,roupas,Túnica longa,1,2,,,,hood
+ID-250-20260103155224,roupas,Vestido,1,4,,,,hood
+ID-251-20260103155224,roupas,Vestido de Serviço,0.5,2,,,,hood
+ID-252-20260103155224,provisoes,Vinho comum (garrafa),0.2,1,,,,food
+ID-253-20260103155224,provisoes,Vinho fino (garrafa),10,1,,,,food
+ID-254-20260103155224,provisoes,Vinho branco Kathy,1,,,,,food
+ID-255-20260103155224,provisoes,Vinho vermelho/branco (garrafa),5,,,,,food
+ID-256-20260103155224,municao,Virotes (12),1,1,besta,,"assassino,bárbaro,combatente,explorador,paladino",arrows
+ID-257-20260103155224,distancia,Zarabatana,1,3,,dano 1 /3m,"assassino,bárbaro,combatente,druid,explorador,paladino",bow
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+ID-1000-20260103155224,equipamento,Barril grande,4,9,capacidade 9,,,torch
+ID-1001-20260103155224,equipamento,Barril pequeno,2,6,capacidade 6,,,torch
+ID-1002-20260103155224,equipamento,Baú de viagem,2,3,capacidade 5,,,torch
+ID-1003-20260103155224,equipamento,Baú grande,5,12,capacidade 8,,,torch
+ID-1004-20260103155224,equipamento,Baú pequeno,2,4,capacidade 6,,,torch
+ID-1005-20260103155224,equipamento,Bolinhas (saco c/ 25),1,0,,,,torch
+ID-1006-20260103155224,equipamento,Cinto para componentes,10,2,,,,torch
+ID-1007-20260103155224,equipamento,Bolsa de cinto grande,1,1,,,,torch
+ID-1008-20260103155224,equipamento,Bolsa de cinto pequena,0.5,0,,,,torch
+ID-1009-20260103155224,equipamento,Cabaça,0.3,1,,,,torch
+ID-1010-20260103155224,equipamento,Cachimbo,5,0,,,,torch
+ID-1011-20260103155224,equipamento,Cadeado e chave,25,1,,,,torch
+ID-1012-20260103155224,equipamento,Caixa de fogo (10 usos),1,2,,,,torch
+ID-1013-20260103155224,equipamento,Caixão,2,4,,,,torch
+ID-1014-20260103155224,equipamento,Cajado (3m),0.2,5,,,,torch
+ID-1015-20260103155224,equipamento,Caneca,0.02,0,,,,torch
+ID-1016-20260103155224,equipamento,"Cantil (1,5L)",1,3,,,,torch
+ID-1017-20260103155224,equipamento,Cavadeira,1,0,,,,torch
+ID-1018-20260103155224,equipamento,Cera de lacrar,1,0,,,,torch
+ID-1019-20260103155224,equipamento,Cesto,0.4,2,,,,torch
+ID-1020-20260103155224,equipamento,"Chaleira, ferro",1,3,,,,torch
+ID-1021-20260103155224,equipamento,Cítara,40,3,,,,torch
+ID-1022-20260103155224,equipamento,"Cobertor, inverno",0.5,2,,,,torch
+ID-1023-20260103155224,equipamento,"Conjunto de costura (agulha, linha, etc)",0.5,1,,,,torch
+ID-1024-20260103155224,equipamento,Corda (20m),5,2,,,,torch
+ID-1025-20260103155224,equipamento,Corda de cânhamo (15m),1,3,,,,torch
+ID-1026-20260103155224,equipamento,Corda de ceda (15m),10,2,,,,torch
+ID-1027-20260103155224,equipamento,Cordão (45m),0.4,2,,,,torch
+ID-1028-20260103155224,equipamento,Corneta,5,2,,,,torch
+ID-1029-20260103155224,equipamento,Corrente (6m),2,12,,,,torch
+ID-1030-20260103155224,equipamento,"Cunha, divisão",0.02,0,,,,torch
+ID-1031-20260103155224,equipamento,"equipamento de pesca (anzol, linha, etc)",0.5,2,,,,torch
+ID-1032-20260103155224,equipamento,Espelho pequeno de aço,10,1,,,,torch
+ID-1033-20260103155224,equipamento,Estacas/gancho (5),0.5,1,,,,torch
+ID-1034-20260103155224,equipamento,Estojo para mapas/pergaminho,1,1,,,,torch
+ID-1035-20260103155224,equipamento,Farol,12,2,,,,torch
+ID-1036-20260103155224,equipamento,Ferramentas de chaveiro,30,1,,,,torch
+ID-1037-20260103155224,equipamento,Flauta,15,1,,,,torch
+ID-1038-20260103155224,equipamento,Flautas de pã,11,1,,,,torch
+ID-1039-20260103155224,equipamento,Formão,1,1,,,,torch
+ID-1040-20260103155224,equipamento,Frasco (30ml),0.03,0,,,,torch
+ID-1041-20260103155224,equipamento,Gaita de fole,0.1,4,,,,torch
+ID-1042-20260103155224,equipamento,Gancho de escalada,35,2,,,,torch
+ID-1043-20260103155224,equipamento,"Gancho, ferro",1,1,,,,torch
+ID-1044-20260103155224,equipamento,Garrafa,2,1,,,,torch
+ID-1045-20260103155224,equipamento,Giz (unidade),0.01,1,,,,torch
+ID-1046-20260103155224,equipamento,Gongo,18,3,,,,torch
+ID-1047-20260103155224,equipamento,Pote de gracha (meio quilo),0.02,1,,,,torch
+ID-1048-20260103155224,equipamento,Harpa,35,4,,,,torch
+ID-1049-20260103155224,equipamento,"Incenso, vareta",1,0,,,,torch
+ID-1050-20260103155224,equipamento,Lâmpada aberta,3,2,,,,torch
+ID-1051-20260103155224,equipamento,Lanterna corta luz,7,2,,,,torch
+ID-1052-20260103155224,equipamento,Lenha (1 dia),0.01,8,,,,torch
+ID-1053-20260103155224,equipamento,Lima,2,1,,,,torch
+ID-1054-20260103155224,equipamento,"Lima estreita, metal",1,1,,,,torch
+ID-1055-20260103155224,equipamento,"Lima larga, metal",2,1,,,,torch
+ID-1056-20260103155224,equipamento,Magnetita,25,1,,,,torch
+ID-1057-20260103155224,equipamento,Marreta,6,4,,,,torch
+ID-1058-20260103155224,equipamento,Martelo,1,2,,,,torch
+ID-1059-20260103155224,equipamento,meias de lã,0.1,0,,,,torch
+ID-1060-20260103155224,equipamento,Mochila,2,2,capacidade 8,,,torch
+ID-1061-20260103155224,equipamento,Mochila de ombro,2,3,capacidade 10,,,torch
+ID-1062-20260103155224,equipamento,Navalha,0.5,1,,,,torch
+ID-1063-20260103155224,equipamento,Óleo p/ armadura e arma,1,1,,,,torch
+ID-1064-20260103155224,equipamento,"òleo, frasco",1,1,,,,torch
+ID-1065-20260103155224,equipamento,Pá,2,3,,,,torch
+ID-1066-20260103155224,equipamento,Panela,3,4,,,,torch
+ID-1067-20260103155224,equipamento,Papel (10 folhas),10,0,,,,torch
+ID-1068-20260103155224,equipamento,Pé de cabra,2,2,,,,torch
+ID-1069-20260103155224,equipamento,Pederneira e isqueiro,1,0,,,,torch
+ID-1070-20260103155224,equipamento,Pedra de esmeril,1,1,,,,torch
+ID-1071-20260103155224,equipamento,Pena de escrever,0.1,0,,,,torch
+ID-1072-20260103155224,equipamento,Pergaminho (10 folhas),5,0,,,,torch
+ID-1073-20260103155224,equipamento,"Picareta, de minerador",3,4,,,,torch
+ID-1074-20260103155224,equipamento,Pilão e almofariz,3,2,,,,torch
+ID-1075-20260103155224,equipamento,"Pregos, ferro (50)",0.5,1,,,,torch
+ID-1076-20260103155224,equipamento,Punção,1,1,,,,torch
+ID-1077-20260103155224,equipamento,Rede de dormir,8,4,,,,torch
+ID-1078-20260103155224,equipamento,Rosário,2,0,,,,torch
+ID-1079-20260103155224,equipamento,"Sabão, bara",0.5,1,,,,torch
+ID-1080-20260103155224,equipamento,Saco de dormir,0.1,3,,,,torch
+ID-1081-20260103155224,equipamento,Saco de pó de giz,0,1,,,,torch
+ID-1082-20260103155224,equipamento,Saco grande,0.5,2,capacidade 10,,,torch
+ID-1083-20260103155224,equipamento,Saco pequeno,0.1,1,capacidade 6,,,torch
+ID-1084-20260103155224,equipamento,Serra de metal,5,2,,,,torch
+ID-1085-20260103155224,equipamento,"Símbolo sagrado, madeira",1,1,,,,torch
+ID-1086-20260103155224,equipamento,"Símbolo sagrado, prata",25,1,,,,torch
+ID-1087-20260103155224,equipamento,Tambor,9,5,,,,torch
+ID-1088-20260103155224,equipamento,Tenazes,0.6,1,,,,torch
+ID-1089-20260103155224,equipamento,"Tenda, grande",45,10,5 pessoas,,,torch
+ID-1090-20260103155224,equipamento,"Tenda, média",25,7,3 pessoas,,,torch
+ID-1091-20260103155224,equipamento,Tinta,8,0,,,,torch
+ID-1092-20260103155224,equipamento,Tocha,0.01,1,,,,torch
+ID-1093-20260103155224,equipamento,Vassoura,0.05,3,,,,torch
+ID-1094-20260103155224,equipamento,Vela (5),0.05,1,,,,torch
+ID-1095-20260103155224,equipamento,Velino (10 folhas),15,1,,,,torch
+ID-1096-20260103155224,equipamento,"Tenda, pequena",10,4,1 pessoa,,,torch

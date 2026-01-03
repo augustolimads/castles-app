@@ -10,7 +10,7 @@ interface GridWithFiltersProps {
   itemsPerPage?: number;
 }
 
-export function GridWithFilters({ itemsPerPage = 12 }: GridWithFiltersProps) {
+export function GridWithFilters({ itemsPerPage = 20 }: GridWithFiltersProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
 
@@ -43,15 +43,13 @@ export function GridWithFilters({ itemsPerPage = 12 }: GridWithFiltersProps) {
     itemsPerPage,
   });
 
-  // Reset pagination quando filtros mudam
+  // Handlers para mudanças nos filtros
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
-    reset();
   };
 
   const handleTypeFilterChange = (value: string) => {
     setTypeFilter(value);
-    reset();
   };
 
   // Obter tipos únicos para o filtro

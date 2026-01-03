@@ -11,7 +11,7 @@ interface GridProps {
   itemsPerPage?: number;
 }
 
-export function Grid({ itemsPerPage = 12 }: GridProps) {
+export function Grid({ itemsPerPage = 20 }: GridProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
