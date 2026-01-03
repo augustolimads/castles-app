@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <SidebarProvider>
           <AppSidebar />
-          <main className="relative w-full max-w-6xl">
+          <main className="relative w-full">
             <div className="p-4 pt-0 md:p-10 md:pt-0">
               {children}
             </div>

@@ -512,7 +512,7 @@ export default function Home() {
   const maxPrimes = getMaxPrimeAttributes();
 
   return (
-    <div className="flex flex-col gap-8 pt-8">
+    <div className="flex flex-col gap-8 pt-8 max-w-4xl mx-auto">
       <div className="flex gap-2">
         <SidebarTrigger />
         <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight text-balance">C&C: Gerador de personagem</h1>

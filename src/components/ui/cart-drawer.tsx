@@ -16,21 +16,22 @@ export function CartDrawer({ children }: CartDrawerProps) {
   const { items, removeItem, updateQuantity, clearCart, totalGold, totalEV, totalItems } = useCart();
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <div className="relative">
-          {children}
-          {totalItems > 0 && (
-            <Badge 
-              variant="destructive" 
-              className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs"
-            >
-              {totalItems}
-            </Badge>
-          )}
-        </div>
-      </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-lg flex flex-col">
+      <div className="xl:hidden">
+          <Sheet>
+              <SheetTrigger asChild>
+                  <div className="relative">
+                      {children}
+                      {totalItems > 0 && (
+                          <Badge
+                              variant="destructive"
+                              className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                          >
+                              {totalItems}
+                          </Badge>
+                      )}
+                  </div>
+              </SheetTrigger>
+              <SheetContent className="w-full sm:max-w-lg flex flex-col">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <ShoppingBasket size={20} />
@@ -168,6 +169,7 @@ export function CartDrawer({ children }: CartDrawerProps) {
           </div>
         )}
       </SheetContent>
-    </Sheet>
+          </Sheet>
+      </div>
   );
 }

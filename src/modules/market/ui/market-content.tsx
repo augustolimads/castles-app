@@ -1,5 +1,6 @@
 'use client';
 
+import { CartSidebar } from '@/components/ui/cart-sidebar';
 import { CartProvider } from '@/hooks/use-cart';
 import { Suspense } from 'react';
 import { Grid } from './grid';
@@ -9,7 +10,12 @@ function MarketContentInner() {
   return (
       <CartProvider>
       <Header />
-      <Grid itemsPerPage={12} />
+          <div className="flex gap-6 min-h-screen">
+              <div className="flex-1 min-w-0">
+                  <Grid itemsPerPage={12} />
+              </div>
+              <CartSidebar />
+          </div>
       </CartProvider>
   );
 }

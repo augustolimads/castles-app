@@ -107,8 +107,8 @@ export function Grid({ itemsPerPage = 12 }: GridProps) {
   }, [originalGoToPreviousPage, currentPage, updateSearchParams]);
 
   return (
-    <div className="space-y-4">
-      <div className="py-4 grid grid-cols lg:grid-cols-2 xl:grid-cols-3 gap-4">
+    <div className="space-y-4 flex-1 flex flex-col">
+      <div className="py-4 grid grid-cols lg:grid-cols-2 2xl:grid-cols-2 3xl:grid-cols-3 4xl:grid-cols-4 5xl:grid-cols-5 gap-4">
         {currentData.map(item => (
           <ItemHorizontalCard key={item.id} item={item} />
         ))}
