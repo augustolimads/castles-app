@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { HeartIcon, Search, ShoppingBasket } from "lucide-react";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Search, ShoppingBasket } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
@@ -110,8 +111,80 @@ export function Header() {
     }, [updateSearchParams]);
 
     return (
-        <header className="sticky top-2 left-0 right-0 bg-secondary flex items-center justify-between py-2 px-2 border rounded-lg">
-            <div className="relative w-4/12">
+        <header className="sticky top-2 left-0 right-0 bg-secondary py-2 px-2 border rounded-lg flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+                <div className="flex gap-2 flex-1 items-center">
+                    <SidebarTrigger variant='outline' size='lg' className="p-4" />
+                    <div className="relative w-72 hidden lg:block">
+                        <Search className="absolute top-2 left-2 pointer-events-none" size={20} color="gray" />
+                        <Input
+                            name="search"
+                            className="w-full pl-8 bg-white"
+                            placeholder="Pesquise um item"
+                            value={searchInputValue}
+                            onChange={(e) => handleSearchChange(e.target.value)}
+                        />
+                    </div>
+                </div>
+                <div className="flex items-center gap-4">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className="cursor-pointer font-semibold">
+                            <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3">
+                                {currentCategory ?
+                                    categories.find(cat => cat.id === currentCategory)?.label || 'Categorias' :
+                                    'Categorias'
+                                }
+                            </span>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem onClick={() => handleCategorySelect('all')}>
+                                Todas as categorias
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            {categories.map(category => (
+                                <DropdownMenuItem
+                                    key={category.id}
+                                    onClick={() => handleCategorySelect(category.id)}
+                                >
+                                    {category.label}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className="cursor-pointer font-semibold">
+                            <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3">
+                                {currentSort ?
+                                    sortOptions.find(sort => sort.id === currentSort)?.label || 'Ordenação' :
+                                    'Ordenação'
+                                }
+                            </span>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem onClick={() => handleSortSelect('')}>
+                                Padrão
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            {sortOptions.map(sortOption => (
+                                <DropdownMenuItem
+                                    key={sortOption.id}
+                                    onClick={() => handleSortSelect(sortOption.id)}
+                                >
+                                    {sortOption.label}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    {/* <Button variant="outline" title="coleções e favoritos">
+                    <HeartIcon />
+                </Button> */}
+                    <Button variant="outline" title="carrinho de compras" className="cursor-pointer">
+                        <ShoppingBasket />
+                    </Button>
+                </div>
+            </div>
+            <div className="relative w-full block lg:hidden">
                 <Search className="absolute top-2 left-2 pointer-events-none" size={20} color="gray" />
                 <Input
                     name="search"
@@ -120,63 +193,6 @@ export function Header() {
                     value={searchInputValue}
                     onChange={(e) => handleSearchChange(e.target.value)}
                 />
-            </div>
-            <div className="flex items-center gap-4">
-                <DropdownMenu>
-                    <DropdownMenuTrigger className="cursor-pointer font-semibold">
-                        <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3">
-                            {currentCategory ?
-                                categories.find(cat => cat.id === currentCategory)?.label || 'Categorias' :
-                                'Categorias'
-                            }
-                        </span>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => handleCategorySelect('all')}>
-                            Todas as categorias
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        {categories.map(category => (
-                            <DropdownMenuItem
-                                key={category.id}
-                                onClick={() => handleCategorySelect(category.id)}
-                            >
-                                {category.label}
-                            </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-
-                <DropdownMenu>
-                    <DropdownMenuTrigger className="cursor-pointer font-semibold">
-                        <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3">
-                            {currentSort ?
-                                sortOptions.find(sort => sort.id === currentSort)?.label || 'Ordenação' :
-                                'Ordenação'
-                            }
-                        </span>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => handleSortSelect('')}>
-                            Padrão
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        {sortOptions.map(sortOption => (
-                            <DropdownMenuItem
-                                key={sortOption.id}
-                                onClick={() => handleSortSelect(sortOption.id)}
-                            >
-                                {sortOption.label}
-                            </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                {/* <Button variant="outline" title="coleções e favoritos">
-                    <HeartIcon />
-                </Button> */}
-                <Button variant="outline" title="carrinho de compras" className="cursor-pointer">
-                    <ShoppingBasket />
-                </Button>
             </div>
         </header>
     )

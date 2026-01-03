@@ -53,14 +53,14 @@ export function Pagination({
   const pageNumbers = generatePageNumbers();
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
+    <div className="flex flex-col items-center justify-between gap-4 py-4">
       {/* Informações dos itens */}
       <div className="text-sm text-muted-foreground">
         Mostrando {startIndex} a {endIndex} de {totalItems} itens
       </div>
 
       {/* Controles de navegação */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center sm:items-start gap-2 flex-col sm:flex-row">
         <Button
           variant="outline"
           size="sm"
@@ -71,7 +71,7 @@ export function Pagination({
           Anterior
         </Button>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-start gap-1 flex-wrap">
           {pageNumbers.map((page, index) => (
             <div key={index}>
               {typeof page === "number" ? (

@@ -44,7 +44,7 @@ export function ItemHorizontalCard({ item }: ItemHorizontalCardProps) {
                 </div>
                 <p className="text-xs font-semibold">{item.ev}</p>
               </Badge>}
-              {item.effect && item.effect !== "" && <Badge variant="outline">
+              {item.effect && item.effect !== "" && <Badge variant="secondary">
                 <p className="text-xs font-semibold">{item.effect}</p>
               </Badge>}
             </div>

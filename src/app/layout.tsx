@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/modules/manager/ui/app-sidebar";
 
 const geistSans = Geist({
@@ -33,9 +33,6 @@ export default function RootLayout({
         <SidebarProvider>
           <AppSidebar />
           <main className="relative w-full max-w-6xl">
-            <div className="fixed">
-              <SidebarTrigger />
-            </div>
             <div className="p-4 pt-0 md:p-10 md:pt-0">
               {children}
             </div>

@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import * as CharGen from "@/modules/char-gen/ui";
 import { LabeledCheckbox } from "@/modules/char-gen/ui/labeled-checkbox";
 import { charClasses } from "@/modules/data/charClasses";
@@ -512,7 +513,10 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-8 pt-8">
-      <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight text-balance">C&C: Gerador de personagem</h1>
+      <div className="flex gap-2">
+        <SidebarTrigger />
+        <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight text-balance">C&C: Gerador de personagem</h1>
+      </div>
 
       <CharGen.TextInput
         label="Webhook do Discord"
