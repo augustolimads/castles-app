@@ -87,8 +87,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems([]);
   };
 
-  const totalGold = items.reduce((sum, item) => sum + (item.gold || 0) * item.quantity, 0);
-  const totalEV = items.reduce((sum, item) => sum + (item.ev || 0) * item.quantity, 0);
+  const totalGold = Number(
+    items.reduce((sum, item) => sum + (item.gold || 0) * item.quantity, 0).toFixed(2)
+  );
+  const totalEV = Number(
+    items.reduce((sum, item) => sum + (item.ev || 0) * item.quantity, 0).toFixed(2)
+  );
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (

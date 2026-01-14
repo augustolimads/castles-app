@@ -1,7 +1,7 @@
 'use client';
 
-import { CartSidebar } from '@/components/ui/cart-sidebar';
-import { CartProvider } from '@/hooks/use-cart';
+import { CartSidebar } from '@/modules/market/ui/cart-sidebar';
+import { CartProvider } from '@/modules/market/use-cart';
 import { Suspense } from 'react';
 import { Grid } from './grid';
 import { Header } from './header';

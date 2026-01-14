@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useCart } from "@/hooks/use-cart";
+import { useCart } from "@/modules/market/use-cart";
 import { CircleDollarSignIcon, Minus, Plus, ShoppingBasket, Trash2, WeightIcon } from "lucide-react";
 import Image from "next/image";
 
@@ -116,9 +116,25 @@ export function CartSidebar() {
                 <div className="flex justify-between items-center">
                   <span className="flex items-center gap-1">
                     <CircleDollarSignIcon size={14} className="text-amber-500" />
-                    Total:
+                    Total em Ouro:
                   </span>
-                  <span className="font-semibold">{totalGold} PO</span>
+                  <span className="font-semibold">{Math.floor(totalGold)} PO</span>
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <span className="flex items-center gap-1">
+                    <CircleDollarSignIcon size={14} className="text-gray-500" />
+                    Total em prata:
+                  </span>
+                  <span className="font-semibold">{Math.floor((totalGold % 1) * 10)} PP</span>
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <span className="flex items-center gap-1">
+                    <CircleDollarSignIcon size={14} className="text-orange-600" />
+                    Total em cobre:
+                  </span>
+                  <span className="font-semibold">{Math.round(((totalGold % 1) * 10 % 1) * 10)} PC</span>
                 </div>
 
                 <div className="flex justify-between items-center">

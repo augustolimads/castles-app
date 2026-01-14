@@ -20,6 +20,11 @@ const items = [
         icon: User2Icon,
     },
     {
+        title: "Mercado",
+        url: "/mercado",
+        icon: ShoppingBasket,
+    },
+    {
         title: "Gerador de NPC",
         url: "/em-breve",
         icon: HardHat,
@@ -29,12 +34,6 @@ const items = [
         title: "Gerador de Tesouro",
         url: "/em-breve",
         icon: HardHat,
-        color: "text-gray-400"
-    },
-    {
-        title: "Mercado",
-        url: "/mercado",
-        icon: ShoppingBasket,
         color: "text-gray-400"
     },
     {

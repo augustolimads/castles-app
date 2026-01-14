@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useCart } from "@/hooks/use-cart";
+import { useCart } from "@/modules/market/use-cart";
 import { CircleDollarSignIcon, ShoppingBasket, WeightIcon } from "lucide-react";
 import Image from "next/image";
 import { useCallback } from "react";
