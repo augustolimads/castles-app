@@ -1,6 +1,6 @@
 export const charRaces = [
     { id: "humano", name: "Humano (+1 atributo prime)" },
-    { id: "anao", name: "Anão (+1 Constituição, -1 Carisma)" },
+    { id: "anao", name: "Anão (+1 Constituição, -1 Destreza)" },
     { id: "elfo", name: "Elfo (+1 Destreza, -1 Constituição)" },
     { id: "gnomo", name: "Gnomo (+1 Inteligência, -1 Força)" },
     { id: "pequenino", name: "Pequenino (+1 Destreza, -1 Força)" },

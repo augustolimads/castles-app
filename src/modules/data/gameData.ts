@@ -31,9 +31,9 @@ export const racialBonuses: Record<string, Partial<CharacterAttributes>> = {
     forca: 0,
     inteligencia: 0,
     sabedoria: 0,
-    destreza: 0,
+    destreza: -1,
     constitution: 1,
-    carisma: -1
+    carisma: 0
   },
   'pequenino': {
     forca: -1,
