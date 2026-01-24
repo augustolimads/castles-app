@@ -1,26 +1,26 @@
 'use client';
 
-import { CartSidebar } from '@/modules/market/ui/cart-sidebar';
-import { CartProvider } from '@/modules/market/use-cart';
 import { Suspense } from 'react';
+import { FavoritesProvider } from '../use-favorites';
+import { FavoritesSidebar } from './favorites-sidebar';
 import { Grid } from './grid';
 import { Header } from './header';
 
-function MarketContentInner() {
+function CompendiumContentInner() {
   return (
-      <CartProvider>
+    <FavoritesProvider>
       <Header />
-          <div className="flex gap-6 min-h-screen">
-              <div className="flex-1 min-w-0">
-                  <Grid itemsPerPage={20} />
-              </div>
-              <CartSidebar />
-          </div>
-      </CartProvider>
+      <div className="flex gap-6 min-h-screen">
+        <div className="flex-1 min-w-0">
+          <Grid itemsPerPage={20} />
+        </div>
+        <FavoritesSidebar />
+      </div>
+    </FavoritesProvider>
   );
 }
 
-export function MarketContent() {
+export function CompendiumContent() {
   return (
     <Suspense fallback={
       <div className="space-y-4">
@@ -39,7 +39,7 @@ export function MarketContent() {
         </div>
       </div>
     }>
-      <MarketContentInner />
+      <CompendiumContentInner />
     </Suspense>
   );
 }

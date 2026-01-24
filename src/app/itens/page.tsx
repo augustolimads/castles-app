@@ -1,4 +1,4 @@
-import { MarketContent } from "@/modules/market/ui/market-content"
+import { MarketContent } from "@/modules/itens/ui/market-content"
 
 function Mercado() {
   return (

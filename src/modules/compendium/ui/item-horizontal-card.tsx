@@ -1,10 +1,10 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useCart } from "@/modules/market/use-cart";
-import { CircleDollarSignIcon, ShoppingBasket, WeightIcon } from "lucide-react";
+import { CircleDollarSignIcon, Star, WeightIcon } from "lucide-react";
 import Image from "next/image";
 import { useCallback } from "react";
+import { useFavorites } from "../use-favorites";
 
 type ItemHorizontalCardProps = {
   item: {
@@ -23,11 +23,13 @@ type ItemHorizontalCardProps = {
 };
 
 export function ItemHorizontalCard({ item }: ItemHorizontalCardProps) {
-  const { addItem } = useCart();
+  const { toggleFavorite, isFavorite } = useFavorites();
 
-  const handleAddToCart = useCallback(() => {
-    addItem(item);
-  }, [addItem, item]);
+  const handleToggleFavorite = useCallback(() => {
+    toggleFavorite(item);
+  }, [toggleFavorite, item]);
+
+  const favorited = isFavorite(item.id);
 
   return (
     <Card className="p-2">
@@ -69,9 +71,13 @@ export function ItemHorizontalCard({ item }: ItemHorizontalCardProps) {
             <p className="text-xs font-semibold">{item.ev}</p>
           </Badge>}
         </div>
-        <Button className="w-1/2 cursor-pointer" onClick={handleAddToCart}>
-          <ShoppingBasket />
-          <span className="text-xs">Adicionar</span>
+        <Button
+          className="w-1/2 cursor-pointer"
+          onClick={handleToggleFavorite}
+          variant={favorited ? "default" : "outline"}
+        >
+          <Star className={favorited ? "fill-current" : ""} />
+          <span className="text-xs">{favorited ? "Favoritado" : "Favoritar"}</span>
         </Button>
       </div>
     </Card>

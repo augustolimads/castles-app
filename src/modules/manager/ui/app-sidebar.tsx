@@ -10,45 +10,8 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { HardHat, ShoppingBasket, User2Icon } from "lucide-react"
 import { usePathname } from "next/navigation"
-// Menu items.
-const items = [
-    {
-        title: "Gerador de personagem",
-        url: "/",
-        icon: User2Icon,
-    },
-    {
-        title: "Mercado",
-        url: "/mercado",
-        icon: ShoppingBasket,
-    },
-    {
-        title: "Gerador de NPC",
-        url: "/em-breve",
-        icon: HardHat,
-        color: "text-gray-400"
-    },
-    {
-        title: "Gerador de Tesouro",
-        url: "/em-breve",
-        icon: HardHat,
-        color: "text-gray-400"
-    },
-    {
-        title: "Compendium",
-        url: "/em-breve",
-        icon: HardHat,
-        color: "text-gray-400"
-    },
-    {
-        title: "War machine",
-        url: "/em-breve",
-        icon: HardHat,
-        color: "text-gray-400"
-    },
-]
+import { items } from "../items"
 
 export function AppSidebar() {
     const pathname = usePathname()

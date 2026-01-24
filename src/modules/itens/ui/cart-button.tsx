@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/modules/market/use-cart";
+import { useCart } from "@/modules/itens/use-cart";
 import { ShoppingBasket } from "lucide-react";
 
 interface CartButtonProps {
