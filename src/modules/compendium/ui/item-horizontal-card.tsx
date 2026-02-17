@@ -1,24 +1,23 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CircleDollarSignIcon, Star, WeightIcon } from "lucide-react";
-import Image from "next/image";
+import { Heart, Shield, Star, Swords } from "lucide-react";
 import { useCallback } from "react";
 import { useFavorites } from "../use-favorites";
 
 type ItemHorizontalCardProps = {
   item: {
     id: string;
-    type: string;
-    name: string;
-    effect: string;
-    gold?: number | undefined;
-    ev?: number | null | undefined;
-    obs: string;
-    tags: string;
-    proficience: string[];
-    icon: string;
-    image: string;
+    nome: string;
+    nivel: string;
+    pv: string;
+    ca: string;
+    tamanho: string;
+    disposicao: string;
+    ataques: string;
+    bioma: string;
+    xp: string;
+    habilidades: string;
   };
 };
 
@@ -33,54 +32,76 @@ export function ItemHorizontalCard({ item }: ItemHorizontalCardProps) {
 
   return (
     <Card className="p-2">
-      <div className="gap-4 flex flex-row">
-        <div className="rounded-lg">
-          <Image
-            src={`/icons/${item.icon}.webp`}
-            alt={item.name}
-            width={60}
-            height={60}
-            className="rounded-lg dar:brightness-[0.2] dark:grayscale"
-          />
-        </div>
-        <div className="pt-0 flex flex-col gap-2 flex-1">
-          <div className="flex justify-between items-start gap-2">
-            <h3 className="md:text-lg font-extrabold">{item.name}</h3>
-            <div className="flex gap-1">
-              {item.effect && item.effect !== "" && <Badge variant="secondary">
-                <p className="text-xs font-semibold">{item.effect}</p>
-              </Badge>}
+      <div className="gap-4 flex flex-col">
+        <div className="flex justify-between items-start gap-2">
+          <div className="flex flex-col gap-1 flex-1">
+            <h3 className="text-lg font-extrabold">{item.nome}</h3>
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="secondary" className="text-xs">
+                Nível {item.nivel}
+              </Badge>
+              {item.tamanho && (
+                <Badge variant="outline" className="text-xs">
+                  {item.tamanho}
+                </Badge>
+              )}
+              {item.disposicao && (
+                <Badge variant="outline" className="text-xs">
+                  {item.disposicao}
+                </Badge>
+              )}
             </div>
           </div>
-          <div>
-            <p className="text-xs">{item.obs}</p>
-          </div>
+          <Button
+            size="sm"
+            className="cursor-pointer shrink-0"
+            onClick={handleToggleFavorite}
+            variant={favorited ? "default" : "outline"}
+          >
+            <Star className={favorited ? "fill-current" : ""} size={16} />
+          </Button>
         </div>
-      </div>
-      <div id="item-horizontal-footer" className="flex gap-2 mt-2 justify-between items-center">
-        <div className="flex gap-2">
-          <div className="flex flex-1 items-center gap-1">
-            <CircleDollarSignIcon size={16} className="text-amber-500" />
-            <span className="flex w-full items-center font-semibold text-sm">{item.gold} PO</span>
+
+        <div className="grid grid-cols-2 gap-2 text-sm">
+          <div className="flex items-center gap-1">
+            <Heart size={14} className="text-red-500" />
+            <span className="font-semibold">PV:</span>
+            <span>{item.pv}</span>
           </div>
-          {item.ev !== null && item.ev !== undefined && <Badge variant="outline">
-            <div className="flex gap-1">
-              <WeightIcon size={16} />
-              <span className="text-xs">EV</span>
+          <div className="flex items-center gap-1">
+            <Shield size={14} className="text-blue-500" />
+            <span className="font-semibold">CA:</span>
+            <span>{item.ca}</span>
+          </div>
+          {item.ataques && (
+            <div className="flex items-center gap-1 col-span-2">
+              <Swords size={14} className="text-orange-500" />
+              <span className="font-semibold">Ataques:</span>
+              <span className="truncate">{item.ataques}</span>
             </div>
-            <p className="text-xs font-semibold">{item.ev}</p>
-          </Badge>}
+          )}
         </div>
-        <Button
-          className="w-1/2 cursor-pointer"
-          onClick={handleToggleFavorite}
-          variant={favorited ? "default" : "outline"}
-        >
-          <Star className={favorited ? "fill-current" : ""} />
-          <span className="text-xs">{favorited ? "Favoritado" : "Favoritar"}</span>
-        </Button>
+
+        {item.habilidades && (
+          <div className="text-xs text-muted-foreground">
+            <span className="font-semibold">Habilidades: </span>
+            <span className="line-clamp-2">{item.habilidades}</span>
+          </div>
+        )}
+
+        <div className="flex justify-between items-center text-xs pt-2 border-t">
+          {item.bioma && (
+            <span className="text-muted-foreground">
+              <span className="font-semibold">Bioma:</span> {item.bioma}
+            </span>
+          )}
+          {item.xp && (
+            <Badge variant="secondary" className="text-xs">
+              {item.xp} XP
+            </Badge>
+          )}
+        </div>
       </div>
     </Card>
-  )
+  );
 }
-

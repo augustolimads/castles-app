@@ -4,7 +4,7 @@ import { Pagination } from "@/components/ui/pagination";
 import { usePagination } from "@/hooks/use-pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import { items } from "../items";
+import { monsters } from "../monsters";
 import { useFavorites } from "../use-favorites";
 import { ItemHorizontalCard } from "./item-horizontal-card";
 
@@ -26,20 +26,21 @@ export function Grid({ itemsPerPage = 20 }: GridProps) {
   // Filtrar e ordenar dados baseado nos searchParams
   const filteredAndSortedData = useMemo(() => {
     // Primeiro, filtrar os dados
-    let filtered = items.filter(item => {
+    let filtered = monsters.filter(item => {
       // Filtro especial para favoritos
       if (categoryFilter === 'favorites') {
         const isFavorited = favoriteItems.some(fav => fav.id === item.id);
         if (!isFavorited) return false;
       } else {
-        const matchesCategory = !categoryFilter || categoryFilter === 'all' || item.type === categoryFilter;
+        const matchesCategory = !categoryFilter || categoryFilter === 'all' || item.bioma?.toLowerCase().includes(categoryFilter.toLowerCase());
         if (!matchesCategory) return false;
       }
 
       const matchesSearch = !searchFilter ||
-        item.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
-        item.effect.toLowerCase().includes(searchFilter.toLowerCase()) ||
-        item.obs.toLowerCase().includes(searchFilter.toLowerCase());
+        item.nome.toLowerCase().includes(searchFilter.toLowerCase()) ||
+        (item.habilidades?.toLowerCase().includes(searchFilter.toLowerCase()) || false) ||
+        (item.bioma?.toLowerCase().includes(searchFilter.toLowerCase()) || false) ||
+        (item.ataques?.toLowerCase().includes(searchFilter.toLowerCase()) || false);
 
       return matchesSearch;
     });
@@ -49,17 +50,17 @@ export function Grid({ itemsPerPage = 20 }: GridProps) {
       filtered = [...filtered].sort((a, b) => {
         switch (sortFilter) {
           case 'name_asc':
-            return a.name.localeCompare(b.name);
+            return a.nome.localeCompare(b.nome);
           case 'name_desc':
-            return b.name.localeCompare(a.name);
-          case 'gold_asc':
-            return (a.gold || 0) - (b.gold || 0);
-          case 'gold_desc':
-            return (b.gold || 0) - (a.gold || 0);
-          case 'ev_asc':
-            return (a.ev || 0) - (b.ev || 0);
-          case 'ev_desc':
-            return (b.ev || 0) - (a.ev || 0);
+            return b.nome.localeCompare(a.nome);
+          case 'nivel_asc':
+            return a.nivel.localeCompare(b.nivel);
+          case 'nivel_desc':
+            return b.nivel.localeCompare(a.nivel);
+          case 'xp_asc':
+            return (a.xp || '').localeCompare(b.xp || '');
+          case 'xp_desc':
+            return (b.xp || '').localeCompare(a.xp || '');
           default:
             return 0;
         }

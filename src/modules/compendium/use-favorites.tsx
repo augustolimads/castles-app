@@ -4,16 +4,16 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 
 type FavoriteItem = {
   id: string;
-  type: string;
-  name: string;
-  effect: string;
-  gold?: number | undefined;
-  ev?: number | null | undefined;
-  obs: string;
-  tags: string;
-  proficience: string[];
-  icon: string;
-  image: string;
+    nome: string;
+    nivel: string;
+    pv: string;
+    ca: string;
+    tamanho: string;
+    disposicao: string;
+    ataques: string;
+    bioma: string;
+    xp: string;
+    habilidades: string;
 };
 
 type FavoritesContextType = {

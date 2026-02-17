@@ -4,34 +4,31 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Search, Star } from "lucide-react";
+import { Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { FavoritesButton } from "./favorites-button";
-import { FavoritesDrawer } from "./favorites-drawer";
 
 const categories = [
-    { id: 'alojamento', label: 'Alojamentos' },
-    { id: 'arma', label: 'Armas' },
-    { id: 'armadura', label: 'Armaduras' },
-    { id: 'distancia', label: 'Armas de projétil' },
-    { id: 'elmo', label: 'Elmos' },
-    { id: 'equipamento', label: 'Equipamentos' },
-    { id: 'escudo', label: 'Escudos' },
-    { id: 'estabulo', label: 'Estábulos' },
-    { id: 'municao', label: 'Munição' },
-    { id: 'provisoes', label: 'Provisões' },
-    { id: 'roupas', label: 'Roupas' },
-    { id: 'transporte', label: 'Transporte' },
+    { id: 'favorites', label: '⭐ Favoritos' },
+    { id: 'subterrâneo', label: 'Subterrâneo' },
+    { id: 'floresta', label: 'Floresta' },
+    { id: 'aquático', label: 'Aquático' },
+    { id: 'deserto', label: 'Deserto' },
+    { id: 'montanha', label: 'Montanha' },
+    { id: 'planície', label: 'Planície' },
+    { id: 'pântano', label: 'Pântano' },
+    { id: 'ártico', label: 'Ártico' },
+    { id: 'urbano', label: 'Urbano' },
 ];
 
 const sortOptions = [
     { id: 'name_asc', label: 'Nome (A-Z)' },
     { id: 'name_desc', label: 'Nome (Z-A)' },
-    { id: 'gold_asc', label: 'Valor (Menor)' },
-    { id: 'gold_desc', label: 'Valor (Maior)' },
-    { id: 'ev_asc', label: 'EV (Menor)' },
-    { id: 'ev_desc', label: 'EV (Maior)' },
+    { id: 'nivel_asc', label: 'Nível (Menor)' },
+    { id: 'nivel_desc', label: 'Nível (Maior)' },
+    { id: 'xp_asc', label: 'XP (Menor)' },
+    { id: 'xp_desc', label: 'XP (Maior)' },
 ];
 
 export function Header() {
@@ -196,7 +193,7 @@ export function Header() {
                     </div>
                 </div>
                 <div className="flex items-center gap-4 xl:hidden">
-                    <FavoritesButton />
+                    <FavoritesButton onClick={() => handleCategorySelect('favorites')} />
                 </div>
             </div>
             <div className="relative w-full block lg:hidden">
