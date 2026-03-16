@@ -1,10 +1,20 @@
-import { BookSearch, HardHat, ShoppingBasket, User2Icon } from "lucide-react"
+import { BookSearch, FileSpreadsheet, HardHat, ShoppingBasket, User2Icon, UserCog } from "lucide-react"
 
 export const items = [
     {
-        title: "Gerador de personagem",
-        url: "/",
+        title: "Fichas",
+        url: "/fichas",
+        icon: FileSpreadsheet,
+    },
+    {
+        title: "Construtor de Aventureiro",
+        url: "/construtor-aventureiro",
         icon: User2Icon,
+    },
+    {
+        title: "Gerador de Aventureiro",
+        url: "/gerador-aventureiro",
+        icon: UserCog,
     },
     {
         title: "Itens & Equipamentos",
