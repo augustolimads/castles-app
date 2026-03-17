@@ -77,78 +77,115 @@ export const racialBonuses: Record<string, Partial<CharacterAttributes>> = {
     }
 };
 
-// Tabelas de idade por raça e classe
-interface AgeFormula {
-    base: number;
-    dice: string;
-}
+// Faixas etárias
+export type AgeCategory = 'Adolescente' | 'Jovem' | 'Adulto' | 'Meia-idade' | 'Idoso';
 
-export const ageFormulas: Record<string, Record<string, AgeFormula>> = {
-    'anao': {
-        'clerigo': { base: 250, dice: '2d20' },
-        'druida': { base: 250, dice: '2d20' },
-        'mago': { base: 300, dice: '2d20' },
-        'ilusionista': { base: 300, dice: '2d20' },
-        'trapaceiro': { base: 75, dice: '3d6' },
-        'default': { base: 40, dice: '5d4' }
+// Ranges de d12 para cada classe (mapeamento de resultado do d12 para a categoria)
+export const ageRangesByClass: Record<string, (roll: number) => AgeCategory> = {
+    'barbaro': (roll: number) => {
+        if (roll <= 4) return 'Adolescente';
+        if (roll <= 8) return 'Jovem';
+        if (roll <= 10) return 'Adulto';
+        if (roll === 11) return 'Meia-idade';
+        return 'Idoso';
     },
-    'elfo': {
-        'clerigo': { base: 500, dice: '10d10' },
-        'druida': { base: 500, dice: '10d10' },
-        'mago': { base: 150, dice: '5d6' },
-        'ilusionista': { base: 150, dice: '5d6' },
-        'trapaceiro': { base: 100, dice: '5d6' },
-        'default': { base: 130, dice: '5d6' }
+    'bardo': (roll: number) => {
+        if (roll === 1) return 'Adolescente';
+        if (roll <= 5) return 'Jovem';
+        if (roll <= 10) return 'Adulto';
+        if (roll === 11) return 'Meia-idade';
+        return 'Idoso';
     },
-    'gnomo': {
-        'clerigo': { base: 300, dice: '3d12' },
-        'druida': { base: 300, dice: '3d12' },
-        'mago': { base: 100, dice: '2d12' },
-        'ilusionista': { base: 100, dice: '2d12' },
-        'trapaceiro': { base: 80, dice: '5d8' },
-        'default': { base: 60, dice: '5d4' }
+    'cavaleiro': (roll: number) => {
+        if (roll === 1) return 'Adolescente';
+        if (roll <= 5) return 'Jovem';
+        if (roll <= 10) return 'Adulto';
+        if (roll === 11) return 'Meia-idade';
+        return 'Idoso';
     },
-    'meio-elfo-elfo': {
-        'clerigo': { base: 40, dice: '2d4' },
-        'druida': { base: 40, dice: '2d4' },
-        'mago': { base: 30, dice: '2d8' },
-        'ilusionista': { base: 30, dice: '2d8' },
-        'trapaceiro': { base: 22, dice: '3d8' },
-        'default': { base: 22, dice: '3d4' }
+    'clerigo': (roll: number) => {
+        if (roll === 1) return 'Adolescente';
+        if (roll <= 3) return 'Jovem';
+        if (roll <= 7) return 'Adulto';
+        if (roll <= 10) return 'Meia-idade';
+        return 'Idoso';
     },
-    'meio-elfo-humano': {
-        'clerigo': { base: 40, dice: '2d4' },
-        'druida': { base: 40, dice: '2d4' },
-        'mago': { base: 30, dice: '2d8' },
-        'ilusionista': { base: 30, dice: '2d8' },
-        'trapaceiro': { base: 22, dice: '3d8' },
-        'default': { base: 22, dice: '3d4' }
+    'combatente': (roll: number) => {
+        if (roll <= 3) return 'Adolescente';
+        if (roll <= 7) return 'Jovem';
+        if (roll <= 10) return 'Adulto';
+        if (roll === 11) return 'Meia-idade';
+        return 'Idoso';
     },
-    'pequenino': {
-        'clerigo': { base: 40, dice: '3d4' },
-        'druida': { base: 40, dice: '3d4' },
-        'mago': { base: 50, dice: '3d4' },
-        'ilusionista': { base: 50, dice: '3d4' },
-        'trapaceiro': { base: 40, dice: '2d4' },
-        'default': { base: 20, dice: '3d4' }
+    'druida': (roll: number) => {
+        if (roll === 1) return 'Adolescente';
+        if (roll === 2) return 'Jovem';
+        if (roll <= 6) return 'Adulto';
+        if (roll <= 10) return 'Meia-idade';
+        return 'Idoso';
     },
-    'meio-orc': {
-        'clerigo': { base: 20, dice: '1d4' },
-        'druida': { base: 20, dice: '1d4' },
-        'mago': { base: 25, dice: '3d4' },
-        'ilusionista': { base: 25, dice: '3d4' },
-        'trapaceiro': { base: 20, dice: '2d4' },
-        'default': { base: 13, dice: '1d4' }
+    'explorador': (roll: number) => {
+        if (roll === 1) return 'Adolescente';
+        if (roll <= 5) return 'Jovem';
+        if (roll <= 10) return 'Adulto';
+        if (roll === 11) return 'Meia-idade';
+        return 'Idoso';
     },
-    'humano': {
-        'clerigo': { base: 20, dice: '1d4' },
-        'druida': { base: 20, dice: '1d4' },
-        'mago': { base: 24, dice: '1d4' },
-        'ilusionista': { base: 24, dice: '1d4' },
-        'trapaceiro': { base: 20, dice: '1d4' },
-        'default': { base: 15, dice: '1d4' }
+    'ilusionista': (roll: number) => {
+        if (roll === 1) return 'Adolescente';
+        if (roll === 2) return 'Jovem';
+        if (roll <= 5) return 'Adulto';
+        if (roll <= 9) return 'Meia-idade';
+        return 'Idoso';
+    },
+    'lutador': (roll: number) => {
+        if (roll === 1) return 'Adolescente';
+        if (roll <= 5) return 'Jovem';
+        if (roll <= 10) return 'Adulto';
+        if (roll === 11) return 'Meia-idade';
+        return 'Idoso';
+    },
+    'mago': (roll: number) => {
+        if (roll === 1) return 'Adolescente';
+        if (roll === 2) return 'Jovem';
+        if (roll <= 5) return 'Adulto';
+        if (roll <= 9) return 'Meia-idade';
+        return 'Idoso';
+    },
+    'paladino': (roll: number) => {
+        if (roll <= 3) return 'Adolescente';
+        if (roll <= 7) return 'Jovem';
+        if (roll <= 10) return 'Adulto';
+        if (roll === 11) return 'Meia-idade';
+        return 'Idoso';
+    },
+    'trapaceiro': (roll: number) => {
+        if (roll <= 4) return 'Adolescente';
+        if (roll <= 8) return 'Jovem';
+        if (roll <= 10) return 'Adulto';
+        if (roll === 11) return 'Meia-idade';
+        return 'Idoso';
+    },
+    'assassino': (roll: number) => {
+        if (roll <= 4) return 'Adolescente';
+        if (roll <= 8) return 'Jovem';
+        if (roll <= 10) return 'Adulto';
+        if (roll === 11) return 'Meia-idade';
+        return 'Idoso';
     }
 };
+
+// Função para gerar faixa etária
+export function generateAgeCategory(characterClass: string): AgeCategory {
+    const ageFunction = ageRangesByClass[characterClass];
+    if (!ageFunction) {
+        // Fallback para classe não encontrada (usar combatente)
+        return ageRangesByClass['combatente'](Math.floor(Math.random() * 12) + 1);
+    }
+
+    const roll = Math.floor(Math.random() * 12) + 1; // 1d12
+    return ageFunction(roll);
+}
 
 // Fórmulas de pontos de vida por classe
 export const hpFormula: Record<string, string> = {

@@ -9,9 +9,9 @@ import { LabeledCheckbox } from "@/modules/char-gen/ui/labeled-checkbox";
 import { charClasses } from "@/modules/data/charClasses";
 import { charRaces } from "@/modules/data/charRaces";
 import {
-  ageFormulas,
-  calculateModifier,
   CharacterAttributes,
+  calculateModifier,
+  generateAgeCategory,
   generatePhysicalStats,
   hpFormula,
   primeAttributes,
@@ -292,16 +292,9 @@ export default function AdventurerConstructor() {
       setTreasure(generatedTreasure);
     }
 
-    // Calcular idade
-    if (ageFormulas[raceKey]) {
-      const ageData = ageFormulas[raceKey][classKey] || ageFormulas[raceKey]['default'];
-      if (ageData) {
-        const ageRoll = new DiceRoll(ageData.dice);
-        const totalAge = ageData.base + ageRoll.total;
-        generatedAge = `${totalAge} anos`;
-        setAge(generatedAge);
-      }
-    }
+    // Gerar faixa etária
+    generatedAge = generateAgeCategory(classKey);
+    setAge(generatedAge);
 
     // Gerar características físicas
     const genders = ['masc.', 'fem.'];
