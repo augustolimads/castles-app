@@ -562,7 +562,7 @@ export default function AdventurerConstructor() {
         />
       </div>
 
-      <div className="flex gap-4 items-center justify-between">
+      <div className="flex gap-4 items-center justify-between flex-wrap">
         <Button
           type="button"
           onClick={handleRollAttributes}
@@ -646,16 +646,16 @@ export default function AdventurerConstructor() {
             <div>
               <h4 className="font-medium mb-2">Nível 0 ({spells.level0.length})</h4>
               <ul className="list-disc list-inside text-sm space-y-1">
-                {spells.level0.map((spell, idx) => (
-                  <li key={idx}>{spell}</li>
+                {spells.level0.map((spell) => (
+                  <li key={spell}>{spell}</li>
                 ))}
               </ul>
             </div>
             <div>
               <h4 className="font-medium mb-2">Nível 1 ({spells.level1.length})</h4>
               <ul className="list-disc list-inside text-sm space-y-1">
-                {spells.level1.map((spell, idx) => (
-                  <li key={idx}>{spell}</li>
+                {spells.level1.map((spell) => (
+                  <li key={spell}>{spell}</li>
                 ))}
               </ul>
             </div>
@@ -665,7 +665,7 @@ export default function AdventurerConstructor() {
 
       <hr />
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <CharGen.TextInput disabled label="PV" id="hp" value={hp} />
         <CharGen.TextInput disabled label="Tesouro inicial" id="treasure" value={treasure} />
         <CharGen.TextInput disabled label="Idade" id="age" value={age} />
