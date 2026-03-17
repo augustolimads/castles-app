@@ -3,8 +3,8 @@ import { Pagination } from "@/components/ui/pagination";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { usePagination } from "@/hooks/use-pagination";
 import { useMemo, useState } from "react";
-import { items } from "../items";
 import { ItemHorizontalCard } from "./item-horizontal-card";
+import { items } from "@/modules/itens/items";
 
 interface GridWithFiltersProps {
   itemsPerPage?: number;
