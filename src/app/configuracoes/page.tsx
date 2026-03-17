@@ -3,6 +3,7 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useConfig } from "@/hooks/use-config";
 import * as CharGen from "@/modules/char-gen/ui";
+import { Config } from "@/modules/config/ui";
 
 function Configuracoes() {
   const { discordWebhook, setDiscordWebhook } = useConfig();
@@ -29,6 +30,10 @@ function Configuracoes() {
         <p className="text-sm text-muted-foreground">
           Configure o webhook do Discord para enviar automaticamente os personagens gerados.
         </p>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <Config.ThemeSelector />
       </div>
     </div>
   );
