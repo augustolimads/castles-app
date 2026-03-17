@@ -187,6 +187,248 @@ export function generateAgeCategory(characterClass: string): AgeCategory {
     return ageFunction(roll);
 }
 
+// Faixas de altura
+export type HeightCategory = 'muito baixo' | 'baixo' | 'médio' | 'alto' | 'muito alto';
+
+// Ranges de d12 para cada raça (mapeamento de resultado do d12 para a categoria de altura)
+export const heightRangesByRace: Record<string, (roll: number) => HeightCategory | null> = {
+    'elfo': (roll: number) => {
+        if (roll === 1) return 'muito baixo';
+        if (roll <= 6) return 'baixo';
+        if (roll <= 10) return 'médio';
+        if (roll === 11) return 'alto';
+        return 'muito alto';
+    },
+    'anao': (roll: number) => {
+        if (roll <= 4) return 'muito baixo';
+        if (roll <= 11) return 'baixo';
+        return 'médio';
+    },
+    'humano': (roll: number) => {
+        if (roll === 1) return 'muito baixo';
+        if (roll <= 4) return 'baixo';
+        if (roll <= 8) return 'médio';
+        if (roll <= 11) return 'alto';
+        return 'muito alto';
+    },
+    'pequenino': (roll: number) => {
+        if (roll <= 7) return 'muito baixo';
+        return 'baixo';
+    },
+    'gnomo': (roll: number) => {
+        if (roll <= 7) return 'muito baixo';
+        return 'baixo';
+    },
+    'meio-elfo': (roll: number) => {
+        if (roll === 1) return 'muito baixo';
+        if (roll <= 4) return 'baixo';
+        if (roll <= 9) return 'médio';
+        if (roll <= 11) return 'alto';
+        return 'muito alto';
+    },
+    'meio-elfo-humano': (roll: number) => {
+        if (roll === 1) return 'muito baixo';
+        if (roll <= 4) return 'baixo';
+        if (roll <= 9) return 'médio';
+        if (roll <= 11) return 'alto';
+        return 'muito alto';
+    },
+    'meio-elfo-elfo': (roll: number) => {
+        if (roll === 1) return 'muito baixo';
+        if (roll <= 4) return 'baixo';
+        if (roll <= 9) return 'médio';
+        if (roll <= 11) return 'alto';
+        return 'muito alto';
+    },
+    'meio-orc': (roll: number) => {
+        if (roll === 1) return 'muito baixo';
+        if (roll === 2) return 'baixo';
+        if (roll <= 5) return 'médio';
+        if (roll <= 9) return 'alto';
+        return 'muito alto';
+    }
+};
+
+// Função para gerar categoria de altura
+export function generateHeightCategory(race: string): HeightCategory {
+    const heightFunction = heightRangesByRace[race];
+    if (!heightFunction) {
+        // Fallback para raça não encontrada (usar humano)
+        const roll = Math.floor(Math.random() * 12) + 1; // 1d12
+        return heightRangesByRace['humano'](roll) || 'médio';
+    }
+
+    const roll = Math.floor(Math.random() * 12) + 1; // 1d12
+    return heightFunction(roll) || 'médio';
+}
+
+// Faixas de peso
+export type WeightCategory = 'magro' | 'em forma' | 'robusto' | 'gordo';
+
+// Ranges de d12 para cada raça (mapeamento de resultado do d12 para a categoria de peso)
+export const weightRangesByRace: Record<string, (roll: number) => WeightCategory | null> = {
+    'elfo': (roll: number) => {
+        if (roll <= 7) return 'magro';
+        if (roll <= 11) return 'em forma';
+        return 'robusto';
+    },
+    'anao': (roll: number) => {
+        if (roll <= 3) return 'em forma';
+        if (roll <= 8) return 'robusto';
+        return 'gordo';
+    },
+    'humano': (roll: number) => {
+        if (roll <= 3) return 'magro';
+        if (roll <= 7) return 'em forma';
+        if (roll <= 11) return 'robusto';
+        return 'gordo';
+    },
+    'pequenino': (roll: number) => {
+        if (roll <= 2) return 'magro';
+        if (roll <= 5) return 'em forma';
+        if (roll <= 9) return 'robusto';
+        return 'gordo';
+    },
+    'gnomo': (roll: number) => {
+        if (roll <= 7) return 'magro';
+        if (roll <= 10) return 'em forma';
+        if (roll === 11) return 'robusto';
+        return 'gordo';
+    },
+    'meio-elfo': (roll: number) => {
+        if (roll <= 4) return 'magro';
+        if (roll <= 9) return 'em forma';
+        if (roll <= 11) return 'robusto';
+        return 'gordo';
+    },
+    'meio-elfo-humano': (roll: number) => {
+        if (roll <= 4) return 'magro';
+        if (roll <= 9) return 'em forma';
+        if (roll <= 11) return 'robusto';
+        return 'gordo';
+    },
+    'meio-elfo-elfo': (roll: number) => {
+        if (roll <= 4) return 'magro';
+        if (roll <= 9) return 'em forma';
+        if (roll <= 11) return 'robusto';
+        return 'gordo';
+    },
+    'meio-orc': (roll: number) => {
+        if (roll <= 3) return 'magro';
+        if (roll <= 7) return 'em forma';
+        if (roll <= 11) return 'robusto';
+        return 'gordo';
+    }
+};
+
+// Função para gerar categoria de peso
+export function generateWeightCategory(race: string): WeightCategory {
+    const weightFunction = weightRangesByRace[race];
+    if (!weightFunction) {
+        // Fallback para raça não encontrada (usar humano)
+        const roll = Math.floor(Math.random() * 12) + 1; // 1d12
+        return weightRangesByRace['humano'](roll) || 'em forma';
+    }
+
+    const roll = Math.floor(Math.random() * 12) + 1; // 1d12
+    return weightFunction(roll) || 'em forma';
+}
+
+// Lista de traços marcantes
+export const distinctiveTraits = [
+    'Peludo',
+    'Sem pelos',
+    'Tatuado',
+    'Cicatriz aparente',
+    'Múltiplas cicatrizes',
+    'Marcas de espinha',
+    'Muitos sinais',
+    'Sardas',
+    'Sinal no rosto',
+    'Marca de nascença',
+    'Vitiligo',
+    'Pele muito lisa',
+    'Pele rachada/ressecada',
+    'Pele avermelhada constante',
+    'Veias muito aparentes',
+    'Queimadura visível',
+    'Pele com brilho incomum',
+    'Olhos animalescos',
+    'Cor de olho incomum',
+    'Heterocromia',
+    'Olhos tristes',
+    'Olhos cansados',
+    'Olhos alegres',
+    'Olhos atormentados',
+    'Olhos grandes',
+    'Olhos pequenos',
+    'Olhos fundos',
+    'Olhos saltados',
+    'Olhar intenso',
+    'Olhar distante',
+    'Olhos semicerrados',
+    'Tremor no olhar',
+    'Olheiras profundas',
+    'Um olho cego',
+    'Pisca excessivamente',
+    'Pouco cabelo',
+    'Careca',
+    'Cor de cabelo incomum',
+    'Duas cores de cabelo',
+    'Cabelo muito longo',
+    'Cabelo extremamente curto',
+    'Cabelo sempre bagunçado',
+    'Cabelo perfeitamente arrumado',
+    'Cabelo oleoso',
+    'Cabelo ressecado',
+    'Cabelo cacheado extremo',
+    'Cabelo liso extremo',
+    'Sobrancelha grossa',
+    'Monocelha',
+    'Sobrancelhas finíssimas',
+    'Sem Sobrancelhas',
+    'Falhas no cabelo',
+    'Dentes tronchos',
+    'Dentes proeminentes',
+    'Banguela',
+    'Dentes muito brancos',
+    'Dentes escurecidos',
+    'Nariz distinto',
+    'Nariz torto',
+    'Nariz grande',
+    'Nariz pequeno',
+    'Orelha grande',
+    'Orelha pequena',
+    'Orelha rasgada',
+    'Boca grande',
+    'Boca pequena',
+    'Testa grande',
+    'Bochecha grande',
+    'Queixo pontudo',
+    'Queixo retraído',
+    'Mandíbula muito marcada',
+    'Membros longos demais',
+    'Membros curtos',
+    'Postura torta',
+    'Postura rígida',
+    'Anda mancando',
+    'Ombros caídos',
+    'Dedo faltando',
+    'Dedo extra',
+    'Tremor nas mãos',
+    'Cicatriz ritualística',
+    'Cheiro marcante',
+    'Voz rouca',
+    'Voz muito suave',
+    'Risada estranha'
+] as const;
+
+// Função para gerar traço marcante aleatório
+export function generateDistinctiveTrait(): string {
+    const randomIndex = Math.floor(Math.random() * distinctiveTraits.length);
+    return distinctiveTraits[randomIndex];
+}
+
 // Fórmulas de pontos de vida por classe
 export const hpFormula: Record<string, string> = {
     'assassino': '1d6',

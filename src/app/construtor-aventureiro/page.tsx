@@ -12,7 +12,9 @@ import {
   CharacterAttributes,
   calculateModifier,
   generateAgeCategory,
-  generatePhysicalStats,
+  generateDistinctiveTrait,
+  generateHeightCategory,
+  generateWeightCategory,
   hpFormula,
   primeAttributes,
   racialBonuses,
@@ -301,12 +303,16 @@ export default function AdventurerConstructor() {
     generatedGender = genders[Math.floor(Math.random() * genders.length)];
     setGender(generatedGender);
 
-    const physicalStats = generatePhysicalStats(raceKey, generatedGender);
-    generatedHeight = physicalStats.height;
-    generatedWeight = physicalStats.weight;
-    generatedDescription = physicalStats.description;
+    // Gerar faixa de altura
+    generatedHeight = generateHeightCategory(raceKey);
     setHeight(generatedHeight);
+
+    // Gerar faixa de peso
+    generatedWeight = generateWeightCategory(raceKey);
     setWeight(generatedWeight);
+
+    // Gerar traço marcante
+    generatedDescription = generateDistinctiveTrait();
     setDescription(generatedDescription);
 
     // Calcular capacidade de carga
@@ -386,7 +392,7 @@ export default function AdventurerConstructor() {
             `**Tesouro:** ${treasure}\n` +
             `**Idade:** ${age}\n` +
             `**Gênero:** ${gender}\n` +
-            `**Descrição:** ${description}\n` +
+            `**Traço Marcante:** ${description}\n` +
             `**Altura:** ${height}\n` +
             `**Peso:** ${weight}\n` +
             `**Capacidade de Carga:** ${carryingCapacity} kg`,
@@ -666,7 +672,7 @@ export default function AdventurerConstructor() {
         <CharGen.TextInput disabled label="Altura" id="height" value={height} />
         <CharGen.TextInput disabled label="Peso" id="weight" value={weight} />
         <CharGen.TextInput disabled label="Gênero" id="gender" value={gender} />
-        <CharGen.TextInput disabled label="Descrição" id="description" value={description} />
+        <CharGen.TextInput disabled label="Traço marcante" id="description" value={description} />
         <CharGen.TextInput disabled label="Sobrecarga" id="carryingCapacity" value={carryingCapacity} />
       </div>
     </div>
