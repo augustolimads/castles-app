@@ -31,7 +31,7 @@ export default function AdventurerConstructor() {
     inteligencia: 10,
     sabedoria: 10,
     destreza: 10,
-    constitution: 10,
+    constituicao: 10,
     carisma: 10
   });
   const [finalAttributes, setFinalAttributes] = useState<CharacterAttributes>({ ...baseAttributes });
@@ -56,7 +56,7 @@ export default function AdventurerConstructor() {
       label: 'Destreza',
       checked: false
     },
-    constitution: {
+    constituicao: {
       label: 'Constituição',
       checked: false
     },
@@ -251,7 +251,7 @@ export default function AdventurerConstructor() {
       inteligencia: new DiceRoll('3d6').total,
       sabedoria: new DiceRoll('3d6').total,
       destreza: new DiceRoll('3d6').total,
-      constitution: new DiceRoll('3d6').total,
+      constituicao: new DiceRoll('3d6').total,
       carisma: new DiceRoll('3d6').total
     };
 
@@ -279,7 +279,7 @@ export default function AdventurerConstructor() {
     // Calcular HP
     if (hpFormula[classKey]) {
       const hpRoll = new DiceRoll(hpFormula[classKey]);
-      const conMod = calculateModifier(finalAttributes.constitution);
+      const conMod = calculateModifier(finalAttributes.constituicao);
       const totalHp = Math.max(1, hpRoll.total + conMod);
       generatedHp = totalHp.toString();
       setHp(generatedHp);
@@ -377,7 +377,7 @@ export default function AdventurerConstructor() {
             `**INT:** ${attributes.inteligencia} (${modifiers.inteligencia >= 0 ? '+' : ''}${modifiers.inteligencia})\n` +
             `**SAB:** ${attributes.sabedoria} (${modifiers.sabedoria >= 0 ? '+' : ''}${modifiers.sabedoria})\n` +
             `**DES:** ${attributes.destreza} (${modifiers.destreza >= 0 ? '+' : ''}${modifiers.destreza})\n` +
-            `**CON:** ${attributes.constitution} (${modifiers.constitution >= 0 ? '+' : ''}${modifiers.constitution})\n` +
+            `**CON:** ${attributes.constituicao} (${modifiers.constituicao >= 0 ? '+' : ''}${modifiers.constituicao})\n` +
             `**CAR:** ${attributes.carisma} (${modifiers.carisma >= 0 ? '+' : ''}${modifiers.carisma})\n` +
             `**Modificador Total:** ${totalModifier >= 0 ? '+' : ''}${totalModifier}`,
           inline: false
@@ -462,7 +462,7 @@ export default function AdventurerConstructor() {
           inteligencia: calculateModifier(finalAttributes.inteligencia),
           sabedoria: calculateModifier(finalAttributes.sabedoria),
           destreza: calculateModifier(finalAttributes.destreza),
-          constitution: calculateModifier(finalAttributes.constitution),
+          constituicao: calculateModifier(finalAttributes.constituicao),
           carisma: calculateModifier(finalAttributes.carisma)
         },
         totalModifier: totalModifier,
@@ -503,7 +503,7 @@ export default function AdventurerConstructor() {
     <div className="flex flex-col gap-8 pt-8 max-w-4xl mx-auto">
       <div className="flex gap-2">
         <SidebarTrigger />
-        <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight text-balance">C&C: Gerador de personagem</h1>
+        <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight text-balance">Construtor de aventureiro</h1>
       </div>
 
       <div id="attributes" className="grid grid-cols-3 gap-4">
@@ -545,10 +545,10 @@ export default function AdventurerConstructor() {
         />
         <CharGen.NumberInput
           label="Constituição"
-          id="constitution"
-          value={finalAttributes.constitution}
+          id="constituicao"
+          value={finalAttributes.constituicao}
           onChange={(val) => {
-            const newBase = { ...baseAttributes, constitution: val };
+            const newBase = { ...baseAttributes, constituicao: val };
             setBaseAttributes(newBase);
           }}
         />

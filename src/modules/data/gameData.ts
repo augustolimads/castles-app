@@ -1,204 +1,204 @@
 // Dados do jogo baseados no HTML original
 
 export interface CharacterAttributes {
-  forca: number;
-  inteligencia: number;
-  sabedoria: number;
-  destreza: number;
-  constitution: number;
-  carisma: number;
+    forca: number;
+    inteligencia: number;
+    sabedoria: number;
+    destreza: number;
+    constituicao: number;
+    carisma: number;
 }
 
 // Bônus raciais para cada raça
 export const racialBonuses: Record<string, Partial<CharacterAttributes>> = {
-  'humano': {
-    forca: 0,
-    inteligencia: 0,
-    sabedoria: 0,
-    destreza: 0,
-    constitution: 0,
-    carisma: 0
-  },
-  'elfo': {
-    forca: 0,
-    inteligencia: 0,
-    sabedoria: 0,
-    destreza: 1,
-    constitution: -1,
-    carisma: 0
-  },
-  'anao': {
-    forca: 0,
-    inteligencia: 0,
-    sabedoria: 0,
-    destreza: -1,
-    constitution: 1,
-    carisma: 0
-  },
-  'pequenino': {
-    forca: -1,
-    inteligencia: 0,
-    sabedoria: 0,
-    destreza: 1,
-    constitution: 0,
-    carisma: 0
-  },
-  'gnomo': {
-    forca: -1,
-    inteligencia: 1,
-    sabedoria: 0,
-    destreza: 0,
-    constitution: 0,
-    carisma: 0
-  },
-  'meio-elfo-humano': {
-    forca: 0,
-    inteligencia: 0,
-    sabedoria: 0,
-    destreza: 0,
-    constitution: 0,
-    carisma: 0
-  },
-  'meio-elfo-elfo': {
-    forca: 0,
-    inteligencia: 0,
-    sabedoria: 0,
-    destreza: 1,
-    constitution: -1,
-    carisma: 0
-  },
-  'meio-orc': {
-    forca: 1,
-    inteligencia: 0,
-    sabedoria: 0,
-    destreza: 0,
-    constitution: 1,
-    carisma: -2
-  }
+    'humano': {
+        forca: 0,
+        inteligencia: 0,
+        sabedoria: 0,
+        destreza: 0,
+        constituicao: 0,
+        carisma: 0
+    },
+    'elfo': {
+        forca: 0,
+        inteligencia: 0,
+        sabedoria: 0,
+        destreza: 1,
+        constituicao: -1,
+        carisma: 0
+    },
+    'anao': {
+        forca: 0,
+        inteligencia: 0,
+        sabedoria: 0,
+        destreza: -1,
+        constituicao: 1,
+        carisma: 0
+    },
+    'pequenino': {
+        forca: -1,
+        inteligencia: 0,
+        sabedoria: 0,
+        destreza: 1,
+        constituicao: 0,
+        carisma: 0
+    },
+    'gnomo': {
+        forca: -1,
+        inteligencia: 1,
+        sabedoria: 0,
+        destreza: 0,
+        constituicao: 0,
+        carisma: 0
+    },
+    'meio-elfo-humano': {
+        forca: 0,
+        inteligencia: 0,
+        sabedoria: 0,
+        destreza: 0,
+        constituicao: 0,
+        carisma: 0
+    },
+    'meio-elfo-elfo': {
+        forca: 0,
+        inteligencia: 0,
+        sabedoria: 0,
+        destreza: 1,
+        constituicao: -1,
+        carisma: 0
+    },
+    'meio-orc': {
+        forca: 1,
+        inteligencia: 0,
+        sabedoria: 0,
+        destreza: 0,
+        constituicao: 1,
+        carisma: -2
+    }
 };
 
 // Tabelas de idade por raça e classe
 interface AgeFormula {
-  base: number;
-  dice: string;
+    base: number;
+    dice: string;
 }
 
 export const ageFormulas: Record<string, Record<string, AgeFormula>> = {
-  'anao': {
-    'clerigo': { base: 250, dice: '2d20' },
-    'druida': { base: 250, dice: '2d20' },
-    'mago': { base: 300, dice: '2d20' },
-    'ilusionista': { base: 300, dice: '2d20' },
-    'trapaceiro': { base: 75, dice: '3d6' },
-    'default': { base: 40, dice: '5d4' }
-  },
-  'elfo': {
-    'clerigo': { base: 500, dice: '10d10' },
-    'druida': { base: 500, dice: '10d10' },
-    'mago': { base: 150, dice: '5d6' },
-    'ilusionista': { base: 150, dice: '5d6' },
-    'trapaceiro': { base: 100, dice: '5d6' },
-    'default': { base: 130, dice: '5d6' }
-  },
-  'gnomo': {
-    'clerigo': { base: 300, dice: '3d12' },
-    'druida': { base: 300, dice: '3d12' },
-    'mago': { base: 100, dice: '2d12' },
-    'ilusionista': { base: 100, dice: '2d12' },
-    'trapaceiro': { base: 80, dice: '5d8' },
-    'default': { base: 60, dice: '5d4' }
-  },
-  'meio-elfo-elfo': {
-    'clerigo': { base: 40, dice: '2d4' },
-    'druida': { base: 40, dice: '2d4' },
-    'mago': { base: 30, dice: '2d8' },
-    'ilusionista': { base: 30, dice: '2d8' },
-    'trapaceiro': { base: 22, dice: '3d8' },
-    'default': { base: 22, dice: '3d4' }
-  },
-  'meio-elfo-humano': {
-    'clerigo': { base: 40, dice: '2d4' },
-    'druida': { base: 40, dice: '2d4' },
-    'mago': { base: 30, dice: '2d8' },
-    'ilusionista': { base: 30, dice: '2d8' },
-    'trapaceiro': { base: 22, dice: '3d8' },
-    'default': { base: 22, dice: '3d4' }
-  },
-  'pequenino': {
-    'clerigo': { base: 40, dice: '3d4' },
-    'druida': { base: 40, dice: '3d4' },
-    'mago': { base: 50, dice: '3d4' },
-    'ilusionista': { base: 50, dice: '3d4' },
-    'trapaceiro': { base: 40, dice: '2d4' },
-    'default': { base: 20, dice: '3d4' }
-  },
-  'meio-orc': {
-    'clerigo': { base: 20, dice: '1d4' },
-    'druida': { base: 20, dice: '1d4' },
-    'mago': { base: 25, dice: '3d4' },
-    'ilusionista': { base: 25, dice: '3d4' },
-    'trapaceiro': { base: 20, dice: '2d4' },
-    'default': { base: 13, dice: '1d4' }
-  },
-  'humano': {
-    'clerigo': { base: 20, dice: '1d4' },
-    'druida': { base: 20, dice: '1d4' },
-    'mago': { base: 24, dice: '1d4' },
-    'ilusionista': { base: 24, dice: '1d4' },
-    'trapaceiro': { base: 20, dice: '1d4' },
-    'default': { base: 15, dice: '1d4' }
-  }
+    'anao': {
+        'clerigo': { base: 250, dice: '2d20' },
+        'druida': { base: 250, dice: '2d20' },
+        'mago': { base: 300, dice: '2d20' },
+        'ilusionista': { base: 300, dice: '2d20' },
+        'trapaceiro': { base: 75, dice: '3d6' },
+        'default': { base: 40, dice: '5d4' }
+    },
+    'elfo': {
+        'clerigo': { base: 500, dice: '10d10' },
+        'druida': { base: 500, dice: '10d10' },
+        'mago': { base: 150, dice: '5d6' },
+        'ilusionista': { base: 150, dice: '5d6' },
+        'trapaceiro': { base: 100, dice: '5d6' },
+        'default': { base: 130, dice: '5d6' }
+    },
+    'gnomo': {
+        'clerigo': { base: 300, dice: '3d12' },
+        'druida': { base: 300, dice: '3d12' },
+        'mago': { base: 100, dice: '2d12' },
+        'ilusionista': { base: 100, dice: '2d12' },
+        'trapaceiro': { base: 80, dice: '5d8' },
+        'default': { base: 60, dice: '5d4' }
+    },
+    'meio-elfo-elfo': {
+        'clerigo': { base: 40, dice: '2d4' },
+        'druida': { base: 40, dice: '2d4' },
+        'mago': { base: 30, dice: '2d8' },
+        'ilusionista': { base: 30, dice: '2d8' },
+        'trapaceiro': { base: 22, dice: '3d8' },
+        'default': { base: 22, dice: '3d4' }
+    },
+    'meio-elfo-humano': {
+        'clerigo': { base: 40, dice: '2d4' },
+        'druida': { base: 40, dice: '2d4' },
+        'mago': { base: 30, dice: '2d8' },
+        'ilusionista': { base: 30, dice: '2d8' },
+        'trapaceiro': { base: 22, dice: '3d8' },
+        'default': { base: 22, dice: '3d4' }
+    },
+    'pequenino': {
+        'clerigo': { base: 40, dice: '3d4' },
+        'druida': { base: 40, dice: '3d4' },
+        'mago': { base: 50, dice: '3d4' },
+        'ilusionista': { base: 50, dice: '3d4' },
+        'trapaceiro': { base: 40, dice: '2d4' },
+        'default': { base: 20, dice: '3d4' }
+    },
+    'meio-orc': {
+        'clerigo': { base: 20, dice: '1d4' },
+        'druida': { base: 20, dice: '1d4' },
+        'mago': { base: 25, dice: '3d4' },
+        'ilusionista': { base: 25, dice: '3d4' },
+        'trapaceiro': { base: 20, dice: '2d4' },
+        'default': { base: 13, dice: '1d4' }
+    },
+    'humano': {
+        'clerigo': { base: 20, dice: '1d4' },
+        'druida': { base: 20, dice: '1d4' },
+        'mago': { base: 24, dice: '1d4' },
+        'ilusionista': { base: 24, dice: '1d4' },
+        'trapaceiro': { base: 20, dice: '1d4' },
+        'default': { base: 15, dice: '1d4' }
+    }
 };
 
 // Fórmulas de pontos de vida por classe
 export const hpFormula: Record<string, string> = {
-  'assassino': '1d6',
-  'barbaro': '1d12',
-  'bardo': '1d10',
-  'cavaleiro': '1d10',
-  'clerigo': '1d8',
-  'combatente': '1d10',
-  'druida': '1d8',
-  'explorador': '1d10',
-  'ilusionista': '1d4',
-  'lutador': '1d12',
-  'mago': '1d4',
-  'paladino': '1d10',
-  'trapaceiro': '1d6'
+    'assassino': '1d6',
+    'barbaro': '1d12',
+    'bardo': '1d10',
+    'cavaleiro': '1d10',
+    'clerigo': '1d8',
+    'combatente': '1d10',
+    'druida': '1d8',
+    'explorador': '1d10',
+    'ilusionista': '1d4',
+    'lutador': '1d12',
+    'mago': '1d4',
+    'paladino': '1d10',
+    'trapaceiro': '1d6'
 };
 
 // Fórmulas de tesouro inicial por classe
 export const treasureFormula: Record<string, string> = {
-  'assassino': '3d4',
-  'barbaro': '2d4',
-  'bardo': '3d4',
-  'cavaleiro': '6d4',
-  'clerigo': '2d10',
-  'combatente': '3d8',
-  'druida': '2d10',
-  'explorador': '3d8',
-  'ilusionista': '1d10',
-  'lutador': '2d4',
-  'mago': '1d10',
-  'paladino': '6d4',
-  'trapaceiro': '3d4'
+    'assassino': '3d4',
+    'barbaro': '2d4',
+    'bardo': '3d4',
+    'cavaleiro': '6d4',
+    'clerigo': '2d10',
+    'combatente': '3d8',
+    'druida': '2d10',
+    'explorador': '3d8',
+    'ilusionista': '1d10',
+    'lutador': '2d4',
+    'mago': '1d10',
+    'paladino': '6d4',
+    'trapaceiro': '3d4'
 };
 
 // Atributos prime por classe
 export const primeAttributes: Record<string, string[]> = {
-  'assassino': ['destreza'],
-    'barbaro': ['constitution'],
-  'bardo': ['carisma'],
-    'cavaleiro': ['forca'],
-  'clerigo': ['sabedoria'],
-  'combatente': ['forca'],
-  'druida': ['sabedoria'],
-  'explorador': ['forca'],
-  'ilusionista': ['inteligencia'],
-    'lutador': ['constitution'],
-  'mago': ['inteligencia'],
-  'paladino': ['carisma'],
-  'trapaceiro': ['destreza']
+    'assassino': ['destreza'],
+    'barbaro': ['constituicao'],
+    'bardo': ['carisma'],
+    'cavaleiro': ['carisma'],
+    'clerigo': ['sabedoria'],
+    'combatente': ['forca'],
+    'druida': ['sabedoria'],
+    'explorador': ['forca'],
+    'ilusionista': ['inteligencia'],
+    'lutador': ['constituicao'],
+    'mago': ['inteligencia'],
+    'paladino': ['carisma'],
+    'trapaceiro': ['destreza']
 };
 
 // Função para normalizar nome da classe para busca nos dados
@@ -212,25 +212,25 @@ export function normalizeClassName(className: string): string {
 
 // Função para calcular modificador de atributo
 export function calculateModifier(score: number): number {
-  switch (score) {
-    case 3: return -3;
-    case 4:
-    case 5: return -2;
-    case 6:
-    case 7:
-    case 8: return -1;
-    case 9:
-    case 10:
-    case 11:
-    case 12: return 0;
-    case 13:
-    case 14:
-    case 15: return 1;
-    case 16:
-    case 17: return 2;
-    case 18: return 3;
-    default: return 0;
-  }
+    switch (score) {
+        case 3: return -3;
+        case 4:
+        case 5: return -2;
+        case 6:
+        case 7:
+        case 8: return -1;
+        case 9:
+        case 10:
+        case 11:
+        case 12: return 0;
+        case 13:
+        case 14:
+        case 15: return 1;
+        case 16:
+        case 17: return 2;
+        case 18: return 3;
+        default: return 0;
+    }
 }
 
 // Tabelas de altura e peso por raça e gênero (do HTML original)
@@ -784,9 +784,9 @@ const heightWeightTables = {
 } as const;
 
 interface PhysicalStats {
-  description: string;
-  height: string;
-  weight: string;
+    description: string;
+    height: string;
+    weight: string;
 }
 
 export function generatePhysicalStats(race: string, gender: string): PhysicalStats {
@@ -856,37 +856,37 @@ export function generatePhysicalStats(race: string, gender: string): PhysicalSta
     const weightKg = Math.round(weightLbs * 0.453592);
     const weight = `${weightKg} kg`;
 
-  return {
-      height,
-      weight,
-      description: entry.description
-  };
+    return {
+        height,
+        weight,
+        description: entry.description
+    };
 }
 
 // Magias por classe
 export const spellsByClass = {
-  'clerigo': {
-    0: ['Criar água', 'descobrir veneno', 'discernir disposição', 'discernir magia', 'luz', 'primeiros socorros', 'purificar', 'resistir ao frio/calor'],
-    1: ['abençoar', 'abençoar água', 'comando', 'curar ferimentos leves', 'descobrir portas secretas', 'escudo divino', 'manto invisível à mortos-vivos', 'proteção contra disposição', 'remover medo', 'resistir a um elemento', 'revelar mortos-vivos', 'santuário', 'tempestade sonora']
-  },
-  'druida': {
-    0: ['Conhecer o caminho', 'Criar água', 'descobrir veneno', 'discernir disposição', 'luz', 'primeiros socorros', 'purificar', 'resistir ao frio/calor'],
-    1: ['Acalmar animais', 'Alarme', 'Aura das fadas', 'Bom fruto', 'Bordão mágico', 'Descobrir armadilhas e poços', 'Descobrir portas secretas', 'Elo animal', 'Funda mágica', 'Invisibilidade a animais', 'Obscurecer com névoa', 'Passo da trilha selvagem', 'Vegetação enredadora']
-  },
-  'mago': {
-    0: ['Abrir/fechar', 'Alcance arcano', 'Consertar', 'Descobrir veneno', 'Discernir magia', 'Luz', 'Mensagem', 'Orbes dançantes', 'Prestidigitação', 'Resistir ao frio/calor', 'Runa arcana', 'Som fantasma'],
-    1: ['Alterar-se menor', 'Alterar tamanho', 'Apagar', 'Armadura arcana', 'Chamas ardentes', 'Choque', 'Compreensão', 'Decifrar escrita arcana', 'Disco flutuante', 'Encantar humanóide', 'Escudo', 'Identificar', 'Invocar familiar', 'Leve como uma pena', 'Mísseis arcanos', 'Passo da aranha', 'Proteção contra disposição', 'Salto', 'Servo invisível', 'Sono', 'Travar barras ou portão']
-  },
-  'ilusionista': {
-    0: ['Consertar', 'Discernir ilusão', 'Glamour arcano', 'Influenciar', 'Luz', 'Marca do dragão', 'Mensagem', 'Orbes dançantes', 'Prestidigitação', 'Primeiros socorros', 'Runa arcana', 'Som fantasma'],
-    1: ['Açoite sombrio menor', 'Alterar-se menor', 'Apagar', 'Armadura arcana', 'Armadura do dragão' , 'Atordoar', 'Aura indetectável', 'Cães ilusórios', 'Cores', 'Decifrar escrita arcana', 'Encantar humanóide', 'Força temporária de Ward', 'Hipnotismo', 'Ilusão', 'Ilusão silenciosa', 'Imagem de dragão', 'Nublar visão', 'Obscurecer com névoa', 'reflexo feérico', 'Trevas', 'Ventriloquismo', 'Ver o invisível']
-  }
+    'clerigo': {
+        0: ['Criar água', 'descobrir veneno', 'discernir disposição', 'discernir magia', 'luz', 'primeiros socorros', 'purificar', 'resistir ao frio/calor'],
+        1: ['abençoar', 'abençoar água', 'comando', 'curar ferimentos leves', 'descobrir portas secretas', 'escudo divino', 'manto invisível à mortos-vivos', 'proteção contra disposição', 'remover medo', 'resistir a um elemento', 'revelar mortos-vivos', 'santuário', 'tempestade sonora']
+    },
+    'druida': {
+        0: ['Conhecer o caminho', 'Criar água', 'descobrir veneno', 'discernir disposição', 'luz', 'primeiros socorros', 'purificar', 'resistir ao frio/calor'],
+        1: ['Acalmar animais', 'Alarme', 'Aura das fadas', 'Bom fruto', 'Bordão mágico', 'Descobrir armadilhas e poços', 'Descobrir portas secretas', 'Elo animal', 'Funda mágica', 'Invisibilidade a animais', 'Obscurecer com névoa', 'Passo da trilha selvagem', 'Vegetação enredadora']
+    },
+    'mago': {
+        0: ['Abrir/fechar', 'Alcance arcano', 'Consertar', 'Descobrir veneno', 'Discernir magia', 'Luz', 'Mensagem', 'Orbes dançantes', 'Prestidigitação', 'Resistir ao frio/calor', 'Runa arcana', 'Som fantasma'],
+        1: ['Alterar-se menor', 'Alterar tamanho', 'Apagar', 'Armadura arcana', 'Chamas ardentes', 'Choque', 'Compreensão', 'Decifrar escrita arcana', 'Disco flutuante', 'Encantar humanóide', 'Escudo', 'Identificar', 'Invocar familiar', 'Leve como uma pena', 'Mísseis arcanos', 'Passo da aranha', 'Proteção contra disposição', 'Salto', 'Servo invisível', 'Sono', 'Travar barras ou portão']
+    },
+    'ilusionista': {
+        0: ['Consertar', 'Discernir ilusão', 'Glamour arcano', 'Influenciar', 'Luz', 'Marca do dragão', 'Mensagem', 'Orbes dançantes', 'Prestidigitação', 'Primeiros socorros', 'Runa arcana', 'Som fantasma'],
+        1: ['Açoite sombrio menor', 'Alterar-se menor', 'Apagar', 'Armadura arcana', 'Armadura do dragão', 'Atordoar', 'Aura indetectável', 'Cães ilusórios', 'Cores', 'Decifrar escrita arcana', 'Encantar humanóide', 'Força temporária de Ward', 'Hipnotismo', 'Ilusão', 'Ilusão silenciosa', 'Imagem de dragão', 'Nublar visão', 'Obscurecer com névoa', 'reflexo feérico', 'Trevas', 'Ventriloquismo', 'Ver o invisível']
+    }
 };
 
 // Quantidade de magias por classe
 export const spellCount: Record<string, Record<number, number>> = {
-  'clerigo': { 0: 3, 1: 2 },
-  'druida': { 0: 3, 1: 2 },
-  'mago': { 0: 4, 1: 3 },
-  'ilusionista': { 0: 4, 1: 3 }
+    'clerigo': { 0: 3, 1: 2 },
+    'druida': { 0: 3, 1: 2 },
+    'mago': { 0: 4, 1: 3 },
+    'ilusionista': { 0: 4, 1: 3 }
 };
