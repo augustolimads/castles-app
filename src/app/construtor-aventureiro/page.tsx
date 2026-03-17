@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <explanation> */
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -30,10 +31,10 @@ export default function AdventurerConstructor() {
   // Estados do personagem
   const [baseAttributes, setBaseAttributes] = useState<CharacterAttributes>({
     forca: 10,
-    inteligencia: 10,
-    sabedoria: 10,
     destreza: 10,
     constituicao: 10,
+    inteligencia: 10,
+    sabedoria: 10,
     carisma: 10
   });
   const [finalAttributes, setFinalAttributes] = useState<CharacterAttributes>({ ...baseAttributes });
@@ -46,20 +47,20 @@ export default function AdventurerConstructor() {
       label: 'Força',
       checked: false
     },
-    inteligencia: {
-      label: 'Inteligência',
-      checked: false
-    },
-    sabedoria: {
-      label: 'Sabedoria',
-      checked: false
-    },
     destreza: {
       label: 'Destreza',
       checked: false
     },
     constituicao: {
       label: 'Constituição',
+      checked: false
+    },
+    inteligencia: {
+      label: 'Inteligência',
+      checked: false
+    },
+    sabedoria: {
+      label: 'Sabedoria',
       checked: false
     },
     carisma: {
@@ -250,10 +251,10 @@ export default function AdventurerConstructor() {
   const handleRollAttributes = () => {
     const newAttributes: CharacterAttributes = {
       forca: new DiceRoll('3d6').total,
-      inteligencia: new DiceRoll('3d6').total,
-      sabedoria: new DiceRoll('3d6').total,
       destreza: new DiceRoll('3d6').total,
       constituicao: new DiceRoll('3d6').total,
+      inteligencia: new DiceRoll('3d6').total,
+      sabedoria: new DiceRoll('3d6').total,
       carisma: new DiceRoll('3d6').total
     };
 
@@ -373,10 +374,10 @@ export default function AdventurerConstructor() {
         {
           name: "📊 ATRIBUTOS",
           value: `**FOR:** ${attributes.forca} (${modifiers.forca >= 0 ? '+' : ''}${modifiers.forca})\n` +
-            `**INT:** ${attributes.inteligencia} (${modifiers.inteligencia >= 0 ? '+' : ''}${modifiers.inteligencia})\n` +
-            `**SAB:** ${attributes.sabedoria} (${modifiers.sabedoria >= 0 ? '+' : ''}${modifiers.sabedoria})\n` +
             `**DES:** ${attributes.destreza} (${modifiers.destreza >= 0 ? '+' : ''}${modifiers.destreza})\n` +
             `**CON:** ${attributes.constituicao} (${modifiers.constituicao >= 0 ? '+' : ''}${modifiers.constituicao})\n` +
+            `**INT:** ${attributes.inteligencia} (${modifiers.inteligencia >= 0 ? '+' : ''}${modifiers.inteligencia})\n` +
+            `**SAB:** ${attributes.sabedoria} (${modifiers.sabedoria >= 0 ? '+' : ''}${modifiers.sabedoria})\n` +
             `**CAR:** ${attributes.carisma} (${modifiers.carisma >= 0 ? '+' : ''}${modifiers.carisma})\n` +
             `**Modificador Total:** ${totalModifier >= 0 ? '+' : ''}${totalModifier}`,
           inline: false
@@ -458,10 +459,10 @@ export default function AdventurerConstructor() {
         attributes: finalAttributes,
         modifiers: {
           forca: calculateModifier(finalAttributes.forca),
-          inteligencia: calculateModifier(finalAttributes.inteligencia),
-          sabedoria: calculateModifier(finalAttributes.sabedoria),
           destreza: calculateModifier(finalAttributes.destreza),
           constituicao: calculateModifier(finalAttributes.constituicao),
+          inteligencia: calculateModifier(finalAttributes.inteligencia),
+          sabedoria: calculateModifier(finalAttributes.sabedoria),
           carisma: calculateModifier(finalAttributes.carisma)
         },
         totalModifier: totalModifier,
@@ -505,6 +506,7 @@ export default function AdventurerConstructor() {
         <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight text-balance">Construtor de aventureiro</h1>
       </div>
 
+      <h3>1. Role os atributos</h3>
       <div id="attributes" className="grid grid-cols-3 gap-4">
         <CharGen.NumberInput
           label="Força"
@@ -512,24 +514,6 @@ export default function AdventurerConstructor() {
           value={finalAttributes.forca}
           onChange={(val) => {
             const newBase = { ...baseAttributes, forca: val };
-            setBaseAttributes(newBase);
-          }}
-        />
-        <CharGen.NumberInput
-          label="Inteligência"
-          id="intelligence"
-          value={finalAttributes.inteligencia}
-          onChange={(val) => {
-            const newBase = { ...baseAttributes, inteligencia: val };
-            setBaseAttributes(newBase);
-          }}
-        />
-        <CharGen.NumberInput
-          label="Sabedoria"
-          id="wisdom"
-          value={finalAttributes.sabedoria}
-          onChange={(val) => {
-            const newBase = { ...baseAttributes, sabedoria: val };
             setBaseAttributes(newBase);
           }}
         />
@@ -548,6 +532,24 @@ export default function AdventurerConstructor() {
           value={finalAttributes.constituicao}
           onChange={(val) => {
             const newBase = { ...baseAttributes, constituicao: val };
+            setBaseAttributes(newBase);
+          }}
+        />
+        <CharGen.NumberInput
+          label="Inteligência"
+          id="intelligence"
+          value={finalAttributes.inteligencia}
+          onChange={(val) => {
+            const newBase = { ...baseAttributes, inteligencia: val };
+            setBaseAttributes(newBase);
+          }}
+        />
+        <CharGen.NumberInput
+          label="Sabedoria"
+          id="wisdom"
+          value={finalAttributes.sabedoria}
+          onChange={(val) => {
+            const newBase = { ...baseAttributes, sabedoria: val };
             setBaseAttributes(newBase);
           }}
         />
@@ -585,6 +587,7 @@ export default function AdventurerConstructor() {
 
       <hr />
 
+      <h3>2. Selecione raça e classe</h3>
       <div className="grid grid-cols-2 gap-4">
         <CharGen.TextSelect
           placeholder="Selecione uma raça"
@@ -608,8 +611,13 @@ export default function AdventurerConstructor() {
         />
       </div>
 
+      <hr />
+
       <div>
-        <p><span>Atributos Prime selecionados:</span> <Badge variant={selectedPrimeCount > maxPrimes ? 'destructive' : 'default'}>{selectedPrimeCount}/{maxPrimes}</Badge></p>
+        <h3>
+          <span>3. Selecionar Atributos Primários: </span>
+          <Badge variant={selectedPrimeCount > maxPrimes ? 'destructive' : 'default'}>{selectedPrimeCount}/{maxPrimes}</Badge>
+        </h3>
         <div className="grid grid-cols-3 gap-4 mt-4">
           {Object.entries(primeAttributeStates).map(([attr, state]) => {
             // Atributos obrigatórios da classe se aplicam a todas as raças
@@ -629,9 +637,12 @@ export default function AdventurerConstructor() {
             );
           })}
         </div>
-
+      </div>
+      <hr />
+      <div>
+        <h3>4. Rolar detalhes finais e feitiços aprendidos (opcional)</h3>
         <Button
-          className="mt-4"
+          className="mt-4 w-40"
           onClick={handleRollFinalDetails}
           disabled={!canRollFinalDetails}
         >
@@ -662,8 +673,6 @@ export default function AdventurerConstructor() {
           </div>
         </div>
       )}
-
-      <hr />
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <CharGen.TextInput disabled label="PV" id="hp" value={hp} />

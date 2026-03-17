@@ -3,6 +3,7 @@
 import {
     Sidebar,
     SidebarContent,
+    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarHeader,
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/sidebar"
 import { usePathname } from "next/navigation"
 import { items } from "../items"
+import { Config } from "@/modules/config/ui"
 
 export function AppSidebar() {
     const pathname = usePathname()
@@ -32,7 +34,7 @@ export function AppSidebar() {
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton asChild isActive={pathname === item.url}>
-                                        <a href={item.url} className={item.color}>
+                                        <a href={item.url} className={item.color} aria-disabled={item.isBlocked}>
                                             <item.icon />
                                             <span>{item.title}</span>
                                         </a>
@@ -43,7 +45,9 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-            {/* <SidebarFooter /> */}
+            <SidebarFooter>
+                <Config.ThemeSelector />
+            </SidebarFooter>
         </Sidebar>
     )
 }

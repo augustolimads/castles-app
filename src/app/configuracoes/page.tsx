@@ -33,6 +33,9 @@ function Configuracoes() {
       </div>
 
       <div className="flex flex-col gap-4">
+        <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+          Alterar tema
+        </h2>
         <Config.ThemeSelector />
       </div>
     </div>
