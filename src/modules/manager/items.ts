@@ -50,4 +50,9 @@ export const items = [
         icon: HardHat,
         color: "text-gray-400"
     },
+    {
+        title: "Configurações",
+        url: "/configuracoes",
+        icon: UserCog,
+    }
 ]

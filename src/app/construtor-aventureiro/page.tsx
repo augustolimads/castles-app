@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useConfig } from "@/hooks/use-config";
 import * as CharGen from "@/modules/char-gen/ui";
 import { LabeledCheckbox } from "@/modules/char-gen/ui/labeled-checkbox";
 import { charClasses } from "@/modules/data/charClasses";
@@ -75,28 +76,15 @@ export default function AdventurerConstructor() {
   const [description, setDescription] = useState('');
   const [carryingCapacity, setCarryingCapacity] = useState('');
   const [spells, setSpells] = useState<{ level0: string[], level1: string[] }>({ level0: [], level1: [] });
-  const [discordWebhook, setDiscordWebhook] = useState('');
   const [isCharacterComplete, setIsCharacterComplete] = useState(false);
+
+  // Hook do Zustand para configurações
+  const { discordWebhook } = useConfig();
 
   // Estados de controle
   const [canSelectRaceClass, setCanSelectRaceClass] = useState(false);
   const [canRollFinalDetails, setCanRollFinalDetails] = useState(false);
   const [showSpells, setShowSpells] = useState(false);
-
-  // Efeito para carregar webhook do localStorage
-  useEffect(() => {
-    const savedWebhook = localStorage.getItem('discordWebhook');
-    if (savedWebhook) {
-      setDiscordWebhook(savedWebhook);
-    }
-  }, []);
-
-  // Efeito para salvar webhook no localStorage
-  useEffect(() => {
-    if (discordWebhook.trim()) {
-      localStorage.setItem('discordWebhook', discordWebhook);
-    }
-  }, [discordWebhook]);
 
   // Efeito para aplicar bônus racial e calcular modificador total
   useEffect(() => {
@@ -517,13 +505,6 @@ export default function AdventurerConstructor() {
         <SidebarTrigger />
         <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight text-balance">C&C: Gerador de personagem</h1>
       </div>
-
-      <CharGen.TextInput
-        label="Webhook do Discord"
-        id="discordWebhook"
-        value={discordWebhook}
-        onChange={setDiscordWebhook}
-      />
 
       <div id="attributes" className="grid grid-cols-3 gap-4">
         <CharGen.NumberInput
