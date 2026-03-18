@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
@@ -9,6 +10,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { races } from "@/modules/compendium/races"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense } from "react"
+
 
 function RacesContent() {
   const searchParams = useSearchParams()
@@ -28,15 +30,29 @@ function RacesContent() {
     <div className="mt-4 space-y-6">
       <div className="flex gap-4 items-center">
         <SidebarTrigger />
-        <Tabs value={currentRace} onValueChange={handleRaceChange}>
+        <Select value={currentRace} onValueChange={handleRaceChange}>
+          <SelectTrigger className="w-full lg:hidden">
+            <SelectValue placeholder="Selecione uma raça" />
+          </SelectTrigger>
+          <SelectContent>
+            {races.map((race) => (
+              <SelectItem key={race.id} value={race.id}>
+                {race.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Tabs
+          value={currentRace}
+          className="hidden lg:block"
+          onValueChange={handleRaceChange}
+        >
           <TabsList variant="default">
-            <TabsTrigger value="anao">Anão</TabsTrigger>
-            <TabsTrigger value="elfo">Elfo</TabsTrigger>
-            <TabsTrigger value="gnomo">Gnomo</TabsTrigger>
-            <TabsTrigger value="humano">Humano</TabsTrigger>
-            <TabsTrigger value="meio-elfo">Meio-elfo</TabsTrigger>
-            <TabsTrigger value="meio-orc">Meio-orc</TabsTrigger>
-            <TabsTrigger value="pequenino">Pequenino</TabsTrigger>
+            {races.map((race) => (
+              <TabsTrigger key={race.id} value={race.id}>
+                {race.name}
+              </TabsTrigger>
+            ))}
           </TabsList>
         </Tabs>
       </div>
