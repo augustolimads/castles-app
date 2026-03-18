@@ -157,8 +157,8 @@ export function CartSidebar() {
                     Limpar
                   </Button>
                 )}
-                <Button className="w-full" size="sm" disabled>
-                  Finalizar Compra
+                <Button className="w-full" size="sm" onClick={clearCart}>
+                  Limpar carrinho
                 </Button>
               </div>
             </div>

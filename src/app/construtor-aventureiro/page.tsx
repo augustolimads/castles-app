@@ -27,47 +27,51 @@ import { DiceRoll } from "@dice-roller/rpg-dice-roller";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
+const initialAttributes: CharacterAttributes = {
+  forca: 10,
+  destreza: 10,
+  constituicao: 10,
+  inteligencia: 10,
+  sabedoria: 10,
+  carisma: 10
+};
+
+const createInitialPrimeAttributeStates = () => ({
+  forca: {
+    label: 'Força',
+    checked: false
+  },
+  destreza: {
+    label: 'Destreza',
+    checked: false
+  },
+  constituicao: {
+    label: 'Constituição',
+    checked: false
+  },
+  inteligencia: {
+    label: 'Inteligência',
+    checked: false
+  },
+  sabedoria: {
+    label: 'Sabedoria',
+    checked: false
+  },
+  carisma: {
+    label: 'Carisma',
+    checked: false
+  }
+});
+
 export default function AdventurerConstructor() {
   // Estados do personagem
-  const [baseAttributes, setBaseAttributes] = useState<CharacterAttributes>({
-    forca: 10,
-    destreza: 10,
-    constituicao: 10,
-    inteligencia: 10,
-    sabedoria: 10,
-    carisma: 10
-  });
+  const [baseAttributes, setBaseAttributes] = useState<CharacterAttributes>(initialAttributes);
   const [finalAttributes, setFinalAttributes] = useState<CharacterAttributes>({ ...baseAttributes });
   const [selectedRace, setSelectedRace] = useState('');
   const [selectedClass, setSelectedClass] = useState('');
   const [rollAttempts, setRollAttempts] = useState(0);
   const [totalModifier, setTotalModifier] = useState(0);
-  const [primeAttributeStates, setPrimeAttributeStates] = useState<Record<string, { label: string; checked: boolean }>>({
-    forca: {
-      label: 'Força',
-      checked: false
-    },
-    destreza: {
-      label: 'Destreza',
-      checked: false
-    },
-    constituicao: {
-      label: 'Constituição',
-      checked: false
-    },
-    inteligencia: {
-      label: 'Inteligência',
-      checked: false
-    },
-    sabedoria: {
-      label: 'Sabedoria',
-      checked: false
-    },
-    carisma: {
-      label: 'Carisma',
-      checked: false
-    }
-  });
+  const [primeAttributeStates, setPrimeAttributeStates] = useState<Record<string, { label: string; checked: boolean }>>(createInitialPrimeAttributeStates());
 
   // Estados dos detalhes finais
   const [hp, setHp] = useState('');
@@ -362,6 +366,32 @@ export default function AdventurerConstructor() {
     }
   };
 
+  // Função para reiniciar todos os campos e estados da tela
+  const handleResetCharacter = () => {
+    setBaseAttributes(initialAttributes);
+    setFinalAttributes(initialAttributes);
+    setSelectedRace('');
+    setSelectedClass('');
+    setRollAttempts(0);
+    setTotalModifier(0);
+    setPrimeAttributeStates(createInitialPrimeAttributeStates());
+
+    setHp('');
+    setTreasure('');
+    setAge('');
+    setHeight('');
+    setWeight('');
+    setGender('');
+    setDescription('');
+    setCarryingCapacity('');
+    setSpells({ level0: [], level1: [] });
+    setIsCharacterComplete(false);
+
+    setCanSelectRaceClass(false);
+    setCanRollFinalDetails(false);
+    setShowSpells(false);
+  };
+
   // Função para formatar mensagem do Discord
   const formatDiscordMessage = (characterData: any) => {
     const { race, characterClass, gender, age, height, weight, description, attributes, modifiers, totalModifier, primeAttributes, hp, treasure, carryingCapacity, spells, rollAttempts } = characterData;
@@ -642,7 +672,7 @@ export default function AdventurerConstructor() {
       <div>
         <h3>4. Rolar detalhes finais e feitiços aprendidos (opcional)</h3>
         <Button
-          className="mt-4 w-40"
+          className="mt-4 self-start"
           onClick={handleRollFinalDetails}
           disabled={!canRollFinalDetails}
         >
@@ -684,6 +714,7 @@ export default function AdventurerConstructor() {
         <CharGen.TextInput disabled label="Traço marcante" id="description" value={description} />
         <CharGen.TextInput disabled label="Sobrecarga" id="carryingCapacity" value={carryingCapacity} />
       </div>
+      <Button className="self-start" type="button" onClick={handleResetCharacter}>Começar de novo</Button>
     </div>
   );
 }

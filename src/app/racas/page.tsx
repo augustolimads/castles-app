@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { races } from "@/modules/compendium/races"
@@ -12,7 +13,7 @@ import { Suspense } from "react"
 function RacesContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
-  
+
   const currentRace = searchParams.get("raca") || "anao"
 
   const handleRaceChange = (value: string) => {
@@ -25,17 +26,20 @@ function RacesContent() {
 
   return (
     <div className="mt-4 space-y-6">
-      <Tabs value={currentRace} onValueChange={handleRaceChange}>
-        <TabsList variant="default">
-          <TabsTrigger value="anao">Anão</TabsTrigger>
-          <TabsTrigger value="elfo">Elfo</TabsTrigger>
-          <TabsTrigger value="gnomo">Gnomo</TabsTrigger>
-          <TabsTrigger value="humano">Humano</TabsTrigger>
-          <TabsTrigger value="meio-elfo">Meio-elfo</TabsTrigger>
-          <TabsTrigger value="meio-orc">Meio-orc</TabsTrigger>
-          <TabsTrigger value="pequenino">Pequenino</TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <div className="flex gap-4 items-center">
+        <SidebarTrigger />
+        <Tabs value={currentRace} onValueChange={handleRaceChange}>
+          <TabsList variant="default">
+            <TabsTrigger value="anao">Anão</TabsTrigger>
+            <TabsTrigger value="elfo">Elfo</TabsTrigger>
+            <TabsTrigger value="gnomo">Gnomo</TabsTrigger>
+            <TabsTrigger value="humano">Humano</TabsTrigger>
+            <TabsTrigger value="meio-elfo">Meio-elfo</TabsTrigger>
+            <TabsTrigger value="meio-orc">Meio-orc</TabsTrigger>
+            <TabsTrigger value="pequenino">Pequenino</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
 
       {selectedRace && (
         <div className="space-y-6">

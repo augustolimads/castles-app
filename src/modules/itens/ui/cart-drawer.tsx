@@ -177,9 +177,8 @@ export function CartDrawer({ children }: CartDrawerProps) {
 
                 <Separator className="my-3" />
 
-                <Button className="w-full" size="lg">
-                  Finalizar Compra
-                  <span className="ml-2 text-sm">({totalGold} PO)</span>
+                <Button className="w-full" size="lg" onClick={clearCart}>
+                  Limpar carrinho
                 </Button>
               </div>
             </div>
