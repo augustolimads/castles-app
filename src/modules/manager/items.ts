@@ -1,4 +1,4 @@
-import { BookSearch, FileSpreadsheet, HardHat, ShoppingBasket, User2Icon, UserCog } from "lucide-react"
+import { BookSearch, FileSpreadsheet, HardHat, PersonStanding, ShoppingBasket, SignpostBig, User2Icon, UserCog } from "lucide-react"
 
 export const items = [
     {
@@ -28,16 +28,28 @@ export const items = [
         isBlocked: true,
     },
     {
-        title: "Monstros",
-        url: "/monstros",
-        icon: BookSearch,
-        color: "text-gray-400",
-        isBlocked: true,
+        title: "Raças",
+        url: "/racas",
+        icon: PersonStanding,
+        isBlocked: false,
+    },
+    {
+        title: "Classes",
+        url: "/classes",
+        icon: SignpostBig,
+        isBlocked: false,
     },
     {
         title: "Feitiços",
         url: "/em-breve",
         icon: HardHat,
+        color: "text-gray-400",
+        isBlocked: true,
+    },
+    {
+        title: "Monstros",
+        url: "/monstros",
+        icon: BookSearch,
         color: "text-gray-400",
         isBlocked: true,
     },
