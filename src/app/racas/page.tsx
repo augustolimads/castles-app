@@ -7,8 +7,9 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { races } from "@/modules/compendium/races"
 import { useRouter, useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 
-function RacesPage() {
+function RacesContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   
@@ -111,4 +112,10 @@ function RacesPage() {
   )
 }
 
-export default RacesPage
+export default function RacesPage() {
+  return (
+    <Suspense fallback={<div className="mt-4">Carregando...</div>}>
+      <RacesContent />
+    </Suspense>
+  )
+}
