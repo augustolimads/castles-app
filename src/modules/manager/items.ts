@@ -40,6 +40,12 @@ export const items = [
         isBlocked: false,
     },
     {
+        title: "Escudo do mestre",
+        url: "/escudo-do-mestre",
+        icon: BookSearch,
+        isBlocked: false,
+    },
+    {
         title: "Feitiços",
         url: "/em-breve",
         icon: HardHat,
