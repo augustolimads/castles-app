@@ -3,7 +3,7 @@
 import { X } from "lucide-react"
 import Image from "next/image"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -94,7 +94,7 @@ const dmTopics: DmTopic[] = [
   },
 ]
 
-function DmScreen() {
+function DmScreenContent() {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
@@ -311,4 +311,56 @@ function DmScreen() {
   )
 }
 
-export default DmScreen
+function DmScreenFallback() {
+  return (
+    <div className="flex w-full flex-col gap-8 px-4 py-6 md:px-6">
+      <header className="relative overflow-hidden rounded-3xl border bg-muted/20 shadow-sm">
+        <div className="relative h-44 w-full sm:h-56 lg:h-64">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.2),transparent_35%),linear-gradient(120deg,rgba(30,27,24,0.5),rgba(120,53,15,0.75))]" />
+        </div>
+
+        <div className="absolute left-5 top-5 z-30">
+          <SidebarTrigger className="text-white" />
+        </div>
+
+        <div className="absolute inset-x-0 bottom-0 flex flex-col gap-4 p-4 sm:flex-row sm:items-end sm:justify-start sm:p-6">
+          <div className="flex items-end gap-3">
+            <div className="space-y-1 self-center text-white">
+              <p className="hidden text-xs uppercase tracking-[0.25em] text-white/75 md:block">Dm Screen</p>
+              <h1 className="text-2xl font-semibold sm:text-3xl">Escudo do Mestre</h1>
+              <p className="text-sm text-white/80">Carregando atalhos de regra e narrativa...</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6">
+          {dmTopics.map((topic) => (
+            <Card key={topic.id} className="border-border/70">
+              <CardHeader className="gap-3">
+                <CardTitle className="text-lg">{topic.title}</CardTitle>
+                <CardDescription>{topic.subtitle}</CardDescription>
+              </CardHeader>
+              <CardContent className="flex flex-wrap gap-2">
+                {topic.quickInfo.map((info) => (
+                  <Badge key={info} variant="outline" className="font-normal">
+                    {info}
+                  </Badge>
+                ))}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </main>
+    </div>
+  )
+}
+
+export default function DmScreen() {
+  return (
+    <Suspense fallback={<DmScreenFallback />}>
+      <DmScreenContent />
+    </Suspense>
+  )
+}
