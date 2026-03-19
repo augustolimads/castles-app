@@ -38,10 +38,10 @@ function ClassesContent() {
 
   return (
     <div className="mt-4 space-y-6">
-      <header className="flex gap-4 items-center sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b">
+      <header className="flex gap-4 items-center sticky top-0 z-10 bg-background/80 backdrop-blur-sm">
         <SidebarTrigger />
         <Select value={currentClass} onValueChange={handleClassChange}>
-          <SelectTrigger className="w-full lg:hidden">
+          <SelectTrigger className="w-full xl:hidden">
             <SelectValue placeholder="Selecione uma classe" />
           </SelectTrigger>
           <SelectContent>
@@ -52,7 +52,7 @@ function ClassesContent() {
             ))}
           </SelectContent>
         </Select>
-        <Tabs value={currentClass} className="hidden lg:block" onValueChange={handleClassChange}>
+        <Tabs value={currentClass} className="hidden xl:block" onValueChange={handleClassChange}>
           <TabsList variant="default">
             {charClasses.map((characterClass) => (
               <TabsTrigger key={characterClass.id} value={characterClass.id}>
@@ -64,85 +64,87 @@ function ClassesContent() {
       </header>
 
       {selectedClass && (
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">{selectedClass.name}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-semibold w-1/3">Dado de Vida</TableCell>
-                    <TableCell>{selectedClass.hitDice}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-semibold">Tendência</TableCell>
-                    <TableCell>{selectedClass.disposition}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-semibold">Atributo Primário</TableCell>
-                    <TableCell>{selectedClass.primaryAttribute}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-semibold">Armas</TableCell>
-                    <TableCell>{selectedClass.armas}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-semibold">Armaduras</TableCell>
-                    <TableCell>{selectedClass.armaduras}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Evolução por Nível</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Nível</TableHead>
-                    <TableHead>PV</TableHead>
-                    <TableHead>Bônus de Ataque</TableHead>
-                    <TableHead>XP</TableHead>
-                    <TableHead>Habilidades</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {selectedClass.levels.map((level) => (
-                    <TableRow key={level.level}>
-                      <TableCell className="font-semibold">{level.level}</TableCell>
-                      <TableCell>{level.hp}</TableCell>
-                      <TableCell>{level.attackBonus}</TableCell>
-                      <TableCell>{level.experience.toLocaleString("pt-BR")}</TableCell>
-                      <TableCell>
-                        {level.abilities.length > 0
-                          ? level.abilities.map((ability, index) => (
-                            <span key={`${level.level}-${ability.id}`}>
-                              <button
-                                type="button"
-                                className="text-primary hover:underline underline-offset-4"
-                                onClick={() => handleAbilityClick(level.level, ability.id)}
-                              >
-                                {ability.name}
-                              </button>
-                              {index < level.abilities.length - 1 ? ", " : ""}
-                            </span>
-                          ))
-                          : "-"}
-                      </TableCell>
+        <div className="space-y-6 flex flex-col lg:flex-row gap-6">
+          <div className="flex flex-col gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl">{selectedClass.name}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell className="font-semibold w-1/3">Dado de Vida</TableCell>
+                      <TableCell>{selectedClass.hitDice}</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+                    <TableRow>
+                      <TableCell className="font-semibold">Tendência</TableCell>
+                      <TableCell>{selectedClass.disposition}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-semibold">Atributo Primário</TableCell>
+                      <TableCell>{selectedClass.primaryAttribute}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-semibold">Armas</TableCell>
+                      <TableCell>{selectedClass.armas}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell className="font-semibold">Armaduras</TableCell>
+                      <TableCell>{selectedClass.armaduras}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
 
-          <Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Evolução por Nível</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Nível</TableHead>
+                      <TableHead>PV</TableHead>
+                      <TableHead>Bônus de Ataque</TableHead>
+                      <TableHead>XP</TableHead>
+                      <TableHead className="hidden md:block lg:hidden 2xl:block">Habilidades</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {selectedClass.levels.map((level) => (
+                      <TableRow key={level.level}>
+                        <TableCell className="font-semibold">{level.level}</TableCell>
+                        <TableCell>{level.hp}</TableCell>
+                        <TableCell>{level.attackBonus}</TableCell>
+                        <TableCell>{level.experience.toLocaleString("pt-BR")}</TableCell>
+                        <TableCell className="hidden md:block lg:hidden 2xl:block">
+                          {level.abilities.length > 0
+                            ? level.abilities.map((ability, index) => (
+                              <span key={`${level.level}-${ability.id}`}>
+                                <button
+                                  type="button"
+                                  className="text-primary hover:underline underline-offset-4"
+                                  onClick={() => handleAbilityClick(level.level, ability.id)}
+                                >
+                                  {ability.name}
+                                </button>
+                                {index < level.abilities.length - 1 ? ", " : ""}
+                              </span>
+                            ))
+                            : "-"}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card className="flex-1">
             <CardHeader>
               <CardTitle>Habilidades por Nível</CardTitle>
             </CardHeader>

@@ -28,7 +28,7 @@ function RacesContent() {
 
   return (
     <div className="mt-4 space-y-6">
-      <header className="flex gap-4 items-center sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b">
+      <header className="flex gap-4 items-center sticky top-0 z-10 bg-background/80 backdrop-blur-sm">
         <SidebarTrigger />
         <Select value={currentRace} onValueChange={handleRaceChange}>
           <SelectTrigger className="w-full lg:hidden">
@@ -58,8 +58,8 @@ function RacesContent() {
       </header>
 
       {selectedRace && (
-        <div className="space-y-6">
-          <Card>
+        <div className="space-y-6 flex flex-col lg:flex-row gap-6">
+          <Card className="w-1/3">
             <CardHeader>
               <CardTitle className="text-2xl">{selectedRace.name}</CardTitle>
             </CardHeader>
@@ -100,7 +100,7 @@ function RacesContent() {
           </Card>
 
           {selectedRace.traits && selectedRace.traits.length > 0 && (
-            <Card>
+            <Card className="flex-1">
               <CardHeader>
                 <CardTitle>Características Especiais</CardTitle>
               </CardHeader>
