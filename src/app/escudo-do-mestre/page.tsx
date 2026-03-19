@@ -3,11 +3,13 @@
 import { X } from "lucide-react"
 import Image from "next/image"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useCallback, useEffect, useMemo } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 
 type DmTopic = {
   id: string
@@ -96,6 +98,7 @@ function DmScreen() {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
+  const [searchTerm, setSearchTerm] = useState("")
 
   const selectedTopicId = searchParams.get("tema")
 
@@ -103,6 +106,26 @@ function DmScreen() {
     () => dmTopics.find((topic) => topic.id === selectedTopicId),
     [selectedTopicId]
   )
+
+  const filteredTopics = useMemo(() => {
+    const normalizedTerm = searchTerm.trim().toLowerCase()
+
+    if (!normalizedTerm) {
+      return dmTopics
+    }
+
+    return dmTopics.filter((topic) => {
+      const quickInfo = topic.quickInfo.join(" ").toLowerCase()
+      const details = topic.details.join(" ").toLowerCase()
+
+      return (
+        topic.title.toLowerCase().includes(normalizedTerm) ||
+        topic.subtitle.toLowerCase().includes(normalizedTerm) ||
+        quickInfo.includes(normalizedTerm) ||
+        details.includes(normalizedTerm)
+      )
+    })
+  }, [searchTerm])
 
   const updateTopicParam = useCallback(
     (topicId?: string) => {
@@ -146,7 +169,7 @@ function DmScreen() {
   }, [closeDetails, selectedTopic])
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-6 md:px-6">
+    <div className="flex w-full flex-col gap-8 px-4 py-6 md:px-6">
       <header className="relative overflow-hidden rounded-3xl border bg-muted/20 shadow-sm">
         <div className="relative h-44 w-full sm:h-56 lg:h-64">
           <Image
@@ -159,23 +182,50 @@ function DmScreen() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.2),transparent_35%),linear-gradient(120deg,rgba(30,27,24,0.5),rgba(120,53,15,0.75))]" />
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 flex flex-col gap-4 p-4 sm:flex-row sm:items-end sm:justify-between sm:p-6">
+        <div className="absolute left-5 top-5 z-30">
+          <SidebarTrigger className="text-white" />
+        </div>
+
+        <div className="absolute inset-x-0 bottom-0 flex flex-col gap-4 p-4 sm:flex-row sm:items-end sm:justify-start sm:p-6">
           <div className="flex items-end gap-3">
-            <div className="relative size-20 overflow-hidden rounded-2xl border-2 border-white/60 bg-black/30 shadow-lg sm:size-24">
+            <div className="hidden lg:block relative size-20 overflow-hidden rounded-2xl border-2 border-white/60 bg-black/30 shadow-lg sm:size-24">
               <Image src="/icons/shield.webp" alt="Ícone do escudo" fill className="object-cover" />
             </div>
-            <div className="space-y-1 text-white">
-              <p className="text-xs uppercase tracking-[0.25em] text-white/75">Dm Screen</p>
-              <h1 className="text-2xl font-semibold sm:text-3xl">Escudo do Mestre</h1>
-              <p className="text-sm text-white/80">Atalhos de regra e narrativa para consultas rápidas.</p>
+            <div className="space-y-1 text-white self-center w-full pointer-events-none">
+              <p className="hidden md:block text-xs uppercase tracking-[0.25em] text-white/75">Dm Screen</p>
+              <h1 className="text-2xl font-semibold sm:text-3xl text-center sm:text-left">Escudo do Mestre</h1>
+              <p className="text-sm text-white/80 text-center sm:text-left">Atalhos de regra e narrativa para consultas rápidas.</p>
+            </div>
+          </div>
+
+          <div className="w-full sm:w-80">
+            <div className="relative">
+              <Input
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Buscar tema, regra ou palavra-chave"
+                className="border-white/40 bg-black/40 pr-9 text-white placeholder:text-white/70"
+                aria-label="Buscar temas no escudo do mestre"
+              />
+
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-2 top-1/2 inline-flex size-6 -translate-y-1/2 items-center justify-center rounded-sm text-white/80 transition hover:bg-white/15 hover:text-white"
+                  aria-label="Limpar busca"
+                >
+                  <X size={14} />
+                </button>
+              )}
             </div>
           </div>
         </div>
       </header>
 
       <main>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {dmTopics.map((topic) => (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6">
+          {filteredTopics.map((topic) => (
             <button
               key={topic.id}
               type="button"
@@ -201,6 +251,14 @@ function DmScreen() {
             </button>
           ))}
         </div>
+
+        {filteredTopics.length === 0 && (
+          <Card className="mt-4 border-dashed">
+            <CardContent className="py-8 text-center text-sm text-muted-foreground">
+              Nenhum tema encontrado para a busca atual.
+            </CardContent>
+          </Card>
+        )}
       </main>
 
       {selectedTopic && (
