@@ -28,7 +28,7 @@ function RacesContent() {
 
   return (
     <div className="mt-4 space-y-6">
-      <div className="flex gap-4 items-center">
+      <header className="flex gap-4 items-center sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b">
         <SidebarTrigger />
         <Select value={currentRace} onValueChange={handleRaceChange}>
           <SelectTrigger className="w-full lg:hidden">
@@ -55,7 +55,7 @@ function RacesContent() {
             ))}
           </TabsList>
         </Tabs>
-      </div>
+      </header>
 
       {selectedRace && (
         <div className="space-y-6">
