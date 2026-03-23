@@ -2,11 +2,13 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useCart } from "@/modules/itens/use-cart";
 import { CircleDollarSignIcon, Minus, Plus, ShoppingBasket, Trash2, WeightIcon } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
 interface CartDrawerProps {
   children: React.ReactNode;
@@ -14,6 +16,11 @@ interface CartDrawerProps {
 
 export function CartDrawer({ children }: CartDrawerProps) {
   const { items, removeItem, updateQuantity, clearCart, totalGold, totalEV, totalItems } = useCart();
+  const [availableGoldInput, setAvailableGoldInput] = useState("");
+
+  const availableGold = Number.parseFloat(availableGoldInput.replace(",", "."));
+  const hasAvailableGold = availableGoldInput.trim() !== "" && !Number.isNaN(availableGold);
+  const remainingGold = hasAvailableGold ? availableGold - totalGold : null;
 
   return (
     <div className="xl:hidden">
@@ -174,6 +181,31 @@ export function CartDrawer({ children }: CartDrawerProps) {
                   </span>
                   <span className="font-semibold">{totalEV}</span>
                 </div>
+
+                <div className="pt-2">
+                  <label htmlFor="available-gold-drawer" className="text-xs text-muted-foreground">
+                    Ouro disponivel (PO)
+                  </label>
+                  <Input
+                    id="available-gold-drawer"
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    value={availableGoldInput}
+                    onChange={(event) => setAvailableGoldInput(event.target.value)}
+                    placeholder="Ex.: 120"
+                    className="mt-1"
+                  />
+                </div>
+
+                {hasAvailableGold && (
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-muted-foreground">Saldo restante:</span>
+                    <span className={`font-semibold ${remainingGold !== null && remainingGold < 0 ? "text-destructive" : "text-emerald-600"}`}>
+                      {remainingGold?.toFixed(1)} PO
+                    </span>
+                  </div>
+                )}
 
                 <Separator className="my-3" />
 

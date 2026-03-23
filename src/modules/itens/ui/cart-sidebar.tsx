@@ -3,13 +3,20 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/modules/itens/use-cart";
 import { CircleDollarSignIcon, Minus, Plus, ShoppingBasket, Trash2, WeightIcon } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
 export function CartSidebar() {
   const { items, removeItem, updateQuantity, clearCart, totalGold, totalEV, totalItems } = useCart();
+  const [availableGoldInput, setAvailableGoldInput] = useState("");
+
+  const availableGold = Number.parseFloat(availableGoldInput.replace(",", "."));
+  const hasAvailableGold = availableGoldInput.trim() !== "" && !Number.isNaN(availableGold);
+  const remainingGold = hasAvailableGold ? availableGold - totalGold : null;
 
   return (
     <div className="hidden xl:block w-80 shrink-0">
@@ -145,6 +152,31 @@ export function CartSidebar() {
                   <span className="font-semibold">{totalEV}</span>
                 </div>
 
+                <div className="pt-2">
+                  <label htmlFor="available-gold-sidebar" className="text-xs text-muted-foreground">
+                    Ouro disponivel (PO)
+                  </label>
+                  <Input
+                    id="available-gold-sidebar"
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    value={availableGoldInput}
+                    onChange={(event) => setAvailableGoldInput(event.target.value)}
+                    placeholder="Ex.: 120"
+                    className="mt-1 h-8 text-sm"
+                  />
+                </div>
+
+                {hasAvailableGold && (
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-muted-foreground">Saldo restante:</span>
+                    <span className={`font-semibold ${remainingGold !== null && remainingGold < 0 ? "text-destructive" : "text-emerald-600"}`}>
+                      {remainingGold?.toFixed(1)} PO
+                    </span>
+                  </div>
+                )}
+
                 <Separator className="my-3" />
                 {items.length > 1 && (
                   <Button
@@ -158,7 +190,7 @@ export function CartSidebar() {
                   </Button>
                 )}
                 <Button className="w-full" size="sm" onClick={clearCart}>
-                  Limpar carrinho
+                  Calcular compras
                 </Button>
               </div>
             </div>
