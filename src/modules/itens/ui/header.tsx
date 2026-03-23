@@ -8,7 +8,8 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { CART_KITS_UPDATED_EVENT, getSavedCartKits } from "@/modules/itens/kits";
 import { CartButton } from "@/modules/itens/ui/cart-button";
 import { CartDrawer } from "@/modules/itens/ui/cart-drawer";
-import { Search, ShoppingBasket } from "lucide-react";
+import { getHiddenItemIds, HIDDEN_ITEMS_UPDATED_EVENT } from "@/modules/itens/use-hidden-items";
+import { RotateCcw, Search, ShoppingBasket, Trash2 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
@@ -37,11 +38,11 @@ const sortOptions = [
 ];
 
 interface HeaderProps {
-    showKits: boolean;
-    onToggleKits: () => void;
+    activeView: 'items' | 'kits' | 'trash';
+    onSetView: (view: 'items' | 'kits' | 'trash') => void;
 }
 
-export function Header({ showKits, onToggleKits }: HeaderProps) {
+export function Header({ activeView, onSetView }: HeaderProps) {
     const searchParams = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
@@ -49,11 +50,20 @@ export function Header({ showKits, onToggleKits }: HeaderProps) {
     const currentCategory = searchParams.get('category') || '';
     const currentSearch = searchParams.get('search') || '';
     const currentSort = searchParams.get('sort') || '';
+    const currentCategoryLabel =
+        currentCategory === 'kits'
+            ? 'Kits'
+            : currentCategory === 'lixeira'
+                ? 'Lixeira'
+                : categories.find(cat => cat.id === currentCategory)?.label || 'Categorias';
 
     // Estado local para o input de busca (para debounce)
     const [searchInputValue, setSearchInputValue] = useState(currentSearch);
     const [kitsCount, setKitsCount] = useState(0);
-    const [previousCategory, setPreviousCategory] = useState<string>(currentCategory !== 'kits' ? currentCategory : '');
+    const [previousCategory, setPreviousCategory] = useState<string>(
+        currentCategory !== 'kits' && currentCategory !== 'lixeira' ? currentCategory : ''
+    );
+    const [hiddenCount, setHiddenCount] = useState(0);
 
     // Sincronizar o input local com os searchParams quando eles mudam externamente
     useEffect(() => {
@@ -110,8 +120,37 @@ export function Header({ showKits, onToggleKits }: HeaderProps) {
     }, [searchInputValue, currentSearch, updateSearchParams]);
 
     const handleCategorySelect = useCallback((categoryId: string) => {
+        if (categoryId === 'kits') {
+            const realCategory = currentCategory !== 'kits' && currentCategory !== 'lixeira'
+                ? currentCategory
+                : previousCategory;
+            setPreviousCategory(realCategory);
+            updateSearchParams({ category: 'kits' });
+            onSetView('kits');
+            return;
+        }
+
+        if (categoryId === 'lixeira') {
+            const realCategory = currentCategory !== 'kits' && currentCategory !== 'lixeira'
+                ? currentCategory
+                : previousCategory;
+            setPreviousCategory(realCategory);
+            updateSearchParams({ category: 'lixeira' });
+            onSetView('trash');
+            return;
+        }
+
+        if (categoryId === 'all') {
+            setPreviousCategory('');
+        } else {
+            setPreviousCategory(categoryId);
+        }
+
         updateSearchParams({ category: categoryId });
-    }, [updateSearchParams]);
+        if (activeView !== 'items') {
+            onSetView('items');
+        }
+    }, [activeView, currentCategory, onSetView, previousCategory, updateSearchParams]);
 
     const handleSearchChange = useCallback((search: string) => {
         setSearchInputValue(search);
@@ -127,16 +166,36 @@ export function Header({ showKits, onToggleKits }: HeaderProps) {
     }, [updateSearchParams]);
 
     const handleToggleKits = useCallback(() => {
-        if (!showKits) {
-            // Ativando Kits: salva categoria atual e define category=kits
-            setPreviousCategory(currentCategory !== 'kits' ? currentCategory : previousCategory);
+        if (activeView !== 'kits') {
+            // Ativando Kits: salva categoria real atual e define category=kits
+            const realCategory = currentCategory !== 'kits' && currentCategory !== 'lixeira'
+                ? currentCategory
+                : previousCategory;
+            setPreviousCategory(realCategory);
             updateSearchParams({ category: 'kits' });
+            onSetView('kits');
         } else {
-            // Desativando Kits: restaura a última categoria antes de kits
+            // Desativando Kits: restaura a última categoria
             updateSearchParams({ category: previousCategory || 'all' });
+            onSetView('items');
         }
-        onToggleKits();
-    }, [showKits, currentCategory, previousCategory, updateSearchParams, onToggleKits]);
+    }, [activeView, currentCategory, previousCategory, updateSearchParams, onSetView]);
+
+    const handleToggleTrash = useCallback(() => {
+        if (activeView !== 'trash') {
+            // Ativando Lixeira: salva categoria real atual e define category=lixeira
+            const realCategory = currentCategory !== 'kits' && currentCategory !== 'lixeira'
+                ? currentCategory
+                : previousCategory;
+            setPreviousCategory(realCategory);
+            updateSearchParams({ category: 'lixeira' });
+            onSetView('trash');
+        } else {
+            // Desativando Lixeira: restaura a última categoria
+            updateSearchParams({ category: previousCategory || 'all' });
+            onSetView('items');
+        }
+    }, [activeView, currentCategory, previousCategory, updateSearchParams, onSetView]);
 
     useEffect(() => {
         setKitsCount(getSavedCartKits().length);
@@ -149,6 +208,17 @@ export function Header({ showKits, onToggleKits }: HeaderProps) {
         return () => {
             window.removeEventListener(CART_KITS_UPDATED_EVENT, reload);
             window.removeEventListener('storage', reload);
+        };
+    }, []);
+
+    useEffect(() => {
+        setHiddenCount(getHiddenItemIds().length);
+        const reloadHidden = () => setHiddenCount(getHiddenItemIds().length);
+        window.addEventListener(HIDDEN_ITEMS_UPDATED_EVENT, reloadHidden);
+        window.addEventListener('storage', reloadHidden);
+        return () => {
+            window.removeEventListener(HIDDEN_ITEMS_UPDATED_EVENT, reloadHidden);
+            window.removeEventListener('storage', reloadHidden);
         };
     }, []);
 
@@ -167,20 +237,23 @@ export function Header({ showKits, onToggleKits }: HeaderProps) {
                             onChange={(e) => handleSearchChange(e.target.value)}
                         />
                     </div>
-                    <div className="flex gap-4 items-center">
+                    <div className="flex gap-4 items-center flex-wrap">
                         <span className="hidden md:block">Filtros:</span>
                         <DropdownMenu>
                             <DropdownMenuTrigger className="cursor-pointer font-semibold">
                                 <span className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 px-4 py-2 has-[>svg]:px-3">
-                                    {currentCategory ?
-                                        categories.find(cat => cat.id === currentCategory)?.label || 'Categorias' :
-                                        'Categorias'
-                                    }
+                                    {currentCategoryLabel}
                                 </span>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
                                 <DropdownMenuItem onClick={() => handleCategorySelect('all')}>
                                     Todas as categorias
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="md:hidden" onClick={() => handleCategorySelect('kits')}>
+                                    Kits
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="md:hidden" onClick={() => handleCategorySelect('lixeira')}>
+                                    Lixeira
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 {categories.map(category => (
@@ -229,16 +302,16 @@ export function Header({ showKits, onToggleKits }: HeaderProps) {
                             <span className="ml-1">Limpar</span>
                         </Button>
 
-                        <div className="relative">
+                        <div className="relative hidden md:flex gap-4">
                             <Button
-                                variant={showKits ? "default" : "outline"}
+                                variant={activeView === 'kits' ? "default" : "outline"}
                                 size="sm"
                                 onClick={handleToggleKits}
                                 className="h-9 px-4"
                             >
-                                {showKits ? "← Voltar" : "Kits"}
+                                {activeView === 'kits' ? "← Voltar" : "Kits"}
                             </Button>
-                            {!showKits && kitsCount > 0 && (
+                            {activeView !== 'kits' && kitsCount > 0 && (
                                 <Badge
                                     variant="destructive"
                                     className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs pointer-events-none"
@@ -246,6 +319,31 @@ export function Header({ showKits, onToggleKits }: HeaderProps) {
                                     {kitsCount}
                                 </Badge>
                             )}
+                            <div className="relative">
+                                <Button
+                                    variant={activeView === 'trash' ? "default" : "outline"}
+                                    size="sm"
+                                    onClick={handleToggleTrash}
+                                    className="h-9 px-3 gap-1"
+                                >
+                                    {activeView === 'trash' ? (
+                                        <>
+                                            <RotateCcw size={16} />
+                                            <span className="hidden sm:inline">Voltar</span>
+                                        </>
+                                    ) : (
+                                        <Trash2 size={16} />
+                                    )}
+                                </Button>
+                                {activeView !== 'trash' && hiddenCount > 0 && (
+                                    <Badge
+                                        variant="secondary"
+                                        className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs pointer-events-none"
+                                    >
+                                        {hiddenCount}
+                                    </Badge>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -6,16 +6,17 @@ import { CartProvider } from '@/modules/itens/use-cart';
 import { Suspense, useState } from 'react';
 import { Grid } from './grid';
 import { Header } from './header';
+import { TrashGrid } from './trash-grid';
 
 function MarketContentInner() {
-  const [showKits, setShowKits] = useState(false);
+  const [activeView, setActiveView] = useState<'items' | 'kits' | 'trash'>('items');
 
   return (
       <CartProvider>
-      <Header showKits={showKits} onToggleKits={() => setShowKits((prev) => !prev)} />
+      <Header activeView={activeView} onSetView={setActiveView} />
           <div className="flex gap-6 min-h-screen">
               <div className="flex-1 min-w-0">
-          {showKits ? <KitsGrid /> : <Grid itemsPerPage={20} />}
+          {activeView === 'kits' ? <KitsGrid /> : activeView === 'trash' ? <TrashGrid /> : <Grid itemsPerPage={20} />}
               </div>
               <CartSidebar />
           </div>

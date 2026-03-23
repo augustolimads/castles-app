@@ -2,6 +2,7 @@
 
 import { Pagination } from "@/components/ui/pagination";
 import { usePagination } from "@/hooks/use-pagination";
+import { useHiddenItems } from "@/modules/itens/use-hidden-items";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { items } from "../items";
@@ -21,10 +22,13 @@ export function Grid({ itemsPerPage = 20 }: GridProps) {
   const searchFilter = searchParams.get('search') || '';
   const sortFilter = searchParams.get('sort') || '';
 
+  const { hiddenIds, hideItem } = useHiddenItems();
+
   // Filtrar e ordenar dados baseado nos searchParams
   const filteredAndSortedData = useMemo(() => {
     // Primeiro, filtrar os dados
     let filtered = items.filter(item => {
+      if (hiddenIds.includes(item.id)) return false;
       const matchesCategory = !categoryFilter || categoryFilter === 'all' || item.type === categoryFilter;
       const matchesSearch = !searchFilter ||
         item.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
@@ -57,7 +61,7 @@ export function Grid({ itemsPerPage = 20 }: GridProps) {
     }
 
     return filtered;
-  }, [categoryFilter, searchFilter, sortFilter]);
+  }, [categoryFilter, searchFilter, sortFilter, hiddenIds]);
 
   const {
     currentData,
@@ -110,7 +114,7 @@ export function Grid({ itemsPerPage = 20 }: GridProps) {
     <div className="space-y-4 flex-1 flex flex-col">
       <div className="py-4 grid grid-cols lg:grid-cols-2 2xl:grid-cols-2 3xl:grid-cols-3 4xl:grid-cols-4 5xl:grid-cols-5 gap-4">
         {currentData.map(item => (
-          <ItemHorizontalCard key={item.id} item={item} />
+          <ItemHorizontalCard key={item.id} item={item} onHide={() => hideItem(item.id)} />
         ))}
       </div>
 

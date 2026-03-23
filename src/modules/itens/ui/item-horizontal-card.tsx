@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useCart } from "@/modules/itens/use-cart";
-import { CircleDollarSignIcon, ShoppingBasket, WeightIcon } from "lucide-react";
+import { CircleDollarSignIcon, RotateCcw, ShoppingBasket, Trash2, WeightIcon } from "lucide-react";
 import Image from "next/image";
 import { useCallback } from "react";
 
@@ -20,9 +20,11 @@ type ItemHorizontalCardProps = {
     icon: string;
     image: string;
   };
+  onHide?: () => void;
+  onRestore?: () => void;
 };
 
-export function ItemHorizontalCard({ item }: ItemHorizontalCardProps) {
+export function ItemHorizontalCard({ item, onHide, onRestore }: ItemHorizontalCardProps) {
   const { addItem } = useCart();
 
   const handleAddToCart = useCallback(() => {
@@ -69,10 +71,22 @@ export function ItemHorizontalCard({ item }: ItemHorizontalCardProps) {
             <p className="text-xs font-semibold">{item.ev}</p>
           </Badge>}
         </div>
-        <Button className="w-1/2 cursor-pointer" onClick={handleAddToCart}>
-          <ShoppingBasket />
-          <span className="text-xs">Adicionar</span>
-        </Button>
+        <div className="flex gap-1 w-1/2">
+          {onRestore && (
+            <Button variant="outline" size="icon" className="cursor-pointer shrink-0" title="Restaurar item" onClick={onRestore}>
+              <RotateCcw size={16} />
+            </Button>
+          )}
+          {onHide && (
+            <Button variant="outline" size="icon" className="cursor-pointer shrink-0 text-muted-foreground hover:text-destructive" title="Ocultar item" onClick={onHide}>
+              <Trash2 size={16} />
+            </Button>
+          )}
+          <Button className="flex-1 cursor-pointer" onClick={handleAddToCart}>
+            <ShoppingBasket />
+            <span className="text-xs">Adicionar</span>
+          </Button>
+        </div>
       </div>
     </Card>
   )
