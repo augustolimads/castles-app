@@ -1,18 +1,21 @@
 'use client';
 
 import { CartSidebar } from '@/modules/itens/ui/cart-sidebar';
+import { KitsGrid } from '@/modules/itens/ui/kits-grid';
 import { CartProvider } from '@/modules/itens/use-cart';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { Grid } from './grid';
 import { Header } from './header';
 
 function MarketContentInner() {
+  const [showKits, setShowKits] = useState(false);
+
   return (
       <CartProvider>
-      <Header />
+      <Header showKits={showKits} onToggleKits={() => setShowKits((prev) => !prev)} />
           <div className="flex gap-6 min-h-screen">
               <div className="flex-1 min-w-0">
-                  <Grid itemsPerPage={20} />
+          {showKits ? <KitsGrid /> : <Grid itemsPerPage={20} />}
               </div>
               <CartSidebar />
           </div>

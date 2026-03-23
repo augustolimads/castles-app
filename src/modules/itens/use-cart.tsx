@@ -1,8 +1,9 @@
 'use client';
 
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-type CartItem = {
+export type CartItem = {
   id: string;
   type: string;
   name: string;
@@ -23,6 +24,7 @@ type CartContextType = {
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
+  replaceCart: (newItems: CartItem[]) => void;
   totalGold: number;
   totalEV: number;
   totalItems: number;
@@ -87,6 +89,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems([]);
   };
 
+  const replaceCart = (newItems: CartItem[]) => {
+    setItems(newItems.filter(item => item.quantity > 0));
+  };
+
   const totalGold = Number(
     items.reduce((sum, item) => sum + (item.gold || 0) * item.quantity, 0).toFixed(2)
   );
@@ -102,6 +108,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       removeItem,
       updateQuantity,
       clearCart,
+      replaceCart,
       totalGold,
       totalEV,
       totalItems,

@@ -2,9 +2,11 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { saveCartKit } from "@/modules/itens/kits";
 import { useCart } from "@/modules/itens/use-cart";
 import { CircleDollarSignIcon, Minus, Plus, ShoppingBasket, Trash2, WeightIcon } from "lucide-react";
 import Image from "next/image";
@@ -17,10 +19,22 @@ interface CartDrawerProps {
 export function CartDrawer({ children }: CartDrawerProps) {
   const { items, removeItem, updateQuantity, clearCart, totalGold, totalEV, totalItems } = useCart();
   const [availableGoldInput, setAvailableGoldInput] = useState("");
+  const [kitDialogOpen, setKitDialogOpen] = useState(false);
+  const [kitNameInput, setKitNameInput] = useState("");
+  const [lastSavedKitName, setLastSavedKitName] = useState<string | null>(null);
 
   const availableGold = Number.parseFloat(availableGoldInput.replace(",", "."));
   const hasAvailableGold = availableGoldInput.trim() !== "" && !Number.isNaN(availableGold);
   const remainingGold = hasAvailableGold ? availableGold - totalGold : null;
+
+  const handleSaveKit = () => {
+    const savedKit = saveCartKit(items, kitNameInput);
+    if (savedKit) {
+      setLastSavedKitName(savedKit.name);
+      setKitNameInput("");
+      setKitDialogOpen(false);
+    }
+  };
 
   return (
     <div className="xl:hidden">
@@ -63,7 +77,7 @@ export function CartDrawer({ children }: CartDrawerProps) {
                 {items.map((item) => (
                   <div key={item.id} className="border rounded-lg p-3">
                     <div className="flex gap-3">
-                      <div className="flex-shrink-0">
+                      <div className="shrink-0">
                         <Image
                           src={`/icons/${item.icon}.webp`}
                           alt={item.name}
@@ -209,9 +223,46 @@ export function CartDrawer({ children }: CartDrawerProps) {
 
                 <Separator className="my-3" />
 
-                <Button className="w-full" size="lg" onClick={clearCart}>
+                <Button className="w-full" size="lg" onClick={() => setKitDialogOpen(true)}>
+                  Salvar lista de compras (kit)
+                </Button>
+                {lastSavedKitName && (
+                  <p className="text-xs text-muted-foreground text-center">
+                    Último kit salvo: {lastSavedKitName}
+                  </p>
+                )}
+
+                <Button variant="outline" className="w-full text-destructive hover:text-destructive" size="sm" onClick={clearCart}>
                   Limpar carrinho
                 </Button>
+
+                <Dialog open={kitDialogOpen} onOpenChange={setKitDialogOpen}>
+                  <DialogContent className="sm:max-w-sm">
+                    <DialogHeader>
+                      <DialogTitle>Salvar kit de compras</DialogTitle>
+                    </DialogHeader>
+                    <div className="py-2">
+                      <label htmlFor="kit-name-dialog-drawer" className="text-sm font-medium">
+                        Nome do kit
+                      </label>
+                      <Input
+                        id="kit-name-dialog-drawer"
+                        value={kitNameInput}
+                        onChange={(event) => setKitNameInput(event.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && handleSaveKit()}
+                        placeholder="Ex.: Kit da masmorra"
+                        className="mt-2"
+                        maxLength={60}
+                        autoFocus
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">Deixe em branco para usar a data/hora atual.</p>
+                    </div>
+                    <DialogFooter>
+                      <Button variant="outline" size="sm" onClick={() => setKitDialogOpen(false)}>Cancelar</Button>
+                      <Button size="sm" onClick={handleSaveKit}>Salvar</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
           )}

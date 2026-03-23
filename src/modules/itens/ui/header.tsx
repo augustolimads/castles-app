@@ -1,9 +1,11 @@
 'use client';
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { CART_KITS_UPDATED_EVENT, getSavedCartKits } from "@/modules/itens/kits";
 import { CartButton } from "@/modules/itens/ui/cart-button";
 import { CartDrawer } from "@/modules/itens/ui/cart-drawer";
 import { Search, ShoppingBasket } from "lucide-react";
@@ -34,7 +36,12 @@ const sortOptions = [
     { id: 'ev_desc', label: 'EV (Maior)' },
 ];
 
-export function Header() {
+interface HeaderProps {
+    showKits: boolean;
+    onToggleKits: () => void;
+}
+
+export function Header({ showKits, onToggleKits }: HeaderProps) {
     const searchParams = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
@@ -45,22 +52,13 @@ export function Header() {
 
     // Estado local para o input de busca (para debounce)
     const [searchInputValue, setSearchInputValue] = useState(currentSearch);
+    const [kitsCount, setKitsCount] = useState(0);
+    const [previousCategory, setPreviousCategory] = useState<string>(currentCategory !== 'kits' ? currentCategory : '');
 
     // Sincronizar o input local com os searchParams quando eles mudam externamente
     useEffect(() => {
         setSearchInputValue(currentSearch);
     }, [currentSearch]);
-
-    // Debounce da busca
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            if (searchInputValue !== currentSearch) {
-                updateSearchParams({ search: searchInputValue });
-            }
-        }, 300);
-
-        return () => clearTimeout(timeoutId);
-    }, [searchInputValue]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const updateSearchParams = useCallback((updates: { category?: string; search?: string; sort?: string }) => {
         const params = new URLSearchParams(searchParams.toString());
@@ -100,6 +98,17 @@ export function Header() {
         router.push(url, { scroll: false });
     }, [searchParams, pathname, router]);
 
+    // Debounce da busca
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            if (searchInputValue !== currentSearch) {
+                updateSearchParams({ search: searchInputValue });
+            }
+        }, 300);
+
+        return () => clearTimeout(timeoutId);
+    }, [searchInputValue, currentSearch, updateSearchParams]);
+
     const handleCategorySelect = useCallback((categoryId: string) => {
         updateSearchParams({ category: categoryId });
     }, [updateSearchParams]);
@@ -116,6 +125,32 @@ export function Header() {
         setSearchInputValue('');
         updateSearchParams({ category: 'all', search: '', sort: '' });
     }, [updateSearchParams]);
+
+    const handleToggleKits = useCallback(() => {
+        if (!showKits) {
+            // Ativando Kits: salva categoria atual e define category=kits
+            setPreviousCategory(currentCategory !== 'kits' ? currentCategory : previousCategory);
+            updateSearchParams({ category: 'kits' });
+        } else {
+            // Desativando Kits: restaura a última categoria antes de kits
+            updateSearchParams({ category: previousCategory || 'all' });
+        }
+        onToggleKits();
+    }, [showKits, currentCategory, previousCategory, updateSearchParams, onToggleKits]);
+
+    useEffect(() => {
+        setKitsCount(getSavedCartKits().length);
+
+        const reload = () => setKitsCount(getSavedCartKits().length);
+
+        window.addEventListener(CART_KITS_UPDATED_EVENT, reload);
+        window.addEventListener('storage', reload);
+
+        return () => {
+            window.removeEventListener(CART_KITS_UPDATED_EVENT, reload);
+            window.removeEventListener('storage', reload);
+        };
+    }, []);
 
     return (
         <header className="sticky top-2 left-0 right-0 bg-secondary py-2 px-2 border rounded-lg flex flex-col gap-2">
@@ -193,6 +228,25 @@ export function Header() {
                         >
                             <span className="ml-1">Limpar</span>
                         </Button>
+
+                        <div className="relative">
+                            <Button
+                                variant={showKits ? "default" : "outline"}
+                                size="sm"
+                                onClick={handleToggleKits}
+                                className="h-9 px-4"
+                            >
+                                {showKits ? "← Voltar" : "Kits"}
+                            </Button>
+                            {!showKits && kitsCount > 0 && (
+                                <Badge
+                                    variant="destructive"
+                                    className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs pointer-events-none"
+                                >
+                                    {kitsCount}
+                                </Badge>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className="flex items-center gap-4 xl:hidden">
