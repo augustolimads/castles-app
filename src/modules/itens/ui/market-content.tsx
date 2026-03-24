@@ -12,15 +12,15 @@ function MarketContentInner() {
   const [activeView, setActiveView] = useState<'items' | 'kits' | 'trash'>('items');
 
   return (
-      <CartProvider>
+    <CartProvider>
       <Header activeView={activeView} onSetView={setActiveView} />
-          <div className="flex gap-6 min-h-screen">
-              <div className="flex-1 min-w-0">
+      <div className="flex gap-6 min-h-screen">
+        <div className="flex-1 min-w-0">
           {activeView === 'kits' ? <KitsGrid /> : activeView === 'trash' ? <TrashGrid /> : <Grid itemsPerPage={20} />}
-              </div>
-              <CartSidebar />
-          </div>
-      </CartProvider>
+        </div>
+        <CartSidebar />
+      </div>
+    </CartProvider>
   );
 }
 

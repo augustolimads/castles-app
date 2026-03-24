@@ -19,7 +19,8 @@ export function getHiddenItemIds(): string[] {
 
 function saveHiddenItemIds(ids: string[]): void {
   localStorage.setItem(HIDDEN_ITEMS_KEY, JSON.stringify(ids));
-  window.dispatchEvent(new Event(HIDDEN_ITEMS_UPDATED_EVENT));
+    // Defer dispatch so it never fires synchronously during another component's render
+    setTimeout(() => window.dispatchEvent(new Event(HIDDEN_ITEMS_UPDATED_EVENT)), 0);
 }
 
 export function useHiddenItems() {
@@ -39,19 +40,20 @@ export function useHiddenItems() {
   const hideItem = useCallback((id: string) => {
     setHiddenIds(prev => {
       if (prev.includes(id)) return prev;
-      const next = [...prev, id];
-      saveHiddenItemIds(next);
-      return next;
+        return [...prev, id];
     });
+      const current = getHiddenItemIds();
+      if (!current.includes(id)) {
+          saveHiddenItemIds([...current, id]);
+      }
   }, []);
 
   const restoreItem = useCallback((id: string) => {
-    setHiddenIds(prev => {
-      const next = prev.filter(x => x !== id);
-      saveHiddenItemIds(next);
-      return next;
-    });
+      setHiddenIds(prev => prev.filter(x => x !== id));
+      const current = getHiddenItemIds();
+      saveHiddenItemIds(current.filter(x => x !== id));
   }, []);
+
 
   return { hiddenIds, hideItem, restoreItem };
 }

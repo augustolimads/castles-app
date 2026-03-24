@@ -249,10 +249,10 @@ export function Header({ activeView, onSetView }: HeaderProps) {
                                 <DropdownMenuItem onClick={() => handleCategorySelect('all')}>
                                     Todas as categorias
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="md:hidden" onClick={() => handleCategorySelect('kits')}>
+                                <DropdownMenuItem className="xl:hidden" onClick={() => handleCategorySelect('kits')}>
                                     Kits
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="md:hidden" onClick={() => handleCategorySelect('lixeira')}>
+                                <DropdownMenuItem className="xl:hidden" onClick={() => handleCategorySelect('lixeira')}>
                                     Lixeira
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
@@ -302,7 +302,7 @@ export function Header({ activeView, onSetView }: HeaderProps) {
                             <span className="ml-1">Limpar</span>
                         </Button>
 
-                        <div className="relative hidden md:flex gap-4">
+                        <div className="relative hidden xl:flex gap-4">
                             <Button
                                 variant={activeView === 'kits' ? "default" : "outline"}
                                 size="sm"
