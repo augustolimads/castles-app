@@ -59,7 +59,7 @@ function RacesContent() {
 
       {selectedRace && (
         <div className="space-y-6 flex flex-col lg:flex-row gap-6">
-          <Card className="w-1/3">
+          <Card className="lg:w-1/3">
             <CardHeader>
               <CardTitle className="text-2xl">{selectedRace.name}</CardTitle>
             </CardHeader>

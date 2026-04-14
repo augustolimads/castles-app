@@ -9,7 +9,7 @@ export const items = [
     },
     {
         title: "Itens & Equipamentos",
-        url: "/itens",
+        url: "/itens?category=arma",
         icon: ShoppingBasket,
         isBlocked: false,
     },

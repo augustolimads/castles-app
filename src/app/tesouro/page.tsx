@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -412,13 +413,36 @@ function Tesouro() {
     }
 
     return (
-        <div className="mx-auto my-8 w-full max-w-6xl px-4">
-            <div className="mb-3 flex items-center gap-2">
-                <SidebarTrigger />
-                <h1 className="text-2xl font-bold">C&C: Gerador de tesouros por tipo</h1>
-            </div>
+        <div className="flex w-full flex-col gap-8 px-4 py-6 md:px-6">
+            <header className="relative overflow-hidden rounded-3xl border bg-muted/20 shadow-sm">
+                <div className="relative h-44 w-full sm:h-56 lg:h-64">
+                    <Image
+                        src="/Tesouro.jpg"
+                        alt="Capa do Gerador de Tesouros"
+                        fill
+                        priority
+                        className="object-cover brightness-[1]"
+                    />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.2),transparent_35%),linear-gradient(120deg,rgba(30,27,24,0.5),rgba(120,53,15,0.75))]" />
+                </div>
 
-            <div className="mb-6 grid grid-cols-3 gap-2 md:grid-cols-6">
+                <div className="absolute left-5 top-5 z-30">
+                    <SidebarTrigger className="text-white" />
+                </div>
+
+                <div className="absolute inset-x-0 bottom-0 flex flex-col gap-4 p-4 sm:flex-row sm:items-end sm:justify-start sm:p-6">
+                    <div className="flex items-end gap-3">
+                        <div className="space-y-1 text-white self-center w-full pointer-events-none">
+                            <p className="hidden md:block text-xs uppercase tracking-[0.25em] text-white/75">Treasure Generator</p>
+                            <h1 className="text-2xl font-semibold sm:text-3xl text-center sm:text-left">Gerador de Tesouros</h1>
+                            <p className="text-sm text-white/80 text-center sm:text-left">Gere tesouros aleatórios por tipo para suas aventuras.</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main className="mx-auto w-full max-w-6xl">
+                <div className="mb-6 grid grid-cols-3 gap-2 md:grid-cols-6">
                 {listButtons.map((value) => (
                     <Button
                         key={value}
@@ -431,8 +455,9 @@ function Tesouro() {
                 ))}
             </div>
 
-            <h2 className="mb-2 text-xl font-semibold">Tesouro gerado</h2>
-            <Card className="overflow-hidden border border-slate-300">
+                <div>
+                    <h2 className="mb-2 text-xl font-semibold">Tesouro gerado</h2>
+                    <Card className="overflow-hidden border border-slate-300">
                 <CardHeader className="bg-accent-foreground p-4 flex items-center -mt-6">
                     <CardTitle className="text-base font-semibold text-accent">
                         {result ? `Treasure Type ${result.treasureType}` : "Clique em um dos botões acima para gerar um tesouro."}
@@ -520,6 +545,8 @@ function Tesouro() {
                     </CardContent>
                 )}
             </Card>
+                </div>
+            </main>
         </div>
     )
 }

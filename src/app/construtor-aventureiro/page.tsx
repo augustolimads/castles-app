@@ -618,7 +618,7 @@ export default function AdventurerConstructor() {
       <hr />
 
       <h3>2. Selecione raça e classe</h3>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <CharGen.TextSelect
           placeholder="Selecione uma raça"
           label="Raça"
@@ -648,7 +648,7 @@ export default function AdventurerConstructor() {
           <span>3. Selecionar Atributos Primários: </span>
           <Badge variant={selectedPrimeCount > maxPrimes ? 'destructive' : 'default'}>{selectedPrimeCount}/{maxPrimes}</Badge>
         </h3>
-        <div className="grid grid-cols-3 gap-4 mt-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
           {Object.entries(primeAttributeStates).map(([attr, state]) => {
             // Atributos obrigatórios da classe se aplicam a todas as raças
             const isRequired = Boolean(selectedClass &&

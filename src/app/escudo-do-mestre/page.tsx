@@ -142,7 +142,7 @@ function DmScreenContent() {
       </header>
 
       <main>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6">
+        <div className="grid grid- grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 4xl:grid-cols-6">
           {filteredTopics.map((topic) => (
             <button
               key={topic.id}
@@ -150,7 +150,7 @@ function DmScreenContent() {
               className="cursor-pointer text-left"
               onClick={() => updateTopicParam(topic.id)}
             >
-              <Card className="group border-border/70 transition hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md">
+              <Card className="group border-border/70 transition hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md min-h-60">
                 <CardHeader className="gap-3">
                   <CardTitle className="flex items-center justify-between text-lg">
                     <span>{topic.title}</span>
