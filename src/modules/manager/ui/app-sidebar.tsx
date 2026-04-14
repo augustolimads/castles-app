@@ -34,7 +34,7 @@ export function AppSidebar() {
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton asChild isActive={pathname === item.url}>
-                                        <a href={item.url} className={item.color} aria-disabled={item.isBlocked}>
+                                        <a href={item.url} className={item.color} aria-disabled={item.isBlocked} target={item.url.startsWith("http") ? "_blank" : "_self"}>
                                             <item.icon />
                                             <span>{item.title}</span>
                                         </a>
