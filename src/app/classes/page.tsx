@@ -150,13 +150,15 @@ function ClassesContent() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {selectedClass.levels.map((level, index) => (
-                  <div key={level.level}>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="secondary">Nível {level.level}</Badge>
-                      </div>
-                      {level.abilities.length > 0 ? (
+                {selectedClass.levels.map((level, index) => {
+                  if (level.abilities.length === 0) return null
+
+                  return (
+                    <div key={level.level}>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <Badge variant="secondary">Nível {level.level}</Badge>
+                        </div>
                         <div className="space-y-2 pl-2">
                           {level.abilities.map((ability) => (
                             <div id={`ability-${level.level}-${ability.id}`} key={`${level.level}-${ability.id}`} className="scroll-mt-24">
@@ -168,13 +170,11 @@ function ClassesContent() {
                             </div>
                           ))}
                         </div>
-                      ) : (
-                        <p className="text-muted-foreground pl-2">Sem novas habilidades neste nível.</p>
-                      )}
+                      </div>
+                      {index < selectedClass.levels.length - 1 && <Separator className="mt-4" />}
                     </div>
-                    {index < selectedClass.levels.length - 1 && <Separator className="mt-4" />}
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </CardContent>
           </Card>
