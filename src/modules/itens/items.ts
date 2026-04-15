@@ -1,4 +1,6 @@
-export const items = [
+import type { Item } from './use-items';
+
+export const items: Item[] = [
   {
     "id": "ID-2-20260103155224",
     "type": "alojamento",

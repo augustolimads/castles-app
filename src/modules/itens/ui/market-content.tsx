@@ -4,11 +4,16 @@ import { CartSidebar } from '@/modules/itens/ui/cart-sidebar';
 import { KitsGrid } from '@/modules/itens/ui/kits-grid';
 import { CartProvider } from '@/modules/itens/use-cart';
 import { Suspense, useState } from 'react';
+import type { Item } from '../use-items';
 import { Grid } from './grid';
 import { Header } from './header';
 import { TrashGrid } from './trash-grid';
 
-function MarketContentInner() {
+interface MarketContentProps {
+  items: Item[];
+}
+
+function MarketContentInner({ items }: MarketContentProps) {
   const [activeView, setActiveView] = useState<'items' | 'kits' | 'trash'>('items');
 
   return (
@@ -16,7 +21,7 @@ function MarketContentInner() {
       <Header activeView={activeView} onSetView={setActiveView} />
       <div className="flex gap-6 min-h-screen">
         <div className="flex-1 min-w-0">
-          {activeView === 'kits' ? <KitsGrid /> : activeView === 'trash' ? <TrashGrid /> : <Grid itemsPerPage={20} />}
+          {activeView === 'kits' ? <KitsGrid /> : activeView === 'trash' ? <TrashGrid items={items} /> : <Grid items={items} itemsPerPage={20} />}
         </div>
         <CartSidebar />
       </div>
@@ -24,7 +29,7 @@ function MarketContentInner() {
   );
 }
 
-export function MarketContent() {
+export function MarketContent({ items }: MarketContentProps) {
   return (
     <Suspense fallback={
       <div className="space-y-4">
@@ -37,13 +42,13 @@ export function MarketContent() {
           </div>
         </div>
         <div className="py-4 grid grid-cols lg:grid-cols-2 xl:grid-cols-3 gap-4">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="h-32 bg-gray-200 rounded animate-pulse" />
+          {Array.from({ length: 12 }).map((item) => (
+            <div key={`skeleton-${item}`} className="h-32 bg-gray-200 rounded animate-pulse" />
           ))}
         </div>
       </div>
     }>
-      <MarketContentInner />
+      <MarketContentInner items={items} />
     </Suspense>
   );
 }

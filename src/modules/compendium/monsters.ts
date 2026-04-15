@@ -1,4 +1,6 @@
-export const monsters = [
+import type { Monster } from './use-monsters';
+
+export const monsters: Monster[] = [
   {
     "id": "abissal-p2026-0",
     "nome": "ABISSAL",
