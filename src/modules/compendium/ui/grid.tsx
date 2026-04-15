@@ -4,8 +4,8 @@ import { Pagination } from "@/components/ui/pagination";
 import { usePagination } from "@/hooks/use-pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import { monsters } from "../monsters";
 import { useFavorites } from "../use-favorites";
+import { useMonsters } from "../use-monsters";
 import { ItemHorizontalCard } from "./item-horizontal-card";
 
 interface GridProps {
@@ -17,6 +17,7 @@ export function Grid({ itemsPerPage = 20 }: GridProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { items: favoriteItems } = useFavorites();
+  const { monsters, loading, error } = useMonsters();
 
   const initialPage = parseInt(searchParams.get('page') ?? '1', 10);
   const categoryFilter = searchParams.get('category') || '';
@@ -68,7 +69,7 @@ export function Grid({ itemsPerPage = 20 }: GridProps) {
     }
 
     return filtered;
-  }, [categoryFilter, searchFilter, sortFilter, favoriteItems]);
+  }, [monsters, categoryFilter, searchFilter, sortFilter, favoriteItems]);
 
   const {
     currentData,
@@ -116,6 +117,24 @@ export function Grid({ itemsPerPage = 20 }: GridProps) {
     originalGoToPreviousPage();
     updateSearchParams(prevPage);
   }, [originalGoToPreviousPage, currentPage, updateSearchParams]);
+
+  if (loading) {
+    return (
+      <div className="py-4 grid grid-cols lg:grid-cols-2 2xl:grid-cols-2 3xl:grid-cols-3 4xl:grid-cols-4 5xl:grid-cols-5 gap-4">
+        {Array.from({ length: 12 }).map((item) => (
+          <div key={`skeleton-${item}`} className="h-32 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-8 text-destructive">
+        Erro ao carregar monstros. Por favor, tente novamente.
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4 flex-1 flex flex-col">
