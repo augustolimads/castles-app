@@ -1,4 +1,4 @@
-import { BookSearch, FileSpreadsheet, HandCoinsIcon, HardHat, PersonStanding, ShoppingBasket, SignpostBig, User2Icon, UserCog } from "lucide-react"
+import { Backpack, BookSearch, FileSpreadsheet, HandCoinsIcon, HardHat, PersonStanding, ShoppingBasket, SignpostBig, User2Icon, UserCog } from "lucide-react"
 
 export const items = [
     {
@@ -11,6 +11,12 @@ export const items = [
         title: "Itens & Equipamentos",
         url: "/itens?category=arma",
         icon: ShoppingBasket,
+        isBlocked: false,
+    },
+    {
+        title: "Containers & Bagagens",
+        url: "/containers",
+        icon: Backpack,
         isBlocked: false,
     },
     {
