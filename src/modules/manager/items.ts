@@ -1,4 +1,4 @@
-import { Backpack, BookSearch, FileSpreadsheet, HandCoinsIcon, HardHat, PersonStanding, ShoppingBasket, SignpostBig, User2Icon, UserCog } from "lucide-react"
+import { Backpack, BookSearch, Clock, FileSpreadsheet, HandCoinsIcon, HardHat, PersonStanding, ShoppingBasket, SignpostBig, User2Icon, UserCog } from "lucide-react"
 
 export const items = [
     {
@@ -41,6 +41,12 @@ export const items = [
         title: "Escudo do mestre",
         url: "/escudo-do-mestre",
         icon: BookSearch,
+        isBlocked: false,
+    },
+    {
+        title: "Tempo",
+        url: "/tempo",
+        icon: Clock,
         isBlocked: false,
     },
     {
