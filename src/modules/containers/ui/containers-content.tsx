@@ -2,12 +2,12 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 import type { Item } from '@/modules/itens/use-items';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useContainers } from '../use-containers';
 import { ContainerCard } from './container-card';
-import { SidebarTrigger } from '@/components/ui/sidebar';
 
 interface ContainersContentProps {
     items: Item[];
@@ -23,6 +23,7 @@ export function ContainersContent({ items }: ContainersContentProps) {
         toggleContainer,
         updateMaxCapacity,
         addItemToContainer,
+        addCustomItemToContainer,
         removeItemFromContainer,
         updateItemQuantity,
         moveItemBetweenContainers,
@@ -140,6 +141,7 @@ export function ContainersContent({ items }: ContainersContentProps) {
                                 }
                                 onMoveItem={moveItemBetweenContainers}
                                 onAddItem={addItemToContainer}
+                                onAddCustomItem={addCustomItemToContainer}
                                 onDragStart={() => handleContainerDragStart(index)}
                             />
                         </div>

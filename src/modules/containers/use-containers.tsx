@@ -186,6 +186,29 @@ export function useContainers() {
     }, 0);
   };
 
+    const addCustomItemToContainer = (containerId: string, item: Item, quantity: number) => {
+        setContainers(prev =>
+            prev.map(c => {
+                if (c.id !== containerId) return c;
+
+                const existingItem = c.items.find(i => i.id === item.id);
+                if (existingItem) {
+                    return {
+                        ...c,
+                        items: c.items.map(i =>
+                            i.id === item.id ? { ...i, quantity: i.quantity + quantity } : i
+                        ),
+                    };
+                }
+
+                return {
+                    ...c,
+                    items: [...c.items, { ...item, quantity }],
+                };
+            })
+        );
+    };
+
   return {
     containers,
     isLoaded,
@@ -195,6 +218,7 @@ export function useContainers() {
     toggleContainer,
       updateMaxCapacity,
     addItemToContainer,
+      addCustomItemToContainer,
     removeItemFromContainer,
     updateItemQuantity,
     moveItemBetweenContainers,

@@ -1,6 +1,12 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import {
     Tooltip,
@@ -13,8 +19,9 @@ import {
     ChevronDown,
     ChevronRight,
     Coins,
-    Edit2,
     GripVertical,
+    MoreVertical,
+    Plus,
     Scale,
     Search,
     Trash2,
@@ -22,6 +29,7 @@ import {
 import { useState } from 'react';
 import type { Container } from '../use-containers';
 import { ContainerItem } from './container-item';
+import { CustomItemModal } from './custom-item-modal';
 import { ItemSearchModal } from './item-search-modal';
 
 interface ContainerCardProps {
@@ -37,6 +45,7 @@ interface ContainerCardProps {
   onUpdateQuantity: (itemId: string, quantity: number) => void;
   onMoveItem: (fromContainerId: string, toContainerId: string, itemId: string) => void;
     onAddItem: (containerId: string, item: Item) => void;
+    onAddCustomItem: (containerId: string, item: Item, quantity: number) => void;
     onDragStart: () => void;
 }
 
@@ -53,6 +62,7 @@ export function ContainerCard({
   onUpdateQuantity,
   onMoveItem,
     onAddItem,
+    onAddCustomItem,
     onDragStart,
 }: ContainerCardProps) {
   const [isEditing, setIsEditing] = useState(false);
@@ -60,6 +70,7 @@ export function ContainerCard({
     const [isEditingCapacity, setIsEditingCapacity] = useState(false);
     const [editCapacity, setEditCapacity] = useState(container.maxCapacity?.toString() || '');
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [isCustomItemOpen, setIsCustomItemOpen] = useState(false);
 
   const handleRename = () => {
     if (editName.trim()) {
@@ -117,31 +128,14 @@ export function ContainerCard({
               autoFocus
             />
           ) : (
-            <h3 className="font-semibold flex-1">{container.name}</h3>
-          )}
-
-                  <Tooltip>
-                      <TooltipTrigger asChild>
-                          <Button
-                              size="sm"
-                              variant="ghost"
-                              onClick={() => setIsSearchOpen(true)}
+                          <button
+                              type="button"
+                              onClick={() => setIsEditing(true)}
+                              className="font-semibold flex-1 text-left hover:text-primary transition-colors"
                           >
-                              <Search className="w-4 h-4" />
-                          </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                          <p>Buscar e adicionar itens</p>
-                      </TooltipContent>
-                  </Tooltip>
-
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setIsEditing(!isEditing)}
-          >
-            <Edit2 className="w-4 h-4" />
-          </Button>
+                              {container.name}
+                          </button>
+          )}
 
           <Button
             size="sm"
@@ -155,14 +149,27 @@ export function ContainerCard({
             )}
           </Button>
 
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={onDelete}
-            className="text-destructive hover:text-destructive"
-          >
-            <Trash2 className="w-4 h-4" />
-          </Button>
+                  <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                          <Button size="sm" variant="ghost">
+                              <MoreVertical className="w-4 h-4" />
+                          </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => setIsSearchOpen(true)}>
+                              <Search className="w-4 h-4" />
+                              Buscar itens
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setIsCustomItemOpen(true)}>
+                              <Plus className="w-4 h-4" />
+                              Criar item customizado
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={onDelete} variant="destructive">
+                              <Trash2 className="w-4 h-4" />
+                              Deletar container
+                          </DropdownMenuItem>
+                      </DropdownMenuContent>
+                  </DropdownMenu>
         </div>
 
         {/* Totais */}
@@ -263,6 +270,13 @@ export function ContainerCard({
               open={isSearchOpen}
               onOpenChange={setIsSearchOpen}
               onAddItem={onAddItem}
+          />
+
+          <CustomItemModal
+              containerId={container.id}
+              open={isCustomItemOpen}
+              onOpenChange={setIsCustomItemOpen}
+              onAddItem={onAddCustomItem}
           />
     </div>
   );
