@@ -381,7 +381,7 @@ function Tempo() {
         <div className="flex flex-col gap-8 pt-8 max-w-4xl mx-auto px-4">
             <div className="flex gap-2">
                 <SidebarTrigger />
-                <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight text-balance">
+                <h1 className="scroll-m-20 text-2xl lg:text-3xl font-extrabold tracking-tight text-balance">
                     Gerenciador de Tempo
                 </h1>
             </div>
@@ -393,7 +393,7 @@ function Tempo() {
                     </CardHeader>
 
                     <CardContent className="pt-6">
-                        <div className="flex items-center justify-center gap-4">
+                        <div className="flex items-center justify-center gap-2 lg:gap-4">
                             <Button
                                 onClick={subtractHour}
                                 variant="outline"
@@ -412,7 +412,7 @@ function Tempo() {
                                 <ChevronLeft className="size-5" />
                             </Button>
 
-                            <div className="flex items-center text-6xl font-bold tabular-nums">
+                            <div className="flex items-center text-2xl lg:text-6xl font-bold tabular-nums">
                                 <input
                                     ref={hoursInputRef}
                                     type="text"
@@ -421,7 +421,7 @@ function Tempo() {
                                     onChange={handleHoursChange}
                                     onBlur={handleHoursBlur}
                                     onFocus={handleHoursFocus}
-                                    className="w-24 text-center bg-transparent border-none outline-none focus:ring-2 focus:ring-primary rounded-md"
+                                    className="w-full lg:w-24 text-center bg-transparent border-none outline-none focus:ring-2 focus:ring-primary rounded-md"
                                     maxLength={2}
                                 />
                                 <span>:</span>
@@ -433,7 +433,7 @@ function Tempo() {
                                     onChange={handleMinutesChange}
                                     onBlur={handleMinutesBlur}
                                     onFocus={handleMinutesFocus}
-                                    className="w-24 text-center bg-transparent border-none outline-none focus:ring-2 focus:ring-primary rounded-md"
+                                    className="w-full lg:w-24 text-center bg-transparent border-none outline-none focus:ring-2 focus:ring-primary rounded-md"
                                     maxLength={2}
                                 />
                             </div>
@@ -526,13 +526,13 @@ function Tempo() {
             <Card className="max-w-2xl xl:max-w-none mx-auto w-full">
                 <CardHeader>
                     <h2 className="text-xl font-semibold text-center mb-4">Eventos dos Turnos</h2>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 items-center justify-end flex-wrap lg:flex-nowrap">
                         <input
                             type="text"
                             placeholder="Nome do evento"
                             value={newEventLabel}
                             onChange={(e) => setNewEventLabel(e.target.value)}
-                            className="flex-1 px-3 py-2 rounded-md border bg-background text-sm"
+                            className="lg:flex-1 px-3 py-2 rounded-md border bg-background text-sm"
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
                                     addCustomEvent();
@@ -544,7 +544,7 @@ function Tempo() {
                             placeholder="Turno"
                             value={newEventTurn}
                             onChange={(e) => setNewEventTurn(e.target.value)}
-                            className="w-24 px-3 py-2 rounded-md border bg-background text-sm"
+                            className="w-16 lg:w-24 px-3 py-2 rounded-md border bg-background text-sm"
                             min={explorationCounter + 1}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') {

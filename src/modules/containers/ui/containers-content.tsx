@@ -70,20 +70,15 @@ export function ContainersContent({ items }: ContainersContentProps) {
 
     return (
         <div className="space-y-6 p-4">
-            <div className="flex items-center justify-between">
-                <div>
-                    <div className='flex gap-2'>
-                        <SidebarTrigger />
-                        <h1 className="text-3xl font-bold">Containers de Equipamentos</h1>
-                    </div>
-                    <p className="text-muted-foreground">
-                        Organize seus equipamentos em containers e compare peso e preço
-                    </p>
+            <div className="flex flex-col xl:flex-row gap-4 items-center xl:items-start justify-between">
+                <div className='flex gap-2 flex-1'>
+                    <SidebarTrigger />
+                    <h1 className="text-xl font-bold">Containers & bagagens</h1>
                 </div>
 
                 <div className="flex gap-2">
                     {showNewContainerInput ? (
-                        <div className="flex gap-2">
+                        <div className="flex flex-col md:flex-row gap-2">
                             <Input
                                 placeholder="Nome do container"
                                 value={newContainerName}
@@ -92,10 +87,12 @@ export function ContainersContent({ items }: ContainersContentProps) {
                                 className="w-64"
                                 autoFocus
                             />
+                            <div className='flex gap-2 justify-end'>
                             <Button onClick={handleCreateContainer}>Criar</Button>
                             <Button variant="outline" onClick={() => setShowNewContainerInput(false)}>
                                 Cancelar
                             </Button>
+                            </div>
                         </div>
                     ) : (
                         <Button onClick={() => setShowNewContainerInput(true)}>
