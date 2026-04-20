@@ -112,12 +112,21 @@ export function Header({ activeView, onSetView }: HeaderProps) {
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             if (searchInputValue !== currentSearch) {
-                updateSearchParams({ search: searchInputValue });
+                // Se está digitando algo na busca, limpa os filtros de categoria e ordenação
+                if (searchInputValue.trim() !== '') {
+                    updateSearchParams({ search: searchInputValue, category: 'all', sort: '' });
+                    setPreviousCategory(''); // Limpa a categoria anterior também
+                    if (activeView !== 'items') {
+                        onSetView('items');
+                    }
+                } else {
+                    updateSearchParams({ search: searchInputValue });
+                }
             }
         }, 300);
 
         return () => clearTimeout(timeoutId);
-    }, [searchInputValue, currentSearch, updateSearchParams]);
+    }, [searchInputValue, currentSearch, updateSearchParams, activeView, onSetView]);
 
     const handleCategorySelect = useCallback((categoryId: string) => {
         if (categoryId === 'kits') {

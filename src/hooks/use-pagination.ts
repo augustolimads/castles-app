@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface UsePaginationProps {
   data: any[];
@@ -10,11 +10,20 @@ interface UsePaginationProps {
 
 export function usePagination({ data, itemsPerPage, initialPage = 1 }: UsePaginationProps) {
     const [currentPage, setCurrentPage] = useState(initialPage);
+  const previousDataLength = useRef(data.length);
 
-  // Reset para página 1 sempre que os dados mudam
+  // Sincronizar com mudanças
   useEffect(() => {
-    setCurrentPage(1);
-  }, [data]);
+    // Se o tamanho dos dados mudou (filtros aplicados), resetar para página 1
+    if (data.length !== previousDataLength.current) {
+      previousDataLength.current = data.length;
+      setCurrentPage(1);
+    }
+    // Caso contrário, sincronizar com o initialPage (navegação por URL)
+    else if (initialPage !== currentPage) {
+      setCurrentPage(initialPage);
+    }
+  }, [data.length, initialPage, currentPage]);
 
   const paginationInfo = useMemo(() => {
     const totalItems = data.length;

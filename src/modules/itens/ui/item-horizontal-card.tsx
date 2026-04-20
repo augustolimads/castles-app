@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useCart } from "@/modules/itens/use-cart";
-import { CircleDollarSignIcon, RotateCcw, ShoppingBasket, Trash2, WeightIcon } from "lucide-react";
+import { CircleDollarSignIcon, EyeOff, RotateCcw, ShoppingBasket, WeightIcon } from "lucide-react";
 import Image from "next/image";
 import { useCallback } from "react";
 
@@ -79,7 +79,7 @@ export function ItemHorizontalCard({ item, onHide, onRestore }: ItemHorizontalCa
           )}
           {onHide && (
             <Button variant="outline" size="icon" className="cursor-pointer shrink-0 text-muted-foreground hover:text-destructive" title="Ocultar item" onClick={onHide}>
-              <Trash2 size={16} />
+              <EyeOff size={16} />
             </Button>
           )}
           <Button className="flex-1 cursor-pointer" onClick={handleAddToCart}>
