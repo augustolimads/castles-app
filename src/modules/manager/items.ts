@@ -1,4 +1,4 @@
-import { Backpack, BookSearch, Clock, FileSpreadsheet, HandCoinsIcon, HardHat, PersonStanding, ShoppingBasket, SignpostBig, User2Icon, UserCog } from "lucide-react"
+import { Backpack, BookSearch, Clock, FileSpreadsheet, HandCoinsIcon, HardHat, PersonStanding, ShoppingBasket, SignpostBig, User2Icon, UserCog, Wand } from "lucide-react"
 
 export const items = [
     {
@@ -38,6 +38,11 @@ export const items = [
         isBlocked: false,
     },
     {
+        title: "Feitiços",
+        url: "/feiticos",
+        icon: Wand,
+    },
+    {
         title: "Escudo do mestre",
         url: "/escudo-do-mestre",
         icon: BookSearch,
@@ -59,13 +64,6 @@ export const items = [
     //     title: "Gerador de Aventureiro",
     //     url: "/gerador-aventureiro",
     //     icon: UserCog,
-    //     color: "text-gray-400",
-    //     isBlocked: true,
-    // },
-    // {
-    //     title: "Feitiços",
-    //     url: "/em-breve",
-    //     icon: HardHat,
     //     color: "text-gray-400",
     //     isBlocked: true,
     // },

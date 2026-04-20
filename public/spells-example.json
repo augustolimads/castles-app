@@ -1,0 +1,98 @@
+[
+  {
+    "id": "spell-mago-0-1",
+    "name": "Luz",
+    "level": 0,
+    "shortDescription": "Cria uma luz em um objeto",
+    "completeDescription": "O conjurador pode criar uma luz que ilumina um raio de 9 metros. A luz pode ser criada em qualquer objeto e dura até ser dissipada pelo conjurador.",
+    "type": "mago"
+  },
+  {
+    "id": "spell-mago-1-1",
+    "name": "Detectar Magia",
+    "level": 1,
+    "shortDescription": "Detecta objetos mágicos em um raio de 18 metros",
+    "completeDescription": "O conjurador pode detectar objetos encantados, personagens ou criaturas enfeitiçadas em um raio de 18 metros. Apontando o objeto, o conjurador saberá que tipo de magia está presente. A magia dura 2 rodadas.",
+    "type": "mago"
+  },
+  {
+    "id": "spell-mago-1-2",
+    "name": "Mísseis Mágicos",
+    "level": 1,
+    "shortDescription": "Lança projéteis mágicos que causam 1d6+1 de dano cada",
+    "completeDescription": "O conjurador lança de 1 a 5 mísseis mágicos (dependendo do nível), cada um causando 1d6+1 pontos de dano. Os mísseis acertam automaticamente e podem ser direcionados a diferentes alvos.",
+    "type": "mago"
+  },
+  {
+    "id": "spell-clerigo-0-1",
+    "name": "Resistência",
+    "level": 0,
+    "shortDescription": "Concede +1 em testes de resistência",
+    "completeDescription": "O alvo ganha +1 de bônus em todos os testes de resistência por 1 minuto.",
+    "type": "clerigo"
+  },
+  {
+    "id": "spell-clerigo-1-1",
+    "name": "Curar Ferimentos Leves",
+    "level": 1,
+    "shortDescription": "Cura 1d6+1 pontos de vida",
+    "completeDescription": "Ao tocar um personagem ou criatura, o clérigo pode curar 1d6+1 pontos de vida. Esta magia não pode ser usada para curar criaturas mortas-vivas. A magia requer concentração e dura instantaneamente.",
+    "type": "clerigo"
+  },
+  {
+    "id": "spell-clerigo-1-2",
+    "name": "Proteção Contra o Mal",
+    "level": 1,
+    "shortDescription": "Cria uma barreira contra criaturas malignas",
+    "completeDescription": "Esta magia cria uma barreira mágica ao redor do alvo. Criaturas malignas sofrem -1 para acertar o alvo e o alvo ganha +1 em testes de resistência contra magias dessas criaturas. Dura 12 rodadas.",
+    "type": "clerigo"
+  },
+  {
+    "id": "spell-druida-0-1",
+    "name": "Criar Água",
+    "level": 0,
+    "shortDescription": "Cria água pura e potável",
+    "completeDescription": "O druida pode criar até 1 litro de água pura e potável por nível de conjurador.",
+    "type": "druida"
+  },
+  {
+    "id": "spell-druida-1-1",
+    "name": "Falar com Animais",
+    "level": 1,
+    "shortDescription": "Permite comunicação com animais naturais",
+    "completeDescription": "O druida pode falar e compreender animais naturais por 1 turno. Os animais não se tornam mais amigáveis ou cooperativos do que o normal, mas podem prestar informações sobre o que viram ou ouviram recentemente.",
+    "type": "druida"
+  },
+  {
+    "id": "spell-druida-1-2",
+    "name": "Emaranhamento",
+    "level": 1,
+    "shortDescription": "Raízes e plantas prendem criaturas em uma área",
+    "completeDescription": "Plantas, raízes e vinhas brotam do solo em uma área de 6 metros quadrados. Criaturas na área devem fazer um teste de resistência ou ficar presas. Dura 1 turno.",
+    "type": "druida"
+  },
+  {
+    "id": "spell-mago-2-1",
+    "name": "Invisibilidade",
+    "level": 2,
+    "shortDescription": "Torna o alvo invisível",
+    "completeDescription": "O alvo se torna invisível, junto com seus equipamentos. Permanece invisível até atacar ou o conjurador encerrar a magia.",
+    "type": "mago"
+  },
+  {
+    "id": "spell-clerigo-2-1",
+    "name": "Restauração Menor",
+    "level": 2,
+    "shortDescription": "Remove penalidades de habilidade",
+    "completeDescription": "Esta magia remove reduções temporárias em valores de habilidade ou restaura 1d4 pontos em uma habilidade permanentemente reduzida.",
+    "type": "clerigo"
+  },
+  {
+    "id": "spell-druida-2-1",
+    "name": "Pele de Árvore",
+    "level": 2,
+    "shortDescription": "Concede +2 na CA e resistência a fogo",
+    "completeDescription": "A pele do alvo se torna áspera como casca de árvore, concedendo +2 de bônus na CA. O alvo também ganha resistência a fogo. Dura 1 hora.",
+    "type": "druida"
+  }
+]
