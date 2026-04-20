@@ -7,19 +7,22 @@ type Props = {
     onChange?: (checked: boolean) => void
     disabled?: boolean
     required?: boolean
+    id?: string
 }
 
-export function LabeledCheckbox({ value, label, onChange, disabled = false, required = false }: Props) {
+export function LabeledCheckbox({ value, label, onChange, disabled = false, required = false, id }: Props) {
+    const checkboxId = id || `checkbox-${label.toLowerCase()}`;
+
     return (
         <Field orientation="horizontal">
             <Checkbox
-                id={`checkbox-${label.toLowerCase()}`}
+                id={checkboxId}
                 checked={value}
                 disabled={disabled}
                 onCheckedChange={(checked) => onChange?.(checked as boolean)}
             />
             <FieldLabel
-                htmlFor={`checkbox-${label.toLowerCase()}`}
+                htmlFor={checkboxId}
                 className={`font-normal ${required ? 'text-blue-600 font-medium' : ''} ${disabled ? 'text-gray-400' : ''}`}
             >
                 {label}{required ? ' *' : ''}

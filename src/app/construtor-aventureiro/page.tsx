@@ -1,9 +1,10 @@
-/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <explanation> */
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: Effects intencionalmente dependem apenas de variáveis específicas */
 "use client";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useConfig } from "@/hooks/use-config";
 import * as CharGen from "@/modules/char-gen/ui";
 import { LabeledCheckbox } from "@/modules/char-gen/ui/labeled-checkbox";
@@ -72,6 +73,7 @@ export default function AdventurerConstructor() {
   const [rollAttempts, setRollAttempts] = useState(0);
   const [totalModifier, setTotalModifier] = useState(0);
   const [primeAttributeStates, setPrimeAttributeStates] = useState<Record<string, { label: string; checked: boolean }>>(createInitialPrimeAttributeStates());
+  const [secondaryAttributeStates, setSecondaryAttributeStates] = useState<Record<string, { label: string; checked: boolean }>>(createInitialPrimeAttributeStates());
 
   // Estados dos detalhes finais
   const [hp, setHp] = useState('');
@@ -83,7 +85,7 @@ export default function AdventurerConstructor() {
   const [description, setDescription] = useState('');
   const [carryingCapacity, setCarryingCapacity] = useState('');
   const [spells, setSpells] = useState<{ level0: string[], level1: string[] }>({ level0: [], level1: [] });
-  const [isCharacterComplete, setIsCharacterComplete] = useState(false);
+
 
   // Hook do Zustand para configurações
   const { discordWebhook } = useConfig();
@@ -92,10 +94,11 @@ export default function AdventurerConstructor() {
   const [canSelectRaceClass, setCanSelectRaceClass] = useState(false);
   const [canRollFinalDetails, setCanRollFinalDetails] = useState(false);
   const [showSpells, setShowSpells] = useState(false);
+  const [activeTab, setActiveTab] = useState("step1");
 
   // Efeito para aplicar bônus racial e calcular modificador total
   useEffect(() => {
-    let newAttributes = { ...baseAttributes };
+    const newAttributes = { ...baseAttributes };
 
     if (selectedRace && racialBonuses[selectedRace.toLowerCase()]) {
       const raceKey = selectedRace.toLowerCase().split(' ')[0]; // pegar primeira palavra
@@ -132,19 +135,6 @@ export default function AdventurerConstructor() {
       setShowSpells(false);
     }
   }, [selectedClass]);
-
-  // Efeito para verificar se o personagem está completo
-  useEffect(() => {
-    const complete = Boolean(
-      selectedRace &&
-      selectedClass &&
-      hp &&
-      age &&
-      height &&
-      weight
-    );
-    setIsCharacterComplete(complete);
-  }, [selectedRace, selectedClass, hp, age, height, weight]);
 
   // Efeito para marcar atributos prime da classe automaticamente
   useEffect(() => {
@@ -231,7 +221,42 @@ export default function AdventurerConstructor() {
       return;
     }
 
+    // Se está tentando marcar como primário, desmarca de secundário (se estiver marcado)
+    if (!primeAttributeStates[attr].checked && secondaryAttributeStates[attr].checked) {
+      setSecondaryAttributeStates(prev => ({
+        ...prev,
+        [attr]: {
+          ...prev[attr],
+          checked: false
+        }
+      }));
+    }
+
     setPrimeAttributeStates(prev => ({
+      ...prev,
+      [attr]: {
+        ...prev[attr],
+        checked: !prev[attr].checked
+      }
+    }));
+  };
+
+  // Função para alternar atributo secundário
+  const toggleSecondaryAttribute = (attr: string) => {
+    const currentCount = Object.values(secondaryAttributeStates).filter(state => state.checked).length;
+    const maxSecondary = 2;
+
+    // Não permite marcar como secundário se já é primário
+    if (primeAttributeStates[attr].checked) {
+      return;
+    }
+
+    // Se está tentando marcar e já atingiu o limite, não permite
+    if (!secondaryAttributeStates[attr].checked && currentCount >= maxSecondary) {
+      return;
+    }
+
+    setSecondaryAttributeStates(prev => ({
       ...prev,
       [attr]: {
         ...prev[attr],
@@ -251,7 +276,7 @@ export default function AdventurerConstructor() {
     return Math.max(2, primes.length);
   };
 
-  // Função para rolar atributos
+  // Função para rolar atributos com 3d6
   const handleRollAttributes = () => {
     const newAttributes: CharacterAttributes = {
       forca: new DiceRoll('3d6').total,
@@ -260,6 +285,35 @@ export default function AdventurerConstructor() {
       inteligencia: new DiceRoll('3d6').total,
       sabedoria: new DiceRoll('3d6').total,
       carisma: new DiceRoll('3d6').total
+    };
+
+    setBaseAttributes(newAttributes);
+    setCanSelectRaceClass(true);
+    setRollAttempts(prev => prev + 1);
+  };
+
+  // Função para rolar atributos com 4d6 (descarta o menor)
+  const handleRollAttributes4d6 = () => {
+    const roll4d6DropLowest = () => {
+      const rolls = [
+        new DiceRoll('1d6').total,
+        new DiceRoll('1d6').total,
+        new DiceRoll('1d6').total,
+        new DiceRoll('1d6').total
+      ];
+      const minValue = Math.min(...rolls);
+      const minIndex = rolls.indexOf(minValue);
+      const remainingRolls = rolls.filter((_, index) => index !== minIndex);
+      return remainingRolls.reduce((sum, val) => sum + val, 0);
+    };
+
+    const newAttributes: CharacterAttributes = {
+      forca: roll4d6DropLowest(),
+      destreza: roll4d6DropLowest(),
+      constituicao: roll4d6DropLowest(),
+      inteligencia: roll4d6DropLowest(),
+      sabedoria: roll4d6DropLowest(),
+      carisma: roll4d6DropLowest()
     };
 
     setBaseAttributes(newAttributes);
@@ -375,6 +429,7 @@ export default function AdventurerConstructor() {
     setRollAttempts(0);
     setTotalModifier(0);
     setPrimeAttributeStates(createInitialPrimeAttributeStates());
+    setSecondaryAttributeStates(createInitialPrimeAttributeStates());
 
     setHp('');
     setTreasure('');
@@ -385,16 +440,16 @@ export default function AdventurerConstructor() {
     setDescription('');
     setCarryingCapacity('');
     setSpells({ level0: [], level1: [] });
-    setIsCharacterComplete(false);
 
     setCanSelectRaceClass(false);
     setCanRollFinalDetails(false);
     setShowSpells(false);
+    setActiveTab("step1"); // Volta para a primeira aba
   };
 
   // Função para formatar mensagem do Discord
   const formatDiscordMessage = (characterData: any) => {
-    const { race, characterClass, gender, age, height, weight, description, attributes, modifiers, totalModifier, primeAttributes, hp, treasure, carryingCapacity, spells, rollAttempts } = characterData;
+    const { race, characterClass, gender, age, height, weight, description, attributes, modifiers, totalModifier, primeAttributes, secondaryAttributes, hp, treasure, carryingCapacity, spells, rollAttempts } = characterData;
 
     const embed = {
       color: parseInt("237feb", 16), // Converter hex para decimal
@@ -415,6 +470,11 @@ export default function AdventurerConstructor() {
         {
           name: "⭐ ATRIBUTOS PRIME",
           value: primeAttributes.join(', ') || 'Nenhum',
+          inline: false
+        },
+        {
+          name: "⚡ ATRIBUTOS SECUNDÁRIOS",
+          value: secondaryAttributes.join(', ') || 'Nenhum',
           inline: false
         },
         {
@@ -478,6 +538,10 @@ export default function AdventurerConstructor() {
         .filter(([_, state]) => state.checked)
         .map(([attr, _]) => attr.charAt(0).toUpperCase() + attr.slice(1));
 
+      const selectedSecondaries = Object.entries(secondaryAttributeStates)
+        .filter(([_, state]) => state.checked)
+        .map(([attr, _]) => attr.charAt(0).toUpperCase() + attr.slice(1));
+
       const characterData = {
         race: generatedData.selectedRace,
         characterClass: generatedData.selectedClass,
@@ -497,6 +561,7 @@ export default function AdventurerConstructor() {
         },
         totalModifier: totalModifier,
         primeAttributes: selectedPrimes,
+        secondaryAttributes: selectedSecondaries,
         hp: generatedData.generatedHp,
         treasure: generatedData.generatedTreasure,
         carryingCapacity: generatedData.generatedCarryingCapacity,
@@ -527,7 +592,13 @@ export default function AdventurerConstructor() {
 
   // Contar atributos prime selecionados
   const selectedPrimeCount = Object.values(primeAttributeStates).filter(state => state.checked).length;
+  const selectedSecondaryCount = Object.values(secondaryAttributeStates).filter(state => state.checked).length;
   const maxPrimes = getMaxPrimeAttributes();
+
+  // Lógica de habilitação de abas
+  const canAccessStep2 = canSelectRaceClass;
+  const canAccessStep3 = selectedRace !== '' && selectedClass !== '';
+  const canAccessStep4 = canAccessStep3 && selectedPrimeCount >= Math.min(2, maxPrimes) && selectedSecondaryCount === 2;
 
   return (
     <div className="flex flex-col gap-8 pt-8 max-w-4xl mx-auto">
@@ -536,185 +607,416 @@ export default function AdventurerConstructor() {
         <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight text-balance">Construtor de aventureiro</h1>
       </div>
 
-      <h3>1. Role os atributos</h3>
-      <div id="attributes" className="grid grid-cols-3 gap-4">
-        <CharGen.NumberInput
-          label="Força"
-          id="strength"
-          value={finalAttributes.forca}
-          onChange={(val) => {
-            const newBase = { ...baseAttributes, forca: val };
-            setBaseAttributes(newBase);
-          }}
-        />
-        <CharGen.NumberInput
-          label="Destreza"
-          id="dexterity"
-          value={finalAttributes.destreza}
-          onChange={(val) => {
-            const newBase = { ...baseAttributes, destreza: val };
-            setBaseAttributes(newBase);
-          }}
-        />
-        <CharGen.NumberInput
-          label="Constituição"
-          id="constituicao"
-          value={finalAttributes.constituicao}
-          onChange={(val) => {
-            const newBase = { ...baseAttributes, constituicao: val };
-            setBaseAttributes(newBase);
-          }}
-        />
-        <CharGen.NumberInput
-          label="Inteligência"
-          id="intelligence"
-          value={finalAttributes.inteligencia}
-          onChange={(val) => {
-            const newBase = { ...baseAttributes, inteligencia: val };
-            setBaseAttributes(newBase);
-          }}
-        />
-        <CharGen.NumberInput
-          label="Sabedoria"
-          id="wisdom"
-          value={finalAttributes.sabedoria}
-          onChange={(val) => {
-            const newBase = { ...baseAttributes, sabedoria: val };
-            setBaseAttributes(newBase);
-          }}
-        />
-        <CharGen.NumberInput
-          label="Carisma"
-          id="charisma"
-          value={finalAttributes.carisma}
-          onChange={(val) => {
-            const newBase = { ...baseAttributes, carisma: val };
-            setBaseAttributes(newBase);
-          }}
-        />
-      </div>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="step1">
+            1. Atributos
+          </TabsTrigger>
+          <TabsTrigger value="step2" disabled={!canAccessStep2}>
+            2. Raça/Classe
+          </TabsTrigger>
+          <TabsTrigger value="step3" disabled={!canAccessStep3}>
+            3. Atrib. Primários
+          </TabsTrigger>
+          <TabsTrigger value="step4" disabled={!canAccessStep4}>
+            4. Detalhes Finais
+          </TabsTrigger>
+        </TabsList>
 
-      <div className="flex gap-4 items-center justify-between flex-wrap">
-        <Button
-          type="button"
-          onClick={handleRollAttributes}
-        >
-          Rolar atributos
-        </Button>
-        <div className="flex gap-10">
-          <p className="flex gap-1">
-            <span>Mod. total:</span>
-            <Badge variant={totalModifier < 0 ? 'destructive' : totalModifier > 0 ? 'default' : 'secondary'}>
-              {totalModifier > 0 ? `+${totalModifier}` : totalModifier}
-            </Badge>
-          </p>
-          <p className="flex gap-1">
-            <span>Tentativas:</span>
-            <Badge>{rollAttempts}x</Badge>
-          </p>
-        </div>
-      </div>
+        {/* Aba 1: Rolar Atributos */}
+        <TabsContent value="step1" className="space-y-6">
+          <h2 className="text-xl font-semibold">1. Role os atributos</h2>
 
-      <hr />
+          <div id="attributes" className="grid grid-cols-3 gap-4">
+            <CharGen.NumberInput
+              label="Força"
+              id="strength"
+              value={baseAttributes.forca}
+              onChange={(val) => {
+                const newBase = { ...baseAttributes, forca: val };
+                setBaseAttributes(newBase);
+              }}
+            />
+            <CharGen.NumberInput
+              label="Destreza"
+              id="dexterity"
+              value={baseAttributes.destreza}
+              onChange={(val) => {
+                const newBase = { ...baseAttributes, destreza: val };
+                setBaseAttributes(newBase);
+              }}
+            />
+            <CharGen.NumberInput
+              label="Constituição"
+              id="constituicao"
+              value={baseAttributes.constituicao}
+              onChange={(val) => {
+                const newBase = { ...baseAttributes, constituicao: val };
+                setBaseAttributes(newBase);
+              }}
+            />
+            <CharGen.NumberInput
+              label="Inteligência"
+              id="intelligence"
+              value={baseAttributes.inteligencia}
+              onChange={(val) => {
+                const newBase = { ...baseAttributes, inteligencia: val };
+                setBaseAttributes(newBase);
+              }}
+            />
+            <CharGen.NumberInput
+              label="Sabedoria"
+              id="wisdom"
+              value={baseAttributes.sabedoria}
+              onChange={(val) => {
+                const newBase = { ...baseAttributes, sabedoria: val };
+                setBaseAttributes(newBase);
+              }}
+            />
+            <CharGen.NumberInput
+              label="Carisma"
+              id="charisma"
+              value={baseAttributes.carisma}
+              onChange={(val) => {
+                const newBase = { ...baseAttributes, carisma: val };
+                setBaseAttributes(newBase);
+              }}
+            />
+          </div>
 
-      <h3>2. Selecione raça e classe</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <CharGen.TextSelect
-          placeholder="Selecione uma raça"
-          label="Raça"
-          values={charRaces}
-          value={selectedRace ?? ''}
-          disabled={!canSelectRaceClass}
-          onChange={(raceId) => {
-            setSelectedRace(raceId);
-          }}
-        />
-        <CharGen.TextSelect
-          placeholder="Selecione uma classe"
-          label="Classe"
-          values={charClasses}
-          value={selectedClass ?? ''}
-          disabled={!canSelectRaceClass}
-          onChange={(classId) => {
-            setSelectedClass(classId);
-          }}
-        />
-      </div>
-
-      <hr />
-
-      <div>
-        <h3>
-          <span>3. Selecionar Atributos Primários: </span>
-          <Badge variant={selectedPrimeCount > maxPrimes ? 'destructive' : 'default'}>{selectedPrimeCount}/{maxPrimes}</Badge>
-        </h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-          {Object.entries(primeAttributeStates).map(([attr, state]) => {
-            // Atributos obrigatórios da classe se aplicam a todas as raças
-            const isRequired = Boolean(selectedClass &&
-              (primeAttributes[selectedClass] || []).includes(attr));
-            const isDisabled = Boolean(isRequired);
-
-            return (
-              <LabeledCheckbox
-                key={attr}
-                value={state.checked}
-                label={state.label}
-                onChange={() => togglePrimeAttribute(attr)}
-                disabled={isDisabled}
-                required={isRequired}
-              />
-            );
-          })}
-        </div>
-      </div>
-      <hr />
-      <div>
-        <h3>4. Rolar detalhes finais e feitiços aprendidos (opcional)</h3>
-        <Button
-          className="mt-4 self-start"
-          onClick={handleRollFinalDetails}
-          disabled={!canRollFinalDetails}
-        >
-          Rolar detalhes finais
-        </Button>
-      </div>
-
-      {showSpells && (
-        <div>
-          <h3 className="text-lg font-semibold mb-4">Magias Conhecidas</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <h4 className="font-medium mb-2">Nível 0 ({spells.level0.length})</h4>
-              <ul className="list-disc list-inside text-sm space-y-1">
-                {spells.level0.map((spell) => (
-                  <li key={spell}>{spell}</li>
-                ))}
-              </ul>
+          <div className="flex gap-4 items-center justify-between flex-wrap">
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                onClick={handleRollAttributes}
+              >
+                Rolar atributos (3d6)
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={handleRollAttributes4d6}
+              >
+                Rolar atributos (4d6)
+              </Button>
             </div>
+            <p className="flex gap-1">
+              <span>Tentativas:</span>
+              <Badge>{rollAttempts}x</Badge>
+            </p>
+          </div>
+
+          {canAccessStep2 && (
+            <div className="flex justify-end">
+              <Button onClick={() => setActiveTab("step2")}>
+                Próxima etapa →
+              </Button>
+            </div>
+          )}
+        </TabsContent>
+
+        {/* Aba 2: Raça e Classe */}
+        <TabsContent value="step2" className="space-y-6">
+          <h2 className="text-xl font-semibold">2. Selecione raça e classe</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <CharGen.TextSelect
+              placeholder="Selecione uma raça"
+              label="Raça"
+              values={charRaces}
+              value={selectedRace ?? ''}
+              disabled={!canSelectRaceClass}
+              onChange={(raceId) => {
+                setSelectedRace(raceId);
+              }}
+            />
+            <CharGen.TextSelect
+              placeholder="Selecione uma classe"
+              label="Classe"
+              values={charClasses}
+              value={selectedClass ?? ''}
+              disabled={!canSelectRaceClass}
+              onChange={(classId) => {
+                setSelectedClass(classId);
+              }}
+            />
+          </div>
+
+          <div className="flex justify-between">
+            <Button variant="outline" onClick={() => setActiveTab("step1")}>
+              ← Voltar
+            </Button>
+            {canAccessStep3 && (
+              <Button onClick={() => setActiveTab("step3")}>
+                Próxima etapa →
+              </Button>
+            )}
+          </div>
+        </TabsContent>
+
+        {/* Aba 3: Atributos Primários */}
+        <TabsContent value="step3" className="space-y-6">
+          <div>
+            <h2 className="text-xl font-semibold">
+              <span>3. Selecionar Atributos Primários: </span>
+              <Badge variant={selectedPrimeCount > maxPrimes ? 'destructive' : 'default'}>
+                {selectedPrimeCount}/{maxPrimes}
+              </Badge>
+            </h2>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+              {Object.entries(primeAttributeStates).map(([attr, state]) => {
+                const isRequired = Boolean(selectedClass &&
+                  (primeAttributes[selectedClass] || []).includes(attr));
+                const isDisabled = Boolean(isRequired);
+
+                return (
+                  <LabeledCheckbox
+                    key={attr}
+                    id={`primary-${attr}`}
+                    value={state.checked}
+                    label={state.label}
+                    onChange={() => togglePrimeAttribute(attr)}
+                    disabled={isDisabled}
+                    required={isRequired}
+                  />
+                );
+              })}
+            </div>
+          </div>
+
+          <hr />
+
+          <div>
+            <h2 className="text-xl font-semibold">
+              <span>Selecionar Atributos Secundários: </span>
+              <Badge variant={selectedSecondaryCount !== 2 ? 'destructive' : 'default'}>
+                {selectedSecondaryCount}/2
+              </Badge>
+            </h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              Escolha exatamente 2 atributos secundários (não podem ser primários)
+            </p>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+              {Object.entries(secondaryAttributeStates).map(([attr, state]) => {
+                const isPrime = primeAttributeStates[attr].checked;
+                const isDisabled = isPrime;
+
+                return (
+                  <LabeledCheckbox
+                    key={attr}
+                    id={`secondary-${attr}`}
+                    value={state.checked}
+                    label={state.label}
+                    onChange={() => toggleSecondaryAttribute(attr)}
+                    disabled={isDisabled}
+                  />
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="flex justify-between">
+            <Button variant="outline" onClick={() => setActiveTab("step2")}>
+              ← Voltar
+            </Button>
+            {canAccessStep4 && (
+              <Button onClick={() => setActiveTab("step4")}>
+                Próxima etapa →
+              </Button>
+            )}
+          </div>
+        </TabsContent>
+
+        {/* Aba 4: Detalhes Finais */}
+        <TabsContent value="step4" className="space-y-6">
+          <h2 className="text-xl font-semibold">4. Rolar detalhes finais e feitiços aprendidos</h2>
+
+          <Button
+            onClick={handleRollFinalDetails}
+            disabled={!canRollFinalDetails}
+          >
+            Rolar detalhes finais
+          </Button>
+
+          {showSpells && spells.level0.length > 0 && (
             <div>
-              <h4 className="font-medium mb-2">Nível 1 ({spells.level1.length})</h4>
-              <ul className="list-disc list-inside text-sm space-y-1">
-                {spells.level1.map((spell) => (
-                  <li key={spell}>{spell}</li>
-                ))}
-              </ul>
+              <h3 className="text-lg font-semibold mb-4">Magias Conhecidas</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h4 className="font-medium mb-2">Nível 0 ({spells.level0.length})</h4>
+                  <ul className="list-disc list-inside text-sm space-y-1">
+                    {spells.level0.map((spell) => (
+                      <li key={spell}>{spell}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-medium mb-2">Nível 1 ({spells.level1.length})</h4>
+                  <ul className="list-disc list-inside text-sm space-y-1">
+                    {spells.level1.map((spell) => (
+                      <li key={spell}>{spell}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <CharGen.TextInput disabled label="PV" id="hp" value={hp} />
+            <CharGen.TextInput disabled label="Tesouro inicial" id="treasure" value={treasure} />
+            <CharGen.TextInput disabled label="Idade" id="age" value={age} />
+            <CharGen.TextInput disabled label="Altura" id="height" value={height} />
+            <CharGen.TextInput disabled label="Peso" id="weight" value={weight} />
+            <CharGen.TextInput disabled label="Gênero" id="gender" value={gender} />
+            <CharGen.TextInput disabled label="Traço marcante" id="description" value={description} />
+            <CharGen.TextInput disabled label="Sobrecarga" id="carryingCapacity" value={carryingCapacity} />
+          </div>
+
+          <div className="flex justify-between">
+            <Button variant="outline" onClick={() => setActiveTab("step3")}>
+              ← Voltar
+            </Button>
+            <Button onClick={handleResetCharacter}>
+              Começar de novo
+            </Button>
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      {/* Resumo dos Atributos Finais - Fixo abaixo das abas */}
+      {canSelectRaceClass && (
+        <div className="border rounded-lg p-6 bg-muted/50 space-y-6">
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Resumo do Personagem</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">Raça:</span>
+                <Badge variant="secondary">{selectedRace || 'Não selecionada'}</Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium">Classe:</span>
+                <Badge variant="secondary">{selectedClass || 'Não selecionada'}</Badge>
+              </div>
+            </div>
+          </div>
+
+          {(selectedPrimeCount > 0 || selectedSecondaryCount > 0) && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {selectedPrimeCount > 0 && (
+                <div>
+                  <h4 className="text-sm font-medium mb-2">⭐ Atributos Primários</h4>
+                  <div className="flex flex-wrap gap-1">
+                    {Object.entries(primeAttributeStates)
+                      .filter(([_, state]) => state.checked)
+                      .map(([attr, state]) => (
+                        <Badge key={attr} variant="default" className="text-xs">
+                          {state.label}
+                        </Badge>
+                      ))}
+                  </div>
+                </div>
+              )}
+              {selectedSecondaryCount > 0 && (
+                <div>
+                  <h4 className="text-sm font-medium mb-2">⚡ Atributos Secundários</h4>
+                  <div className="flex flex-wrap gap-1">
+                    {Object.entries(secondaryAttributeStates)
+                      .filter(([_, state]) => state.checked)
+                      .map(([attr, state]) => (
+                        <Badge key={attr} variant="outline" className="text-xs">
+                          {state.label}
+                        </Badge>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div>
+            <h4 className="text-sm font-medium mb-3">Atributos Finais (com bônus racial)</h4>
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+              <div className="flex flex-col items-center">
+                <span className="text-xs text-muted-foreground mb-1">FOR</span>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="text-lg font-bold">
+                    {finalAttributes.forca}
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">
+                    ({calculateModifier(finalAttributes.forca) >= 0 ? '+' : ''}{calculateModifier(finalAttributes.forca)})
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-xs text-muted-foreground mb-1">DES</span>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="text-lg font-bold">
+                    {finalAttributes.destreza}
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">
+                    ({calculateModifier(finalAttributes.destreza) >= 0 ? '+' : ''}{calculateModifier(finalAttributes.destreza)})
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-xs text-muted-foreground mb-1">CON</span>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="text-lg font-bold">
+                    {finalAttributes.constituicao}
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">
+                    ({calculateModifier(finalAttributes.constituicao) >= 0 ? '+' : ''}{calculateModifier(finalAttributes.constituicao)})
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-xs text-muted-foreground mb-1">INT</span>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="text-lg font-bold">
+                    {finalAttributes.inteligencia}
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">
+                    ({calculateModifier(finalAttributes.inteligencia) >= 0 ? '+' : ''}{calculateModifier(finalAttributes.inteligencia)})
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-xs text-muted-foreground mb-1">SAB</span>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="text-lg font-bold">
+                    {finalAttributes.sabedoria}
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">
+                    ({calculateModifier(finalAttributes.sabedoria) >= 0 ? '+' : ''}{calculateModifier(finalAttributes.sabedoria)})
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-xs text-muted-foreground mb-1">CAR</span>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="text-lg font-bold">
+                    {finalAttributes.carisma}
+                  </Badge>
+                  <span className="text-sm text-muted-foreground">
+                    ({calculateModifier(finalAttributes.carisma) >= 0 ? '+' : ''}{calculateModifier(finalAttributes.carisma)})
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 flex justify-center">
+              <p className="flex gap-2 items-center">
+                <span className="text-sm">Modificador Total:</span>
+                <Badge variant={totalModifier < 0 ? 'destructive' : totalModifier > 0 ? 'default' : 'secondary'}>
+                  {totalModifier > 0 ? `+${totalModifier}` : totalModifier}
+                </Badge>
+              </p>
             </div>
           </div>
         </div>
       )}
-
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <CharGen.TextInput disabled label="PV" id="hp" value={hp} />
-        <CharGen.TextInput disabled label="Tesouro inicial" id="treasure" value={treasure} />
-        <CharGen.TextInput disabled label="Idade" id="age" value={age} />
-        <CharGen.TextInput disabled label="Altura" id="height" value={height} />
-        <CharGen.TextInput disabled label="Peso" id="weight" value={weight} />
-        <CharGen.TextInput disabled label="Gênero" id="gender" value={gender} />
-        <CharGen.TextInput disabled label="Traço marcante" id="description" value={description} />
-        <CharGen.TextInput disabled label="Sobrecarga" id="carryingCapacity" value={carryingCapacity} />
-      </div>
-      <Button className="self-start" type="button" onClick={handleResetCharacter}>Começar de novo</Button>
     </div>
   );
 }
