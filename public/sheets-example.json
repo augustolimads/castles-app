@@ -1,0 +1,90 @@
+[
+  {
+    "id": "sheet-example-1",
+    "type": "personagem",
+    "portrait": "https://api.dicebear.com/7.x/avataaars/svg?seed=Aragorn",
+    "name": "Aragorn",
+    "race": "Humano",
+    "class": "Guerreiro",
+    "level": 10,
+    "bg": "https://images.unsplash.com/photo-1519974719765-e6559eac2575?w=400",
+    "createdAt": 1704067200000
+  },
+  {
+    "id": "sheet-example-2",
+    "type": "personagem",
+    "portrait": "https://api.dicebear.com/7.x/avataaars/svg?seed=Gandalf",
+    "name": "Gandalf",
+    "race": "Maia",
+    "class": "Mago",
+    "level": 20,
+    "bg": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400",
+    "createdAt": 1704067300000
+  },
+  {
+    "id": "sheet-example-3",
+    "type": "personagem",
+    "portrait": "https://api.dicebear.com/7.x/avataaars/svg?seed=Legolas",
+    "name": "Legolas",
+    "race": "Elfo",
+    "class": "Arqueiro",
+    "level": 12,
+    "bg": "https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?w=400",
+    "createdAt": 1704067400000
+  },
+  {
+    "id": "sheet-example-4",
+    "type": "npc",
+    "portrait": "https://api.dicebear.com/7.x/avataaars/svg?seed=Innkeeper",
+    "name": "Taberneiro João",
+    "race": "Humano",
+    "class": "Plebeu",
+    "level": 1,
+    "bg": "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=400",
+    "createdAt": 1704067500000
+  },
+  {
+    "id": "sheet-example-5",
+    "type": "npc",
+    "portrait": "https://api.dicebear.com/7.x/avataaars/svg?seed=Merchant",
+    "name": "Mercadora Elena",
+    "race": "Halfling",
+    "class": "Mercador",
+    "level": 3,
+    "bg": "https://images.unsplash.com/photo-1441986380878-c4248f5b8b5b?w=400",
+    "createdAt": 1704067600000
+  },
+  {
+    "id": "sheet-example-6",
+    "type": "monstro",
+    "portrait": "https://api.dicebear.com/7.x/bottts/svg?seed=Dragon",
+    "name": "Dragão Vermelho",
+    "race": "Dragão",
+    "class": "Criatura",
+    "level": 15,
+    "bg": "https://images.unsplash.com/photo-1549558549-415fe4c37b60?w=400",
+    "createdAt": 1704067700000
+  },
+  {
+    "id": "sheet-example-7",
+    "type": "monstro",
+    "portrait": "https://api.dicebear.com/7.x/bottts/svg?seed=Orc",
+    "name": "Chefe Orc",
+    "race": "Orc",
+    "class": "Bárbaro",
+    "level": 8,
+    "bg": "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=400",
+    "createdAt": 1704067800000
+  },
+  {
+    "id": "sheet-example-8",
+    "type": "monstro",
+    "portrait": "https://api.dicebear.com/7.x/bottts/svg?seed=Goblin",
+    "name": "Rei Goblin",
+    "race": "Goblin",
+    "class": "Ladino",
+    "level": 5,
+    "bg": "https://images.unsplash.com/photo-1509773896068-7fd415d91e2e?w=400",
+    "createdAt": 1704067900000
+  }
+]

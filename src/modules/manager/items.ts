@@ -21,7 +21,7 @@ export const items = [
     },
     {
         title: "Fichas",
-        url: "https://ficha.gutods.com.br",
+        url: "/fichas",
         icon: FileSpreadsheet,
         isBlocked: false,
     },
