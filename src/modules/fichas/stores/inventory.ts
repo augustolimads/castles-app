@@ -5,6 +5,14 @@ interface IWeapon {
     name: string;
     bth: string;
     dmg: string;
+    ev: number;
+}
+
+interface IEquipment {
+    id: string;
+    name: string;
+    ac: number;
+    ev: number;
 }
 
 interface IItem {
@@ -17,13 +25,15 @@ interface IItem {
 
 interface InventoryState {
     weapons: IWeapon[];
+    equipments: IEquipment[];
     items: IItem[];
-    updateInventory: (updates: Partial<{ weapons: IWeapon[]; items: IItem[] }>) => void;
-    setInventory: (inventory: { weapons: IWeapon[]; items: IItem[] }) => void;
+    updateInventory: (updates: Partial<{ weapons: IWeapon[]; equipments: IEquipment[]; items: IItem[] }>) => void;
+    setInventory: (inventory: { weapons: IWeapon[]; equipments: IEquipment[]; items: IItem[] }) => void;
 }
 
 export const useInventoryStore = create<InventoryState>((set) => ({
     weapons: [],
+    equipments: [],
     items: [],
     updateInventory: (updates) => set((state) => ({ ...state, ...updates })),
     setInventory: (inventory) => set(inventory),
@@ -41,4 +51,18 @@ export const useWeaponsStore = create<WeaponsState>((set) => ({
 
 export function setDeleteWeapons(value: boolean) {
     useWeaponsStore.getState().setDeleteMode(value);
+}
+
+interface EquipmentsState {
+    isDeleteMode: boolean;
+    setDeleteMode: (value: boolean) => void;
+}
+
+export const useEquipmentsStore = create<EquipmentsState>((set) => ({
+    isDeleteMode: false,
+    setDeleteMode: (value) => set({ isDeleteMode: value }),
+}));
+
+export function setDeleteEquipments(value: boolean) {
+    useEquipmentsStore.getState().setDeleteMode(value);
 }

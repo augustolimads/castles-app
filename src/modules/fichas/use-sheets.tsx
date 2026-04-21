@@ -59,7 +59,7 @@ export function useSheets(filterType?: SheetType) {
     const allSheets = getStoredSheets();
     saveSheets([...allSheets, newSheet]);
 
-    // Criar o character completo no store
+    // Criar o character completo no store com dados básicos
     const newCharacter = createNewCharacter({
       id: newSheet.id,
       name: sheet.name,
@@ -69,8 +69,15 @@ export function useSheets(filterType?: SheetType) {
       portrait: sheet.portrait,
     });
 
-    // Salvar o character no localStorage
-    saveCharacterToStorage(newCharacter);
+    // Salvar o character básico no localStorage (pode ser sobrescrito depois)
+    saveCharacterToStorage(newCharacter, {
+      level: { lv0: 0, lv1: 0, lv2: 0, lv3: 0, lv4: 0, lv5: 0, lv6: 0, lv7: 0, lv8: 0, lv9: 0 },
+      known: []
+    }, {
+      weapons: [],
+      equipments: [],
+      items: []
+    });
 
     return newSheet.id;
   };

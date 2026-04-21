@@ -30,7 +30,7 @@ function Abilities() {
     }, [classInfo, character.info.level]);
 
     return (
-        <div className="flex flex-col gap-2 h-[75vh] overflow-y-auto">
+        <div className="flex flex-col gap-2 h-[65vh] overflow-y-auto">
             {raceInfo && (
                 <div id="raceInfo" className="flex-1 py-3">
                     <h2 className="font-bold text-2xl text-left mb-4">{raceInfo.name}</h2>

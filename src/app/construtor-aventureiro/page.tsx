@@ -24,7 +24,10 @@ import {
   spellsByClass,
   treasureFormula
 } from "@/modules/data/gameData";
+import { type CharacterState, saveCharacterToStorage } from "@/modules/fichas/stores/character";
+import { useSheets } from "@/modules/fichas/use-sheets";
 import { DiceRoll } from "@dice-roller/rpg-dice-roller";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -89,6 +92,10 @@ export default function AdventurerConstructor() {
 
   // Hook do Zustand para configurações
   const { discordWebhook } = useConfig();
+
+  // Hooks de navegação e sheets
+  const router = useRouter();
+  const { addSheet } = useSheets();
 
   // Estados de controle
   const [canSelectRaceClass, setCanSelectRaceClass] = useState(false);
@@ -445,6 +452,196 @@ export default function AdventurerConstructor() {
     setCanRollFinalDetails(false);
     setShowSpells(false);
     setActiveTab("step1"); // Volta para a primeira aba
+  };
+
+  // Função para criar ficha de personagem
+  const handleCreateSheet = () => {
+    if (!hp || !selectedRace || !selectedClass) {
+      toast.error('Complete todos os detalhes finais antes de criar a ficha');
+      return;
+    }
+
+    try {
+      // Mapear os atributos do construtor para o formato da ficha
+      const attributeMapping: Record<string, 'str' | 'dex' | 'con' | 'int' | 'wis' | 'cha'> = {
+        forca: 'str',
+        destreza: 'dex',
+        constituicao: 'con',
+        inteligencia: 'int',
+        sabedoria: 'wis',
+        carisma: 'cha'
+      };
+
+      // Criar estrutura de atributos com tipos (1=primário, 2=secundário, 3=terciário)
+      const attributes = {
+        str: { value: 10, type: 3 },
+        dex: { value: 10, type: 3 },
+        con: { value: 10, type: 3 },
+        int: { value: 10, type: 3 },
+        wis: { value: 10, type: 3 },
+        cha: { value: 10, type: 3 }
+      };
+
+      Object.entries(attributeMapping).forEach(([ptName, enName]) => {
+        let type = 3; // terciário por padrão
+        if (primeAttributeStates[ptName]?.checked) {
+          type = 1; // primário
+        } else if (secondaryAttributeStates[ptName]?.checked) {
+          type = 2; // secundário
+        }
+        attributes[enName] = {
+          value: finalAttributes[ptName as keyof CharacterAttributes],
+          type
+        };
+      });
+
+      // Extrair o valor de tesouro (remove " PO" do final)
+      const goldAmount = treasure ? parseInt(treasure.replace(' PO', '')) : 0;
+
+      // Calcular encumbrance rating baseado na força e constituição
+      const strValue = finalAttributes.forca;
+      const strBonus = primeAttributeStates.forca?.checked ? 3 : 0;
+      const conBonus = primeAttributeStates.constituicao?.checked ? 3 : 0;
+      const rating = strValue + strBonus + conBonus;
+      const enc3x = rating * 3;
+
+      // Montar as notas com informações extras
+      const notesArray = [];
+      if (age) notesArray.push(`Idade: ${age}`);
+      if (height) notesArray.push(`Altura: ${height}`);
+      if (weight) notesArray.push(`Peso: ${weight}`);
+      if (gender) notesArray.push(`Gênero: ${gender}`);
+      if (description) notesArray.push(`Traço marcante: ${description}`);
+      const notesText = notesArray.join('\n');
+
+      // Criar a ficha básica
+      const sheetId = addSheet({
+        name: 'Novo Personagem',
+        race: selectedRace,
+        class: selectedClass,
+        level: 1,
+        portrait: '',
+        type: 'personagem'
+      });
+
+      // Criar character state completo
+      const characterData: CharacterState = {
+        id: sheetId,
+        name: 'Novo Personagem',
+        portrait: 'https://i.pinimg.com/736x/29/f9/96/29f996b8d38b9e6d2b3e7cc70df54bcb.jpg',
+        attr: attributes,
+        ac: {
+          head: 0,
+          main: 10
+        },
+        hp: {
+          current: parseInt(hp) || 1,
+          max: parseInt(hp) || 1,
+          temp: 0
+        },
+        stats: {
+          init: 0,
+          speed: '30ft',
+          bth: 0,
+        },
+        info: {
+          charClass: selectedClass,
+          race: selectedRace,
+          disposition: '',
+          level: 1,
+          xp: 0,
+          nextLevel: 0,
+          languages: 'Comum',
+        },
+        armor: {
+          helm: '',
+          main: '',
+          shield: '',
+          magicalItem: '',
+        },
+        treasure: {
+          platinum: 0,
+          gold: goldAmount,
+          silver: 0,
+          copper: 0,
+        },
+        encumbrance: {
+          total: 0,
+          rating: rating,
+          enc3x: enc3x,
+        },
+        tracking: {
+          water: 0,
+          food: 0,
+          arrows: 0,
+          torches: 0,
+          conditions: ''
+        },
+        notes: notesText
+      };
+
+      // Preparar magias conhecidas se houver
+      const spellsData = {
+        level: {
+          lv0: 0,
+          lv1: 0,
+          lv2: 0,
+          lv3: 0,
+          lv4: 0,
+          lv5: 0,
+          lv6: 0,
+          lv7: 0,
+          lv8: 0,
+          lv9: 0,
+        },
+        known: [] as Array<{
+          id: string;
+          name: string;
+          level: number;
+          slots: number;
+          description: string;
+        }>
+      };
+
+      if (showSpells && (spells.level0.length > 0 || spells.level1.length > 0)) {
+        spells.level0.forEach((spellName, index) => {
+          spellsData.known.push({
+            id: `spell-0-${index}`,
+            name: spellName,
+            level: 0,
+            slots: 0,
+            description: ''
+          });
+        });
+        spells.level1.forEach((spellName, index) => {
+          spellsData.known.push({
+            id: `spell-1-${index}`,
+            name: spellName,
+            level: 1,
+            slots: 0,
+            description: ''
+          });
+        });
+      }
+
+      // Preparar inventário vazio
+      const inventoryData = {
+        weapons: [],
+        equipments: [],
+        items: []
+      };
+
+      // Salvar o character completo
+      saveCharacterToStorage(characterData, spellsData, inventoryData);
+
+      toast.success('Ficha criada com sucesso!');
+
+      // Redirecionar para a página da ficha
+      router.push(`/fichas/${sheetId}`);
+    } catch (error) {
+      console.error('Erro ao criar ficha:', error);
+      toast.error('Erro ao criar ficha');
+    }
   };
 
   // Função para formatar mensagem do Discord
@@ -879,9 +1076,14 @@ export default function AdventurerConstructor() {
             <Button variant="outline" onClick={() => setActiveTab("step3")}>
               ← Voltar
             </Button>
-            <Button onClick={handleResetCharacter}>
-              Começar de novo
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={handleResetCharacter}>
+                Começar de novo
+              </Button>
+              <Button onClick={handleCreateSheet}>
+                Criar ficha
+              </Button>
+            </div>
           </div>
         </TabsContent>
       </Tabs>

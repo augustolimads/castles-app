@@ -1,5 +1,6 @@
 'use client';
 
+import { SidebarTrigger } from '@/components/ui/sidebar';
 import {
     setCharacterName,
     useCharacterStore,
@@ -11,11 +12,12 @@ function CharacterName() {
     return (
         <div>
             <div className="flex items-center gap-1 justify-between">
-                <div className="flex-1 pl-1">
-                    <svg 
-                        width="188" 
-                        height="23" 
-                        xmlns="http://www.w3.org/2000/svg" 
+                <div className="flex gap-4 items-center flex-1 pl-1 py-1">
+                    <SidebarTrigger />
+                    <svg
+                        width="188"
+                        height="20"
+                        xmlns="http://www.w3.org/2000/svg"
                         role="img"
                         aria-labelledby="brand-title"
                     >
