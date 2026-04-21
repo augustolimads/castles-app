@@ -8,6 +8,5 @@ export interface CharacterSheet {
   race: string;
   class: string;
   level: number;
-  bg: string;
   createdAt: number;
 }

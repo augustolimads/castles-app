@@ -2,17 +2,18 @@
 
 import { Button } from "@/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
 import type { SheetType } from '../types';
 
 interface CreateSheetDialogProps {
@@ -24,8 +25,7 @@ interface CreateSheetDialogProps {
     race: string;
     class: string;
     level: number;
-    bg: string;
-  }) => void;
+  }) => string; // Agora retorna o ID criado
 }
 
 const typeLabels = {
@@ -35,6 +35,7 @@ const typeLabels = {
 };
 
 export function CreateSheetDialog({ type, onCreateSheet }: CreateSheetDialogProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -42,14 +43,39 @@ export function CreateSheetDialog({ type, onCreateSheet }: CreateSheetDialogProp
     class: '',
     level: 1,
     portrait: '',
-    bg: '',
   });
+
+  const raceSuggestions = useMemo(() => [
+    'Anão',
+    'Elfo',
+    'Gnomo',
+    'Halfling',
+    'Humano',
+    'Meio-Elfo',
+    'Meio-Orc',
+  ], []);
+
+  const classSuggestions = useMemo(() => [
+    'Assassino',
+    'Bárbaro',
+    'Bardo',
+    'Clérigo',
+    'Druida',
+    'Guerreiro',
+    'Ilusionista',
+    'Cavaleiro',
+    'Monge',
+    'Paladino',
+    'Ranger',
+    'Ladino',
+    'Mago',
+  ], []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim()) return;
 
-    onCreateSheet({
+    const newSheetId = onCreateSheet({
       type,
       ...formData,
     });
@@ -61,9 +87,11 @@ export function CreateSheetDialog({ type, onCreateSheet }: CreateSheetDialogProp
       class: '',
       level: 1,
       portrait: '',
-      bg: '',
     });
     setOpen(false);
+
+    // Redirecionar para a página de detalhes da ficha criada
+    router.push(`/fichas/${newSheetId}`);
   };
 
   return (
@@ -71,7 +99,7 @@ export function CreateSheetDialog({ type, onCreateSheet }: CreateSheetDialogProp
       <DialogTrigger asChild>
         <Button>Nova Ficha de {typeLabels[type]}</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-125">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Criar Nova Ficha de {typeLabels[type]}</DialogTitle>
@@ -100,7 +128,13 @@ export function CreateSheetDialog({ type, onCreateSheet }: CreateSheetDialogProp
                   value={formData.race}
                   onChange={(e) => setFormData({ ...formData, race: e.target.value })}
                   placeholder="Ex: Humano, Elfo"
+                  list="race-suggestions"
                 />
+                <datalist id="race-suggestions">
+                  {raceSuggestions.map((race) => (
+                    <option key={race} value={race} />
+                  ))}
+                </datalist>
               </div>
 
               <div className="grid gap-2">
@@ -110,7 +144,13 @@ export function CreateSheetDialog({ type, onCreateSheet }: CreateSheetDialogProp
                   value={formData.class}
                   onChange={(e) => setFormData({ ...formData, class: e.target.value })}
                   placeholder="Ex: Guerreiro"
+                  list="class-suggestions"
                 />
+                <datalist id="class-suggestions">
+                  {classSuggestions.map((className) => (
+                    <option key={className} value={className} />
+                  ))}
+                </datalist>
               </div>
             </div>
 
@@ -133,16 +173,6 @@ export function CreateSheetDialog({ type, onCreateSheet }: CreateSheetDialogProp
                 value={formData.portrait}
                 onChange={(e) => setFormData({ ...formData, portrait: e.target.value })}
                 placeholder="https://exemplo.com/imagem.jpg"
-              />
-            </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="bg">URL do Background</Label>
-              <Input
-                id="bg"
-                value={formData.bg}
-                onChange={(e) => setFormData({ ...formData, bg: e.target.value })}
-                placeholder="https://exemplo.com/background.jpg"
               />
             </div>
           </div>

@@ -12,3 +12,7 @@ export function cn(...inputs: ClassValue[]) {
 export function formatNumber(value: number): string {
   return value.toFixed(2).replace(/\.?0+$/, '');
 }
+
+export function selectAllText(event: FocusEvent): void {
+    (event.target as HTMLInputElement).select();
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { createNewCharacter, deleteCharacterFromStorage, saveCharacterToStorage } from './stores/character';
 import type { CharacterSheet, SheetType } from './types';
 
 const SHEETS_STORAGE_KEY = 'castles-character-sheets';
@@ -53,13 +54,33 @@ export function useSheets(filterType?: SheetType) {
       id: `sheet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       createdAt: Date.now(),
     };
+
+    // Salvar o sheet na lista
     const allSheets = getStoredSheets();
     saveSheets([...allSheets, newSheet]);
+
+    // Criar o character completo no store
+    const newCharacter = createNewCharacter({
+      id: newSheet.id,
+      name: sheet.name,
+      race: sheet.race,
+      charClass: sheet.class,
+      level: sheet.level,
+      portrait: sheet.portrait,
+    });
+
+    // Salvar o character no localStorage
+    saveCharacterToStorage(newCharacter);
+
+    return newSheet.id;
   };
 
   const deleteSheet = (id: string) => {
     const allSheets = getStoredSheets();
     saveSheets(allSheets.filter(sheet => sheet.id !== id));
+
+    // Também deletar o character correspondente
+    deleteCharacterFromStorage(id);
   };
 
   const updateSheet = (id: string, updates: Partial<CharacterSheet>) => {
@@ -68,6 +89,8 @@ export function useSheets(filterType?: SheetType) {
       sheet.id === id ? { ...sheet, ...updates } : sheet
     );
     saveSheets(updated);
+
+    // TODO: Se necessário, atualizar também o character correspondente
   };
 
   return {

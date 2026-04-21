@@ -40,12 +40,6 @@ export function SheetCard({ sheet, onDelete }: SheetCardProps) {
       className="relative group cursor-pointer rounded-lg overflow-hidden border bg-card hover:shadow-lg transition-all duration-200 text-left w-full"
       onClick={handleCardClick}
     >
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity"
-        style={{ backgroundImage: `url(${sheet.bg || '/placeholder-bg.jpg'})` }}
-      />
-
       {/* Content */}
       <div className="relative p-4 flex gap-4">
         {/* Portrait */}
