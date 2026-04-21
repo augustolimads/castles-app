@@ -9,7 +9,7 @@ import Attribute from './attribute';
 function AttributeList() {
     const character = useCharacterStore();
 
-    function togglePrimary(id: string, newValue: boolean) {
+    function togglePrimary(id: string) {
         const attrId = id as TAttr;
         if (
             attrId === 'str' ||
@@ -20,12 +20,23 @@ function AttributeList() {
             attrId === 'cha'
         ) {
             handleInputChange();
+            const currentType = character.attr[attrId].type;
+            // Ciclo: 3 ou undefined (terciário) -> 1 (primário) -> 2 (secundário) -> 3 (terciário)
+            let newType: number;
+            if (currentType === 1) {
+                newType = 2; // primário -> secundário
+            } else if (currentType === 2) {
+                newType = 3; // secundário -> terciário
+            } else {
+                newType = 1; // terciário ou undefined -> primário
+            }
+
             useCharacterStore.getState().updateCharacter({
                 attr: {
                     ...character.attr,
                     [attrId]: {
                         ...character.attr[attrId],
-                        isPrimary: Boolean(newValue),
+                        type: newType,
                     },
                 },
             });

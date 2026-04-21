@@ -1,6 +1,6 @@
-import { v4 } from 'uuid';
 import { create } from 'zustand';
 import { handleInputChange } from '../appChanges';
+import { updateEncumbraceRating } from '../attributeLogic';
 
 export interface ICharacter {
     id: string;
@@ -19,10 +19,10 @@ const SHEETS_UPDATED_EVENT = 'sheets-updated';
 
 interface Attribute {
     value: number;
-    isPrimary: boolean;
+    type: number; // 1 = primário, 2 = secundário, 3 = terciário (padrão)
 }
 
-interface CharacterState {
+export interface CharacterState {
     id: string;
     name: string;
     portrait: string;
@@ -95,12 +95,12 @@ const initialState: CharacterState = {
     name: '',
     portrait: 'https://i.pinimg.com/736x/29/f9/96/29f996b8d38b9e6d2b3e7cc70df54bcb.jpg',
     attr: {
-        str: { value: 10, isPrimary: false },
-        dex: { value: 10, isPrimary: false },
-        con: { value: 10, isPrimary: false },
-        int: { value: 10, isPrimary: false },
-        wis: { value: 10, isPrimary: false },
-        cha: { value: 10, isPrimary: false }
+        str: { value: 10, type: 3 },
+        dex: { value: 10, type: 3 },
+        con: { value: 10, type: 3 },
+        int: { value: 10, type: 3 },
+        wis: { value: 10, type: 3 },
+        cha: { value: 10, type: 3 }
     },
     ac: {
         head: 0,
@@ -174,19 +174,21 @@ export const useCharacterListStore = create<CharacterListStore>((set) => ({
 /**
  * Salva um character completo no localStorage
  */
-export function saveCharacterToStorage(character: CharacterState, spells?: unknown, inventory?: { weapons?: unknown[]; items?: unknown[] }) {
+export function saveCharacterToStorage(character: CharacterState, spells?: unknown, inventory?: { weapons?: unknown[]; equipments?: unknown[]; items?: unknown[] }) {
     if (typeof window === 'undefined' || !character.id) return;
 
     try {
         const charactersMap = getCharactersFromStorage();
-        // Salvar apenas os dados do character, spells e inventory são salvos em seus próprios stores
         charactersMap[character.id] = character;
         localStorage.setItem(CHARACTERS_STORAGE_KEY, JSON.stringify(charactersMap));
         window.dispatchEvent(new Event(CHARACTERS_UPDATED_EVENT));
 
-        // TODO: Se necessário, também salvar spells e inventory associados ao character
-        if (spells || inventory) {
-            console.log('Spells e inventory serão salvos em stores separados');
+        // Salvar spells e inventory associados ao character
+        if (spells) {
+            localStorage.setItem(`${CHARACTERS_STORAGE_KEY}-spells-${character.id}`, JSON.stringify(spells));
+        }
+        if (inventory) {
+            localStorage.setItem(`${CHARACTERS_STORAGE_KEY}-inventory-${character.id}`, JSON.stringify(inventory));
         }
     } catch (error) {
         console.error('Erro ao salvar character:', error);
@@ -232,6 +234,11 @@ export function deleteCharacterFromStorage(id: string) {
         const charactersMap = getCharactersFromStorage();
         delete charactersMap[id];
         localStorage.setItem(CHARACTERS_STORAGE_KEY, JSON.stringify(charactersMap));
+
+        // Deletar também os dados de spells e inventory
+        localStorage.removeItem(`${CHARACTERS_STORAGE_KEY}-spells-${id}`);
+        localStorage.removeItem(`${CHARACTERS_STORAGE_KEY}-inventory-${id}`);
+
         window.dispatchEvent(new Event(CHARACTERS_UPDATED_EVENT));
     } catch (error) {
         console.error('Erro ao deletar character:', error);
@@ -282,21 +289,15 @@ export function saveCharacter(spells?: unknown, inventory?: { weapons?: unknown[
 export function setCharacterName(event: React.ChangeEvent<HTMLInputElement>) {
     handleInputChange();
     const input = event.target;
-    const character = useCharacterStore.getState();
     useCharacterStore.getState().updateCharacter({
         name: input.value,
     });
     updateTitle();
 
-    // Sincronizar com sheet
+    // Salvar e sincronizar com sheet
+    const character = useCharacterStore.getState();
     if (character.id) {
-        syncCharacterToSheet(character.id);
-    }
-
-    const url = new URL(window.location.href);
-    const charParamsId = url.searchParams.get('char');
-    if (!charParamsId) {
-        newCharacterId();
+        saveCharacter();
     }
 }
 
@@ -307,30 +308,57 @@ export function loadCharacter(charId: string): CharacterState | null {
     if (characterData) {
         useCharacterStore.getState().setCharacter(characterData);
         updateTitle();
+
+        // Carregar spells do localStorage
+        try {
+            const spellsData = localStorage.getItem(`${CHARACTERS_STORAGE_KEY}-spells-${charId}`);
+            if (spellsData) {
+                const { useSpellsStore } = require('./spell');
+                useSpellsStore.getState().setSpells(JSON.parse(spellsData));
+            }
+        } catch (error) {
+            console.error('Erro ao carregar spells:', error);
+        }
+
+        // Carregar inventory do localStorage
+        try {
+            const inventoryData = localStorage.getItem(`${CHARACTERS_STORAGE_KEY}-inventory-${charId}`);
+            if (inventoryData) {
+                const { useInventoryStore } = require('./inventory');
+                const parsed = JSON.parse(inventoryData);
+
+                // Inicializar equipments se não existir (migração de dados antigos)
+                if (!parsed.equipments) {
+                    parsed.equipments = [];
+                }
+
+                // Adicionar ev em weapons se não existir (migração)
+                if (parsed.weapons && parsed.weapons.length > 0) {
+                    parsed.weapons = parsed.weapons.map((weapon: { id: string; name: string; bth: string; dmg: string; ev?: number }) => ({
+                        ...weapon,
+                        ev: weapon.ev ?? 0
+                    }));
+                }
+
+                useInventoryStore.getState().setInventory(parsed);
+            } else {
+                // Se não tem inventory, criar vazio
+                const { useInventoryStore } = require('./inventory');
+                useInventoryStore.getState().setInventory({
+                    weapons: [],
+                    equipments: [],
+                    items: []
+                });
+            }
+        } catch (error) {
+            console.error('Erro ao carregar inventory:', error);
+        }
+
+        // Recalcular encumbrance rating após carregar o personagem
+        updateEncumbraceRating();
         return characterData;
     }
     return null;
-}
-
-function newCharacterId() {
-    const newId = v4();
-    useCharacterStore.getState().updateCharacter({
-        id: newId,
-    });
-
-    const searchParams = new URLSearchParams(window.location.search);
-    const character = useCharacterStore.getState();
-
-    if (character.id) {
-        searchParams.set('char', character.id);
-    } else {
-        searchParams.delete('char');
-    }
-    window.history.replaceState(
-        {},
-        '',
-        `${window.location.pathname}?${searchParams}`
-    );
 }
 
 function updateTitle() {

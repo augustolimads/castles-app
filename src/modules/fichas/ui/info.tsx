@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo } from 'react';
+import { charClasses } from '@/modules/compendium/charClasses';
+import { useEffect, useMemo } from 'react';
 import { handleInputChange } from '../appChanges';
 import { saveCharacter, useCharacterStore } from '../stores/character';
 import TextInput from './text-input';
@@ -9,6 +10,33 @@ function Info() {
     const character = useCharacterStore();
     
     type TInfoKey = keyof typeof character.info;
+
+    // Calcular XP necessária para o próximo nível baseado na classe
+    // biome-ignore lint/correctness/useExhaustiveDependencies: Monitorar apenas level e charClass
+    useEffect(() => {
+        const { charClass, level, nextLevel } = character.info;
+
+        if (!charClass || !level) return;
+
+        const characterClass = charClasses.find(
+            (c) => c.name.toLowerCase() === charClass.toLowerCase()
+        );
+
+        if (!characterClass) return;
+
+        const nextLevelData = characterClass.levels.find(
+            (l) => l.level === level + 1
+        );
+
+        if (nextLevelData && nextLevelData.experience !== nextLevel) {
+            useCharacterStore.getState().updateCharacter({
+                info: {
+                    ...character.info,
+                    nextLevel: nextLevelData.experience,
+                },
+            });
+        }
+    }, [character.info.level, character.info.charClass]);
 
     function updateInput(id: string, newValue: string | number) {
         handleInputChange();
@@ -57,13 +85,13 @@ function Info() {
         'Bardo',
         'Clérigo',
         'Druida',
-        'Guerreiro',
+        'Combatente',
         'Ilusionista',
         'Cavaleiro',
         'Monge',
         'Paladino',
-        'Ranger',
-        'Ladino',
+        'Explorador',
+        'Trapaceiro',
         'Mago',
     ], []);
 
@@ -73,18 +101,18 @@ function Info() {
         'Leal e Mau',
         'Neutro e Bom',
         'Neutro e Mau',
-        'Neutro (Leal)',
-        'Neutro (Caótico)',
-        'Neutro Verdadeiro',
+        'Neutro e Leal',
+        'Neutro e Caótico',
+        'Neutro',
         'Caótico e Bom',
         'Caótico e Neutro',
         'Caótico e Mau',
-        'Bom (Leal)',
-        'Bom (Neutro)',
-        'Bom (Caótico)',
-        'Mau (Leal)',
-        'Mau (Neutro)',
-        'Mau (Caótico)',
+        'Bom e Leal',
+        'Bom e Neutro',
+        'Bom e Caótico',
+        'Mau e Leal',
+        'Mau e Neutro',
+        'Mau e Caótico',
     ], []);
 
     return (
@@ -128,6 +156,7 @@ function Info() {
                 id="nextLevel"
                 name="Próximo Nível"
                 isNumber
+                disabled
                 value={character.info.nextLevel}
                 updateInput={updateInput}
             />

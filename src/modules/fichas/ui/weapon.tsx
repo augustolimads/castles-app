@@ -13,6 +13,7 @@ interface WeaponData {
     name: string;
     bth: string;
     dmg: string;
+    ev: number;
 }
 
 interface WeaponProps {
@@ -73,13 +74,13 @@ function Weapon({ newWeapon, deleteWeapon, data }: WeaponProps) {
             {weapons.isDeleteMode ? (
                 <button
                     type="button"
-                    className="w-12 cursor-pointer"
+                    className="w-8 cursor-pointer"
                     onClick={() => deleteWeapon(data.id)}
                 >
                     {isHovered && <X size={12} />}
                 </button>
             ) : (
-                <button type="button" className="w-12 cursor-pointer" onClick={handleClick}>
+                <button type="button" className="w-8 cursor-pointer" onClick={handleClick}>
                     <DicesIcon size={14} />
                 </button>
             )}
@@ -99,9 +100,9 @@ function Weapon({ newWeapon, deleteWeapon, data }: WeaponProps) {
             <input
                 id="bth"
                 type="number"
-                className="input w-10"
+                className="input w-5 text-sm"
                 onKeyDown={handlePress}
-                placeholder="BBA"
+                placeholder="BA"
                 value={data.bth}
                 onFocus={(e) => e.currentTarget.select()}
                 onInput={(e) => {
@@ -111,7 +112,7 @@ function Weapon({ newWeapon, deleteWeapon, data }: WeaponProps) {
             />
             <input
                 id="dmg"
-                className="input w-16"
+                className="input w-14 text-sm"
                 onKeyDown={handlePress}
                 placeholder="Dano"
                 value={data.dmg}
@@ -119,6 +120,19 @@ function Weapon({ newWeapon, deleteWeapon, data }: WeaponProps) {
                 onInput={(e) => {
                     const target = e.currentTarget;
                     updateWeapon(data.id, 'dmg', target.value);
+                }}
+            />
+            <input
+                id="ev"
+                type="number"
+                className="input w-5 text-sm"
+                onKeyDown={handlePress}
+                placeholder="EV"
+                value={data.ev}
+                onFocus={(e) => e.currentTarget.select()}
+                onInput={(e) => {
+                    const target = e.currentTarget;
+                    updateWeapon(data.id, 'ev', target.value);
                 }}
             />
         </div>

@@ -57,8 +57,8 @@ export function updateAttr(id: TAttr, newValue: string) {
 
 export function updateEncumbraceRating() {
     const character = useCharacterStore.getState();
-    const strPrimarySum3 = character.attr.str.isPrimary ? 3 : 0;
-    const conPrimarySum3 = character.attr.con.isPrimary ? 3 : 0;
+    const strPrimarySum3 = character.attr.str.type === 1 ? 3 : 0;
+    const conPrimarySum3 = character.attr.con.type === 1 ? 3 : 0;
     const newRating = character.attr.str.value + strPrimarySum3 + conPrimarySum3;
     
     useCharacterStore.getState().updateCharacter({

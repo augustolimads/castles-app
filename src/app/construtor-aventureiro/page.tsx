@@ -8,10 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useConfig } from "@/hooks/use-config";
 import * as CharGen from "@/modules/char-gen/ui";
 import { LabeledCheckbox } from "@/modules/char-gen/ui/labeled-checkbox";
-import { charClasses } from "@/modules/data/charClasses";
+import { charClasses } from "@/modules/compendium/charClasses";
 import { charRaces } from "@/modules/data/charRaces";
 import {
-  CharacterAttributes,
+  type CharacterAttributes,
   calculateModifier,
   generateAgeCategory,
   generateDistinctiveTrait,
@@ -24,7 +24,10 @@ import {
   spellsByClass,
   treasureFormula
 } from "@/modules/data/gameData";
+import { type CharacterState, saveCharacterToStorage } from "@/modules/fichas/stores/character";
+import { useSheets } from "@/modules/fichas/use-sheets";
 import { DiceRoll } from "@dice-roller/rpg-dice-roller";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -75,6 +78,16 @@ export default function AdventurerConstructor() {
   const [primeAttributeStates, setPrimeAttributeStates] = useState<Record<string, { label: string; checked: boolean }>>(createInitialPrimeAttributeStates());
   const [secondaryAttributeStates, setSecondaryAttributeStates] = useState<Record<string, { label: string; checked: boolean }>>(createInitialPrimeAttributeStates());
 
+  // Estados de realocação de pontos
+  const [pointAdjustments, setPointAdjustments] = useState<Record<string, number>>({
+    forca: 0,
+    destreza: 0,
+    constituicao: 0,
+    inteligencia: 0,
+    sabedoria: 0,
+    carisma: 0
+  });
+
   // Estados dos detalhes finais
   const [hp, setHp] = useState('');
   const [treasure, setTreasure] = useState('');
@@ -90,13 +103,17 @@ export default function AdventurerConstructor() {
   // Hook do Zustand para configurações
   const { discordWebhook } = useConfig();
 
+  // Hooks de navegação e sheets
+  const router = useRouter();
+  const { addSheet } = useSheets();
+
   // Estados de controle
   const [canSelectRaceClass, setCanSelectRaceClass] = useState(false);
   const [canRollFinalDetails, setCanRollFinalDetails] = useState(false);
   const [showSpells, setShowSpells] = useState(false);
   const [activeTab, setActiveTab] = useState("step1");
 
-  // Efeito para aplicar bônus racial e calcular modificador total
+  // Efeito para aplicar bônus racial, realocações e calcular modificador total
   useEffect(() => {
     const newAttributes = { ...baseAttributes };
 
@@ -113,6 +130,12 @@ export default function AdventurerConstructor() {
       }
     }
 
+    // Aplicar ajustes de realocação de pontos
+    Object.keys(pointAdjustments).forEach(attr => {
+      const attrKey = attr as keyof CharacterAttributes;
+      newAttributes[attrKey] += pointAdjustments[attrKey];
+    });
+
     setFinalAttributes(newAttributes);
 
     // Calcular modificador total
@@ -120,7 +143,7 @@ export default function AdventurerConstructor() {
       return sum + calculateModifier(value);
     }, 0);
     setTotalModifier(totalMod);
-  }, [baseAttributes, selectedRace]);
+  }, [baseAttributes, selectedRace, pointAdjustments]);
 
   // Efeito para verificar se pode rolar detalhes finais
   useEffect(() => {
@@ -430,6 +453,14 @@ export default function AdventurerConstructor() {
     setTotalModifier(0);
     setPrimeAttributeStates(createInitialPrimeAttributeStates());
     setSecondaryAttributeStates(createInitialPrimeAttributeStates());
+    setPointAdjustments({
+      forca: 0,
+      destreza: 0,
+      constituicao: 0,
+      inteligencia: 0,
+      sabedoria: 0,
+      carisma: 0
+    });
 
     setHp('');
     setTreasure('');
@@ -445,6 +476,208 @@ export default function AdventurerConstructor() {
     setCanRollFinalDetails(false);
     setShowSpells(false);
     setActiveTab("step1"); // Volta para a primeira aba
+  };
+
+  // Função para criar ficha de personagem
+  const handleCreateSheet = () => {
+    if (!hp || !selectedRace || !selectedClass) {
+      toast.error('Complete todos os detalhes finais antes de criar a ficha');
+      return;
+    }
+
+    try {
+      // Mapear os atributos do construtor para o formato da ficha
+      const attributeMapping: Record<string, 'str' | 'dex' | 'con' | 'int' | 'wis' | 'cha'> = {
+        forca: 'str',
+        destreza: 'dex',
+        constituicao: 'con',
+        inteligencia: 'int',
+        sabedoria: 'wis',
+        carisma: 'cha'
+      };
+
+      // Criar estrutura de atributos com tipos (1=primário, 2=secundário, 3=terciário)
+      const attributes = {
+        str: { value: 10, type: 3 },
+        dex: { value: 10, type: 3 },
+        con: { value: 10, type: 3 },
+        int: { value: 10, type: 3 },
+        wis: { value: 10, type: 3 },
+        cha: { value: 10, type: 3 }
+      };
+
+      Object.entries(attributeMapping).forEach(([ptName, enName]) => {
+        let type = 3; // terciário por padrão
+        if (primeAttributeStates[ptName]?.checked) {
+          type = 1; // primário
+        } else if (secondaryAttributeStates[ptName]?.checked) {
+          type = 2; // secundário
+        }
+        attributes[enName] = {
+          value: finalAttributes[ptName as keyof CharacterAttributes],
+          type
+        };
+      });
+
+      // Extrair o valor de tesouro (remove " PO" do final)
+      const goldAmount = treasure ? parseInt(treasure.replace(' PO', '')) : 0;
+
+      // Calcular encumbrance rating baseado na força e constituição
+      const strValue = finalAttributes.forca;
+      const strBonus = primeAttributeStates.forca?.checked ? 3 : 0;
+      const conBonus = primeAttributeStates.constituicao?.checked ? 3 : 0;
+      const rating = strValue + strBonus + conBonus;
+      const enc3x = rating * 3;
+
+      // Montar as notas com informações extras
+      const notesArray = [];
+      if (age) notesArray.push(`Idade: ${age}`);
+      if (height) notesArray.push(`Altura: ${height}`);
+      if (weight) notesArray.push(`Peso: ${weight}`);
+      if (gender) notesArray.push(`Gênero: ${gender}`);
+      if (description) notesArray.push(`Traço marcante: ${description}`);
+      const notesText = notesArray.join('\n');
+
+      // Criar a ficha básica
+      const sheetId = addSheet({
+        name: 'Novo Personagem',
+        race: selectedRace,
+        class: selectedClass,
+        level: 1,
+        portrait: '',
+        type: 'personagem'
+      });
+
+      // Calcular XP necessária para o próximo nível (nível 2)
+      let nextLevelXp = 0;
+      const characterClass = charClasses.find(
+        (c) => c.name.toLowerCase() === selectedClass.toLowerCase()
+      );
+      if (characterClass) {
+        const nextLevel = characterClass.levels.find((l) => l.level === 2);
+        if (nextLevel) {
+          nextLevelXp = nextLevel.experience;
+        }
+      }
+
+      // Criar character state completo
+      const characterData: CharacterState = {
+        id: sheetId,
+        name: 'Novo Personagem',
+        portrait: 'https://i.pinimg.com/736x/29/f9/96/29f996b8d38b9e6d2b3e7cc70df54bcb.jpg',
+        attr: attributes,
+        ac: {
+          head: 0,
+          main: 10
+        },
+        hp: {
+          current: parseInt(hp) || 1,
+          max: parseInt(hp) || 1,
+          temp: 0
+        },
+        stats: {
+          init: 0,
+          speed: '30ft',
+          bth: 0,
+        },
+        info: {
+          charClass: selectedClass,
+          race: selectedRace,
+          disposition: '',
+          level: 1,
+          xp: 0,
+          nextLevel: nextLevelXp,
+          languages: 'Comum',
+        },
+        armor: {
+          helm: '',
+          main: '',
+          shield: '',
+          magicalItem: '',
+        },
+        treasure: {
+          platinum: 0,
+          gold: goldAmount,
+          silver: 0,
+          copper: 0,
+        },
+        encumbrance: {
+          total: 0,
+          rating: rating,
+          enc3x: enc3x,
+        },
+        tracking: {
+          water: 0,
+          food: 0,
+          arrows: 0,
+          torches: 0,
+          conditions: ''
+        },
+        notes: notesText
+      };
+
+      // Preparar magias conhecidas se houver
+      const spellsData = {
+        level: {
+          lv0: 0,
+          lv1: 0,
+          lv2: 0,
+          lv3: 0,
+          lv4: 0,
+          lv5: 0,
+          lv6: 0,
+          lv7: 0,
+          lv8: 0,
+          lv9: 0,
+        },
+        known: [] as Array<{
+          id: string;
+          name: string;
+          level: number;
+          slots: number;
+          description: string;
+        }>
+      };
+
+      if (showSpells && (spells.level0.length > 0 || spells.level1.length > 0)) {
+        spells.level0.forEach((spellName, index) => {
+          spellsData.known.push({
+            id: `spell-0-${index}`,
+            name: spellName,
+            level: 0,
+            slots: 0,
+            description: ''
+          });
+        });
+        spells.level1.forEach((spellName, index) => {
+          spellsData.known.push({
+            id: `spell-1-${index}`,
+            name: spellName,
+            level: 1,
+            slots: 0,
+            description: ''
+          });
+        });
+      }
+
+      // Preparar inventário vazio
+      const inventoryData = {
+        weapons: [],
+        equipments: [],
+        items: []
+      };
+
+      // Salvar o character completo
+      saveCharacterToStorage(characterData, spellsData, inventoryData);
+
+      toast.success('Ficha criada com sucesso!');
+
+      // Redirecionar para a página da ficha
+      router.push(`/fichas/${sheetId}`);
+    } catch (error) {
+      console.error('Erro ao criar ficha:', error);
+      toast.error('Erro ao criar ficha');
+    }
   };
 
   // Função para formatar mensagem do Discord
@@ -599,6 +832,7 @@ export default function AdventurerConstructor() {
   const canAccessStep2 = canSelectRaceClass;
   const canAccessStep3 = selectedRace !== '' && selectedClass !== '';
   const canAccessStep4 = canAccessStep3 && selectedPrimeCount >= Math.min(2, maxPrimes) && selectedSecondaryCount === 2;
+  const canAccessStep5 = canAccessStep4; // Realocação é opcional, então pode pular
 
   return (
     <div className="flex flex-col gap-8 pt-8 max-w-4xl mx-auto">
@@ -608,7 +842,7 @@ export default function AdventurerConstructor() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="step1">
             1. Atributos
           </TabsTrigger>
@@ -619,7 +853,10 @@ export default function AdventurerConstructor() {
             3. Atrib. Primários
           </TabsTrigger>
           <TabsTrigger value="step4" disabled={!canAccessStep4}>
-            4. Detalhes Finais
+            4. Realocar Pontos
+          </TabsTrigger>
+          <TabsTrigger value="step5" disabled={!canAccessStep5}>
+            5. Detalhes Finais
           </TabsTrigger>
         </TabsList>
 
@@ -829,9 +1066,141 @@ export default function AdventurerConstructor() {
           </div>
         </TabsContent>
 
-        {/* Aba 4: Detalhes Finais */}
+        {/* Aba 4: Realocar Pontos */}
         <TabsContent value="step4" className="space-y-6">
-          <h2 className="text-xl font-semibold">4. Rolar detalhes finais e feitiços aprendidos</h2>
+          <div>
+            <h2 className="text-xl font-semibold">4. Realocar pontos de atributo (opcional)</h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              A cada 2 pontos retirados de um atributo, você pode adicionar 1 ponto em um atributo primário. Nenhum atributo pode ficar abaixo de 9.
+            </p>
+          </div>
+
+          <div className="border rounded-lg p-4 space-y-4">
+            {Object.entries(pointAdjustments).map(([attr, adjustment]) => {
+              const attrKey = attr as keyof CharacterAttributes;
+              const attrLabel = {
+                forca: 'Força',
+                destreza: 'Destreza',
+                constituicao: 'Constituição',
+                inteligencia: 'Inteligência',
+                sabedoria: 'Sabedoria',
+                carisma: 'Carisma'
+              }[attr];
+
+              const isPrime = primeAttributeStates[attr]?.checked;
+              const baseValue = baseAttributes[attrKey];
+              const currentValue = finalAttributes[attrKey];
+              const minValue = 9;
+              const maxDecrease = Math.floor((baseValue - minValue) / 2) * 2; // Sempre par
+
+              // Calcular quantos pontos podem ser adicionados (baseado em pontos removidos de outros)
+              const totalPointsRemoved = Object.entries(pointAdjustments)
+                .filter(([key]) => key !== attr)
+                .reduce((sum, [, val]) => sum + Math.abs(Math.min(0, val)), 0);
+              const availablePointsToAdd = Math.floor(totalPointsRemoved / 2);
+
+              return (
+                <div key={attr} className="flex items-center gap-4 p-3 bg-muted/50 rounded-lg">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">{attrLabel}</span>
+                      {isPrime && <Badge variant="default" className="text-xs">Prime</Badge>}
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      Base: {baseValue} → Atual: {currentValue}
+                      {adjustment !== 0 && (
+                        <span className={adjustment > 0 ? "text-green-600 ml-2" : "text-red-600 ml-2"}>
+                          ({adjustment > 0 ? '+' : ''}{adjustment})
+                        </span>
+                      )}
+                    </span>
+                  </div>
+
+                  <div className="flex gap-2">
+                    {/* Botão para remover pontos (só se não for prime e tiver margem) */}
+                    {!isPrime && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          const newAdjustments = { ...pointAdjustments };
+                          newAdjustments[attr] = Math.max(adjustment - 2, -maxDecrease);
+                          setPointAdjustments(newAdjustments);
+                        }}
+                        disabled={adjustment <= -maxDecrease}
+                      >
+                        -2
+                      </Button>
+                    )}
+
+                    {/* Botão para adicionar pontos (só para prime e se tiver pontos disponíveis) */}
+                    {isPrime && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          const newAdjustments = { ...pointAdjustments };
+                          newAdjustments[attr] = adjustment + 1;
+                          setPointAdjustments(newAdjustments);
+                        }}
+                        disabled={adjustment >= availablePointsToAdd}
+                      >
+                        +1
+                      </Button>
+                    )}
+
+                    {/* Botão para resetar este atributo */}
+                    {adjustment !== 0 && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => {
+                          const newAdjustments = { ...pointAdjustments };
+                          newAdjustments[attr] = 0;
+                          setPointAdjustments(newAdjustments);
+                        }}
+                      >
+                        Resetar
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="border rounded-lg p-4 bg-blue-50 dark:bg-blue-950">
+            <h3 className="font-semibold mb-2">Resumo da Realocação</h3>
+            <div className="text-sm space-y-1">
+              <p>
+                <span className="font-medium">Pontos removidos:</span>{' '}
+                {Object.values(pointAdjustments).reduce((sum, val) => sum + Math.abs(Math.min(0, val)), 0)}
+              </p>
+              <p>
+                <span className="font-medium">Pontos adicionados:</span>{' '}
+                {Object.values(pointAdjustments).reduce((sum, val) => sum + Math.max(0, val), 0)}
+              </p>
+              <p>
+                <span className="font-medium">Pontos disponíveis para prime:</span>{' '}
+                {Math.floor(Object.values(pointAdjustments).reduce((sum, val) => sum + Math.abs(Math.min(0, val)), 0) / 2) -
+                  Object.values(pointAdjustments).reduce((sum, val) => sum + Math.max(0, val), 0)}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex justify-between">
+            <Button variant="outline" onClick={() => setActiveTab("step3")}>
+              ← Voltar
+            </Button>
+            <Button onClick={() => setActiveTab("step5")}>
+              Próxima etapa →
+            </Button>
+          </div>
+        </TabsContent>
+
+        {/* Aba 5: Detalhes Finais */}
+        <TabsContent value="step5" className="space-y-6">
+          <h2 className="text-xl font-semibold">5. Rolar detalhes finais e feitiços aprendidos</h2>
 
           <Button
             onClick={handleRollFinalDetails}
@@ -876,12 +1245,17 @@ export default function AdventurerConstructor() {
           </div>
 
           <div className="flex justify-between">
-            <Button variant="outline" onClick={() => setActiveTab("step3")}>
+            <Button variant="outline" onClick={() => setActiveTab("step4")}>
               ← Voltar
             </Button>
-            <Button onClick={handleResetCharacter}>
-              Começar de novo
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={handleResetCharacter}>
+                Começar de novo
+              </Button>
+              <Button onClick={handleCreateSheet}>
+                Criar ficha
+              </Button>
+            </div>
           </div>
         </TabsContent>
       </Tabs>

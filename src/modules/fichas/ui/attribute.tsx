@@ -11,10 +11,10 @@ interface AttributeProps {
     name: string;
     desc: string;
     updateAttr: (id: TAttr, newValue: string) => void;
-    togglePrimary: (id: string, newValue: boolean) => void;
+    togglePrimary: (id: string) => void;
     score: {
         value: number;
-        isPrimary: boolean;
+        type: number;
     };
 }
 
@@ -28,12 +28,17 @@ function Attribute({ id, name, score, desc, updateAttr, togglePrimary }: Attribu
         console.log('Roll dice:', '1d20' + attrMod, 'for', name);
     }
 
+    const isPrimary = score.type === 1;
+    const isSecondary = score.type === 2;
+    const showTypeNumber = isPrimary || isSecondary;
+
     return (
         <div>
             <div
                 className={cn(
                     'card-xs flex flex-col relative',
-                    score.isPrimary && 'border-primary!'
+                    isPrimary && 'border-primary!',
+                    isSecondary && 'border-secondary!'
                 )}
             >
                 <label htmlFor={id + 'Score'} className="text-xs text-center">{name}</label>
@@ -58,7 +63,8 @@ function Attribute({ id, name, score, desc, updateAttr, togglePrimary }: Attribu
                     title={desc}
                     className={cn(
                         'cursor-pointer badge w-10',
-                        score.isPrimary && 'border-primary!'
+                        isPrimary && 'border-primary!',
+                        isSecondary && 'border-secondary!'
                     )}
                     onClick={handleClick}
                 >
@@ -66,18 +72,20 @@ function Attribute({ id, name, score, desc, updateAttr, togglePrimary }: Attribu
                 </button>
                 <button
                     type="button"
-                    title="Alternar Atributo Primário"
-                    aria-label="Alternar Atributo Primário"
+                    title="Alternar Tipo de Atributo"
+                    aria-label="Alternar Tipo de Atributo"
                     className={cn(
-                        'absolute -left-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full flex justify-center align-center cursor-pointer bg-background border border-border',
-                        score.isPrimary && 'bg-primary border-primary'
+                        'absolute -left-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full flex items-center justify-center cursor-pointer bg-background border border-border text-xs font-semibold',
+                        isPrimary && 'bg-primary border-primary text-primary-foreground',
+                        isSecondary && 'bg-secondary border-secondary text-secondary-foreground'
                     )}
                     onClick={() => {
                         handleInputChange();
-                        togglePrimary(id, !score.isPrimary);
+                        togglePrimary(id);
                         saveCharacter();
                     }}
                 >
+                    {showTypeNumber && score.type}
                 </button>
             </div>
         </div>

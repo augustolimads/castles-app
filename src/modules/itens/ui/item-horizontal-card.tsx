@@ -40,7 +40,7 @@ export function ItemHorizontalCard({ item, onHide, onRestore }: ItemHorizontalCa
             alt={item.name}
             width={60}
             height={60}
-            className="rounded-lg dar:brightness-[0.2] dark:grayscale"
+            className="rounded-lg"
           />
         </div>
         <div className="pt-0 flex flex-col gap-2 flex-1">

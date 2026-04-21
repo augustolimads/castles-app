@@ -1,10 +1,10 @@
-import { Separator } from "@/components/ui/separator";
-import { CircleDollarSignIcon, ShoppingBasket, Sword, WeightIcon } from "lucide-react";
-import Image from "next/image";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { CircleDollarSignIcon, ShoppingBasket, Sword, WeightIcon } from "lucide-react";
+import Image from "next/image";
 
 export function ItemCard() {
   return (
@@ -26,7 +26,7 @@ export function ItemCard() {
             src="/icons/dagger-black.webp"
             alt="Produto Exemplo"
             fill
-            className="h-full w-full rounded-t-lg object-cover dar:brightness-[0.2] dark:grayscale"
+          className="h-full w-full rounded-t-lg object-cover"
           />
         </AspectRatio>
         <div className="p-2 pt-0 flex flex-col gap-2">
