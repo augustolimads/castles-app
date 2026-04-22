@@ -289,13 +289,13 @@ export function saveCharacter(spells?: unknown, inventory?: { weapons?: unknown[
 export function setCharacterName(event: React.ChangeEvent<HTMLInputElement>) {
     handleInputChange();
     const input = event.target;
-    const character = useCharacterStore.getState();
     useCharacterStore.getState().updateCharacter({
         name: input.value,
     });
     updateTitle();
 
-    // Sincronizar com sheet
+    // Salvar e sincronizar com sheet
+    const character = useCharacterStore.getState();
     if (character.id) {
         syncCharacterToSheet(character.id);
     }

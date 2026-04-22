@@ -1,10 +1,16 @@
-import { Backpack, BookSearch, Clock, FileSpreadsheet, HandCoinsIcon, HardHat, PersonStanding, ShoppingBasket, SignpostBig, User2Icon, UserCog, Wand } from "lucide-react"
+import { Backpack, BookSearch, Clock, FileSpreadsheet, HandCoinsIcon, PersonStanding, ShoppingBasket, SignpostBig, User2Icon, UserCog, Wand } from "lucide-react"
 
 export const items = [
     {
         title: "Construtor de Aventureiro",
         url: "/construtor-aventureiro",
         icon: User2Icon,
+        isBlocked: false,
+    },
+    {
+        title: "Fichas",
+        url: "/fichas",
+        icon: FileSpreadsheet,
         isBlocked: false,
     },
     {
@@ -17,12 +23,6 @@ export const items = [
         title: "Containers & Bagagens",
         url: "/containers",
         icon: Backpack,
-        isBlocked: false,
-    },
-    {
-        title: "Fichas",
-        url: "/fichas",
-        icon: FileSpreadsheet,
         isBlocked: false,
     },
     {

@@ -34,11 +34,20 @@ export function SheetCard({ sheet, onDelete }: SheetCardProps) {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleCardClick();
+    }
+  };
+
   return (
-    <button
-      type="button"
+    <div
+      role="button"
+      tabIndex={0}
       className="relative group cursor-pointer rounded-lg overflow-hidden border bg-card hover:shadow-lg transition-all duration-200 text-left w-full"
       onClick={handleCardClick}
+      onKeyDown={handleKeyDown}
     >
       {/* Content */}
       <div className="relative p-4 flex gap-4">
@@ -92,6 +101,6 @@ export function SheetCard({ sheet, onDelete }: SheetCardProps) {
           </div>
         </div>
       </div>
-    </button>
+    </div>
   );
 }

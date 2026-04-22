@@ -375,7 +375,20 @@ export const charClasses = [
                 hp: 'd8',
                 attackBonus: '+0',
                 experience: 0,
-                abilities: []
+                abilities: [
+                    {
+                        id: 1,
+                        name: "Usar Magia",
+                        description: "a habilidade de conjurar feitiços divinos. Com uma sabedoria 13-15, um feitiço extra de 1º nível. Com sabedoria 16-17, um feitiço extra de 2º nível. Com sabedoria 18-19, um feitiço extra de 3º nível.",
+                        check: "-"
+                    },
+                    {
+                        id: 2,
+                        name: "Afastar Mortos-Vivos",
+                        description: "Afasta ou destrói monstros mortos-vivos.",
+                        check: "SAB"
+                    },
+                ]
             },
             {
                 level: 2,
@@ -470,7 +483,13 @@ export const charClasses = [
                 hp: 'd10',
                 attackBonus: '+1',
                 experience: 0,
-                abilities: []
+                abilities: [
+                    {
+                        id: 1,
+                        name: "Especialização em Armas",
+                        description: "escolha uma arma para se especializar. +1 para jogadas de ataque e dano com a arma escolhida",
+                    },
+                ]
             },
             {
                 level: 2,
@@ -491,7 +510,13 @@ export const charClasses = [
                 hp: 'd10',
                 attackBonus: '+4',
                 experience: 8501,
-                abilities: []
+                abilities: [
+                    {
+                        id: 1,
+                        name: "Domínio de Combate",
+                        description: "1 ataque extra contra monstros de nível 1 ou menos",
+                    },
+                ]
             },
             {
                 level: 5,
@@ -512,14 +537,26 @@ export const charClasses = [
                 hp: 'd10',
                 attackBonus: '+7',
                 experience: 68001,
-                abilities: []
+                abilities: [
+                    {
+                        id: 1,
+                        name: "Especialização em Armas",
+                        description: "os bônus aumentam para +2 nas jogadas de ataque e dano",
+                    },
+                ]
             },
             {
                 level: 8,
                 hp: 'd10',
                 attackBonus: '+8',
                 experience: 136001,
-                abilities: []
+                abilities: [
+                    {
+                        id: 1,
+                        name: "Domínio de Combate",
+                        description: "2 ataques extra contra monstros de nível 1 ou menos",
+                    },
+                ]
             },
             {
                 level: 9,
@@ -533,7 +570,13 @@ export const charClasses = [
                 hp: 'd10',
                 attackBonus: '+10',
                 experience: 500001,
-                abilities: []
+                abilities: [
+                    {
+                        id: 1,
+                        name: "Ataque Extra",
+                        description: "um ataque adicional por rodada de combate",
+                    },
+                ]
             },
             {
                 level: 11,
@@ -547,7 +590,13 @@ export const charClasses = [
                 hp: 'd10',
                 attackBonus: '+12',
                 experience: 1000001,
-                abilities: []
+                abilities: [
+                    {
+                        id: 1,
+                        name: "Domínio de Combate",
+                        description: "3 ataques extra contra monstros de nível 1 ou menos",
+                    },
+                ]
             },
         ]
     },
@@ -860,7 +909,13 @@ export const charClasses = [
                 hp: 'd4',
                 attackBonus: '+0',
                 experience: 0,
-                abilities: []
+                abilities: [
+                    {
+                        id: 1,
+                        name: "Conjuração",
+                        description: "a habilidade de conjurar feitiços arcanos. Com um valor de inteligência 13-15 recebe um feitiço adicional de primeiro nível. Com uma inteligência 16-17, recebe um feitiço extra de segundo nível. Com uma inteligência 18-19, um feitiço extra de terceiro nível",
+                    },
+                ]
             },
             {
                 level: 2,
@@ -1050,7 +1105,71 @@ export const charClasses = [
                 hp: 'd6',
                 attackBonus: '+0',
                 experience: 0,
-                abilities: []
+                abilities: [
+                    {
+                        id: 1,
+                        name: "Especial",
+                        description: "pode usar couro, jaqueta de couro e gibão de peles sem penalidades",
+                    },
+                    {
+                        id: 2,
+                        name: "Ataque pelas costas",
+                        description: "recebe um bônus de +4 para acertar e causa dano dobrado, após um teste bem-sucedido de mover-se em silêncio ou esconder-se",
+                    },
+                    {
+                        id: 3,
+                        name: "A Gíria",
+                        description: "fala através de palavras codificadas e gestos",
+                    },
+                    {
+                        id: 4,
+                        name: "Escalar",
+                        description: "escala qualquer superfície",
+                        check: "DES"
+                    },
+                    {
+                        id: 5,
+                        name: "Decifrar Escrita",
+                        description: "decifra escritos/linguagens/códigos",
+                        check: "INT"
+                    },
+                    {
+                        id: 6,
+                        name: "Esconder-se",
+                        description: "pode se esconder em sombras e locais ocultos",
+                        check: "DES"
+                    },
+                    {
+                        id: 7,
+                        name: "Ouvir",
+                        description: "ouve ruídos a até 9m (10ft)",
+                        check: "SAB"
+                    },
+                    {
+                        id: 8,
+                        name: "Passos Leves",
+                        description: "se desloca silenciosamente em ambientes fechados e abertos",
+                        check: "DES"
+                    },
+                    {
+                        id: 9,
+                        name: "Abrir fechaduras",
+                        description: "destranca fechaduras mecânicas",
+                        check: "DES"
+                    },
+                    {
+                        id: 10,
+                        name: "Furtar Bolsos",
+                        description: "remove o conteúdo de bolsos ou bolsas, faz truques de prestidigitação",
+                        check: "DES"
+                    },
+                    {
+                        id: 11,
+                        name: "Encontrar/Desarmar Armadilhas",
+                        description: "encontra, desarma ou ativa uma armadilha",
+                        check: "INT"
+                    },
+                ]
             },
             {
                 level: 2,
@@ -1064,21 +1183,40 @@ export const charClasses = [
                 hp: 'd6',
                 attackBonus: '+1',
                 experience: 2501,
-                abilities: []
+                abilities: [
+                    {
+                        id: 1,
+                        name: "Esconder-se",
+                        description: "pode se esconder em sombras e locais ocultos. Testes -5",
+                        check: "DES"
+                    },
+                ]
             },
             {
                 level: 4,
                 hp: 'd6',
                 attackBonus: '+1',
                 experience: 6001,
-                abilities: []
+                abilities: [
+                    {
+                        id: 1,
+                        name: "Ataque furtivo",
+                        description: "recebe +2 para acertar e +4 para o dano contra um alvo desprevenido",
+                    },
+                ]
             },
             {
                 level: 5,
                 hp: 'd6',
                 attackBonus: '+2',
                 experience: 12001,
-                abilities: []
+                abilities: [
+                    {
+                        id: 1,
+                        name: "Ataque pelas costas",
+                        description: "recebe um bônus de +4 para acertar e causa dano triplicado, após um teste bem-sucedido de mover-se em silêncio ou esconder-se",
+                    },
+                ]
             },
             {
                 level: 6,
@@ -1106,7 +1244,13 @@ export const charClasses = [
                 hp: 'd6',
                 attackBonus: '+3',
                 experience: 120001,
-                abilities: []
+                abilities: [
+                     {
+                        id: 1,
+                        name: "Ataque pelas costas",
+                        description: "recebe um bônus de +4 para acertar e causa dano quadruplicado, após um teste bem-sucedido de mover-se em silêncio ou esconder-se",
+                    },
+                ]
             },
             {
                 level: 10,

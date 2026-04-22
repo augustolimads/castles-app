@@ -1,6 +1,7 @@
 'use client';
 
-import { useMemo } from 'react';
+import { charClasses } from '@/modules/compendium/charClasses';
+import { useEffect, useMemo } from 'react';
 import { handleInputChange } from '../appChanges';
 import { saveCharacter, useCharacterStore } from '../stores/character';
 import TextInput from './text-input';
@@ -9,6 +10,33 @@ function Info() {
     const character = useCharacterStore();
     
     type TInfoKey = keyof typeof character.info;
+
+    // Calcular XP necessária para o próximo nível baseado na classe
+    // biome-ignore lint/correctness/useExhaustiveDependencies: Monitorar apenas level e charClass
+    useEffect(() => {
+        const { charClass, level, nextLevel } = character.info;
+
+        if (!charClass || !level) return;
+
+        const characterClass = charClasses.find(
+            (c) => c.name.toLowerCase() === charClass.toLowerCase()
+        );
+
+        if (!characterClass) return;
+
+        const nextLevelData = characterClass.levels.find(
+            (l) => l.level === level + 1
+        );
+
+        if (nextLevelData && nextLevelData.experience !== nextLevel) {
+            useCharacterStore.getState().updateCharacter({
+                info: {
+                    ...character.info,
+                    nextLevel: nextLevelData.experience,
+                },
+            });
+        }
+    }, [character.info.level, character.info.charClass]);
 
     function updateInput(id: string, newValue: string | number) {
         handleInputChange();
@@ -128,6 +156,7 @@ function Info() {
                 id="nextLevel"
                 name="Próximo Nível"
                 isNumber
+                disabled
                 value={character.info.nextLevel}
                 updateInput={updateInput}
             />
