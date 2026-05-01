@@ -44,7 +44,7 @@ export interface CharacterState {
         temp: number;
     };
     stats: {
-        init: number;
+        capacity: number;
         speed: string;
         bth: number;
     };
@@ -112,7 +112,7 @@ const initialState: CharacterState = {
         temp: 0
     },
     stats: {
-        init: 0,
+        capacity: 0,
         speed: '30ft',
         bth: 0,
     },
@@ -188,7 +188,13 @@ export function saveCharacterToStorage(character: CharacterState, spells?: unkno
             localStorage.setItem(`${CHARACTERS_STORAGE_KEY}-spells-${character.id}`, JSON.stringify(spells));
         }
         if (inventory) {
-            localStorage.setItem(`${CHARACTERS_STORAGE_KEY}-inventory-${character.id}`, JSON.stringify(inventory));
+            // Garantir que todos os arrays existam antes de salvar
+            const completeInventory = {
+                weapons: inventory.weapons || [],
+                equipments: inventory.equipments || [],
+                items: inventory.items || []
+            };
+            localStorage.setItem(`${CHARACTERS_STORAGE_KEY}-inventory-${character.id}`, JSON.stringify(completeInventory));
         }
     } catch (error) {
         console.error('Erro ao salvar character:', error);
@@ -277,10 +283,32 @@ export function loadAllCharacters() {
     console.log('loadAllCharacters chamado');
 }
 
-export function saveCharacter(spells?: unknown, inventory?: { weapons?: unknown[]; items?: unknown[] }) {
+export function saveCharacter(spells?: unknown, inventory?: { weapons?: unknown[]; equipments?: unknown[]; items?: unknown[] }) {
     const character = useCharacterStore.getState();
     if (character.id) {
-        saveCharacterToStorage(character, spells, inventory);
+        // Se spells não foi fornecido, buscar do store
+        let spellsData = spells;
+        if (!spellsData) {
+            try {
+                const { useSpellsStore } = require('./spell');
+                spellsData = useSpellsStore.getState();
+            } catch (error) {
+                console.error('Erro ao buscar spells:', error);
+            }
+        }
+
+        // Se inventory não foi fornecido, buscar do store
+        let inventoryData = inventory;
+        if (!inventoryData) {
+            try {
+                const { useInventoryStore } = require('./inventory');
+                inventoryData = useInventoryStore.getState();
+            } catch (error) {
+                console.error('Erro ao buscar inventory:', error);
+            }
+        }
+
+        saveCharacterToStorage(character, spellsData, inventoryData);
         syncCharacterToSheet(character.id);
         handleInputChange(false);
     }

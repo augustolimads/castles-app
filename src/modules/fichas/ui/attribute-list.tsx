@@ -62,7 +62,7 @@ function AttributeList() {
             <Attribute
                 id="dex"
                 name="DES"
-                desc="Destreza - Determina iniciativa, CA e ataques à distância"
+                desc="Destreza - Determina CA e ataques à distância"
                 score={character.attr.dex}
                 updateAttr={updateAttr}
                 togglePrimary={togglePrimary}

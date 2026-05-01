@@ -1,6 +1,7 @@
 'use client';
 
 import { handleInputChange } from '../appChanges';
+import { updateEncumbraceRating } from '../attributeLogic';
 import { saveCharacter, useCharacterStore } from '../stores/character';
 import Ac from './Ac';
 import Hp from './Hp';
@@ -20,6 +21,12 @@ function StatList() {
                 [statId]: newValue,
             },
         });
+
+        // Recalcular encumbrance quando capacity mudar
+        if (id === 'capacity') {
+            updateEncumbraceRating();
+        }
+
         saveCharacter();
     }
 
@@ -31,9 +38,9 @@ function StatList() {
             </div>
             <div className="grid grid-cols-3 gap-4">
                 <Stat
-                    id="init"
-                    name="Iniciativa"
-                    value={character.stats.init}
+                    id="capacity"
+                    name="Capacidade"
+                    value={character.stats.capacity}
                     updateStat={updateStat}
                 />
                 <Stat

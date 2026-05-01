@@ -8,7 +8,7 @@
 - pega o next level lá embaixo e digita no campo
 - marca os prime attributes
 - preenche Max HP e Current HP baseado na classe e constituição
-- preenche a iniciativa baseada na destreza
+- preenche a capacidade adicional (ex: mochila +10)
 - preenche speed baseada na raça
 - prenche BTH baseado na classe
 - preenche languages baseado na raça e inteligência
