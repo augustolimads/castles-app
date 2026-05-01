@@ -113,6 +113,27 @@ export default function AdventurerConstructor() {
   const [showSpells, setShowSpells] = useState(false);
   const [activeTab, setActiveTab] = useState("step1");
 
+  // Função helper para calcular atributos com bônus racial (sem realocação)
+  const getAttributesWithRacialBonus = () => {
+    const withBonus = { ...baseAttributes };
+
+    if (selectedRace && racialBonuses[selectedRace.toLowerCase()]) {
+      const raceKey = selectedRace.toLowerCase().split(' ')[0];
+      const bonuses = racialBonuses[raceKey];
+      if (bonuses) {
+        Object.keys(bonuses).forEach(attr => {
+          const attrKey = attr as keyof CharacterAttributes;
+          const bonus = bonuses[attrKey];
+          if (bonus !== undefined) {
+            withBonus[attrKey] += bonus;
+          }
+        });
+      }
+    }
+
+    return withBonus;
+  };
+
   // Efeito para aplicar bônus racial, realocações e calcular modificador total
   useEffect(() => {
     const newAttributes = { ...baseAttributes };
@@ -1107,10 +1128,14 @@ export default function AdventurerConstructor() {
               }[attr];
 
               const isPrime = primeAttributeStates[attr]?.checked;
+              const attributesWithRacialBonus = getAttributesWithRacialBonus();
+              const baseValueWithRacialBonus = attributesWithRacialBonus[attrKey];
               const baseValue = baseAttributes[attrKey];
               const currentValue = finalAttributes[attrKey];
               const minValue = 9;
-              const maxDecrease = Math.floor((baseValue - minValue) / 2) * 2; // Sempre par
+
+              // Usar o valor com bônus racial como base para calcular máximo de redução
+              const maxDecrease = Math.floor((baseValueWithRacialBonus - minValue) / 2) * 2; // Sempre par
 
               // Calcular quantos pontos podem ser adicionados (baseado em pontos removidos de outros)
               const totalPointsRemoved = Object.entries(pointAdjustments)
@@ -1126,7 +1151,11 @@ export default function AdventurerConstructor() {
                       {isPrime && <Badge variant="default" className="text-xs">Prime</Badge>}
                     </div>
                     <span className="text-sm text-muted-foreground">
-                      Base: {baseValue} → Atual: {currentValue}
+                      Base: {baseValue}
+                      {baseValueWithRacialBonus !== baseValue && (
+                        <span className="text-blue-600"> (+{baseValueWithRacialBonus - baseValue} racial = {baseValueWithRacialBonus})</span>
+                      )}
+                      {' '}→ Atual: {currentValue}
                       {adjustment !== 0 && (
                         <span className={adjustment > 0 ? "text-green-600 ml-2" : "text-red-600 ml-2"}>
                           ({adjustment > 0 ? '+' : ''}{adjustment})
@@ -1136,21 +1165,19 @@ export default function AdventurerConstructor() {
                   </div>
 
                   <div className="flex gap-2">
-                    {/* Botão para remover pontos (só se não for prime e tiver margem) */}
-                    {!isPrime && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => {
-                          const newAdjustments = { ...pointAdjustments };
-                          newAdjustments[attr] = Math.max(adjustment - 2, -maxDecrease);
-                          setPointAdjustments(newAdjustments);
-                        }}
-                        disabled={adjustment <= -maxDecrease}
-                      >
-                        -2
-                      </Button>
-                    )}
+                    {/* Botão para remover pontos */}
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        const newAdjustments = { ...pointAdjustments };
+                        newAdjustments[attr] = Math.max(adjustment - 2, -maxDecrease);
+                        setPointAdjustments(newAdjustments);
+                      }}
+                      disabled={adjustment <= -maxDecrease || maxDecrease <= 0}
+                    >
+                      -2
+                    </Button>
 
                     {/* Botão para adicionar pontos (só para prime e se tiver pontos disponíveis) */}
                     {isPrime && (
@@ -1165,21 +1192,6 @@ export default function AdventurerConstructor() {
                         disabled={adjustment >= availablePointsToAdd}
                       >
                         +1
-                      </Button>
-                    )}
-
-                    {/* Botão para resetar este atributo */}
-                    {adjustment !== 0 && (
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => {
-                          const newAdjustments = { ...pointAdjustments };
-                          newAdjustments[attr] = 0;
-                          setPointAdjustments(newAdjustments);
-                        }}
-                      >
-                        Resetar
                       </Button>
                     )}
                   </div>
@@ -1206,6 +1218,27 @@ export default function AdventurerConstructor() {
               </p>
             </div>
           </div>
+
+          {/* Botão para resetar todas as realocações */}
+          {Object.values(pointAdjustments).some(val => val !== 0) && (
+            <div className="flex justify-center">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setPointAdjustments({
+                    forca: 0,
+                    destreza: 0,
+                    constituicao: 0,
+                    inteligencia: 0,
+                    sabedoria: 0,
+                    carisma: 0
+                  });
+                }}
+              >
+                Resetar Realocações
+              </Button>
+            </div>
+          )}
 
           <div className="flex justify-between">
             <Button variant="outline" onClick={() => setActiveTab("step3")}>
