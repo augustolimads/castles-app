@@ -759,7 +759,7 @@ export default function AdventurerConstructor() {
           temp: 0
         },
         stats: {
-          init: 0,
+          capacity: 0,
           speed: '30ft',
           bth: 0,
         },

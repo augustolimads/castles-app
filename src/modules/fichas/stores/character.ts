@@ -322,9 +322,24 @@ export function setCharacterName(event: React.ChangeEvent<HTMLInputElement>) {
     });
     updateTitle();
 
-    // Salvar e sincronizar com sheet
+    // Salvar character completo e sincronizar com sheet
     const character = useCharacterStore.getState();
     if (character.id) {
+        // Buscar spells e inventory do store
+        try {
+            const { useSpellsStore } = require('./spell');
+            const { useInventoryStore } = require('./inventory');
+            const spells = useSpellsStore.getState();
+            const inventory = useInventoryStore.getState();
+
+            // Salvar o character completo no localStorage
+            saveCharacterToStorage(character, spells, inventory);
+        } catch (error) {
+            console.error('Erro ao salvar character:', error);
+            // Mesmo com erro, tenta salvar sem spells/inventory
+            saveCharacterToStorage(character);
+        }
+
         syncCharacterToSheet(character.id);
     }
 }
@@ -334,7 +349,28 @@ export function loadCharacter(charId: string): CharacterState | null {
 
     const characterData = loadCharacterFromStorage(charId);
     if (characterData) {
-        useCharacterStore.getState().setCharacter(characterData);
+        // Fazer merge com initialState para garantir que todos os campos existam
+        const mergedData: CharacterState = {
+            ...initialState,
+            ...characterData,
+            attr: {
+                str: { ...initialState.attr.str, ...characterData.attr?.str },
+                dex: { ...initialState.attr.dex, ...characterData.attr?.dex },
+                con: { ...initialState.attr.con, ...characterData.attr?.con },
+                int: { ...initialState.attr.int, ...characterData.attr?.int },
+                wis: { ...initialState.attr.wis, ...characterData.attr?.wis },
+                cha: { ...initialState.attr.cha, ...characterData.attr?.cha },
+            },
+            ac: { ...initialState.ac, ...characterData.ac },
+            hp: { ...initialState.hp, ...characterData.hp },
+            stats: { ...initialState.stats, ...characterData.stats },
+            info: { ...initialState.info, ...characterData.info },
+            armor: { ...initialState.armor, ...characterData.armor },
+            treasure: { ...initialState.treasure, ...characterData.treasure },
+            encumbrance: { ...initialState.encumbrance, ...characterData.encumbrance },
+            tracking: { ...initialState.tracking, ...characterData.tracking },
+        };
+        useCharacterStore.getState().setCharacter(mergedData);
         updateTitle();
 
         // Carregar spells do localStorage

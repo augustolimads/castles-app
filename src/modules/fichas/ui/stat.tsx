@@ -23,7 +23,7 @@ function Stat({ id, name, value, updateStat }: StatProps) {
             <input
                 id={id + 'Value'}
                 className="input flex flex-1 text-center py-2"
-                value={value}
+                value={value ?? ''}
                 type={id === 'speed' ? 'text' : 'number'}
                 onFocus={(e) => e.currentTarget.select()}
                 onInput={(e) => {
