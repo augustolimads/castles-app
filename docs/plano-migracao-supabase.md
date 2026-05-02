@@ -9,7 +9,7 @@
 | Fase | Status | Progresso | Documentação |
 |------|--------|-----------|--------------|
 | **Fase 0** | ✅ Concluída | 100% | [fase-0-refatoracao-localstorage.md](./fase-0-refatoracao-localstorage.md) |
-| **Fase 1** | 🔲 Pendente | 0% | - |
+| **Fase 1** | ✅ Concluída | 100% | [supabase-setup-guia.md](./supabase-setup-guia.md) |
 | **Fase 2** | 🔲 Pendente | 0% | - |
 | **Fase 3** | 🔲 Pendente | 0% | - |
 | **Fase 4** | 🔲 Pendente | 0% | - |
@@ -61,7 +61,60 @@
 
 ---
 
-## 📋 Detalhamento das Fases
+## � Comportamento de Sincronização Multi-dispositivo
+
+### Como Funciona o Merge Bidirecional
+
+O sistema **preserva dados únicos** de cada dispositivo e **resolve conflitos** por timestamp:
+
+```
+📱 Cenário: Usuário com 2 computadores
+
+┌─────────────────────────────────────────────────────────────┐
+│ COMPUTADOR A (offline)                                      │
+│ - Personagens: X, Y, Z                                      │
+│ └─ Faz login → sincroniza                                   │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│ ☁️  SUPABASE (nuvem)                                         │
+│ - Personagens: X, Y, Z                                      │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│ COMPUTADOR B (offline)                                      │
+│ - Personagens: A, B, C                                      │
+│ └─ Faz login → sincroniza                                   │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│ ✅ RESULTADO FINAL (merge, não replace)                     │
+│                                                             │
+│ Computador A: X, Y, Z, A, B, C  (6 personagens)            │
+│ Supabase:     X, Y, Z, A, B, C  (6 personagens)            │
+│ Computador B: X, Y, Z, A, B, C  (6 personagens)            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Regras de Sincronização
+
+✅ **Dados únicos são preservados**
+- Cada personagem tem ID única (`castles-character-data-{uuid}`)
+- Sincronizar não substitui tudo, apenas faz merge
+- Exemplo: 3 personagens no PC1 + 3 no PC2 = 6 em ambos após sync
+
+⚠️ **Conflitos (mesma ID) resolvidos por timestamp**
+- Se mesmo personagem editado em 2 dispositivos → prevalece o mais recente
+- Estratégia: **last-write-wins** (baseado em `lastModified`)
+
+🔄 **Sincronização é bidirecional**
+- **Download:** Busca dados remotos que não existem localmente
+- **Upload:** Envia dados locais que não existem remotamente
+- **Merge:** Para dados duplicados, resolve por timestamp
+
+---
+
+## �📋 Detalhamento das Fases
 
 ### ✅ Fase 0: Refatoração do localStorage (PREPARAÇÃO)
 
@@ -108,117 +161,32 @@ Refatorar estrutura de armazenamento de fichas de personagens do formato fragmen
 
 ---
 
-### 🔲 Fase 1: Infraestrutura Supabase
+### ✅ Fase 1: Infraestrutura Supabase
 
-**Status:** 🔲 Pendente  
+**Status:** ✅ Concluída  
 **Dependências:** Fase 0 ✅  
-**Estimativa:** 2-3 horas
+**Estimativa:** 2-3 horas  
+**Documentação:** [supabase-setup-guia.md](./supabase-setup-guia.md)
 
 #### Objetivos
 Configurar projeto Supabase, instalar dependências, modelar banco de dados e configurar autenticação passwordless.
 
-#### Tasks
+#### Arquivos Criados
+- ✅ `.env.local` - variáveis de ambiente (não commitado)
+- ✅ `.env.example` - template de variáveis de ambiente
+- ✅ `src/lib/supabase/client.ts` - cliente Supabase singleton
+- ✅ `src/lib/supabase/types.ts` - tipos TypeScript do schema
+- ✅ `docs/supabase-schema.sql` - schema SQL completo
+- ✅ `docs/supabase-setup-guia.md` - guia passo a passo
 
-##### 1.1 Configurar Projeto e Dependências
-- [ ] Criar conta no [Supabase](https://supabase.com)
-- [ ] Criar novo projeto (região: South America ou US East)
-- [ ] Instalar pacotes:
-  ```bash
-  npm install @supabase/supabase-js @supabase/auth-helpers-nextjs
-  ```
-- [ ] Criar arquivo `.env.local`:
-  ```env
-  NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
-  NEXT_PUBLIC_SUPABASE_ANON_KEY=xxx
-  ```
-- [ ] Criar `src/lib/supabase/client.ts` - singleton do cliente Supabase
+#### Próximos Passos
+Para completar a configuração:
+1. Criar projeto no Supabase Dashboard (manual)
+2. Executar script SQL `docs/supabase-schema.sql` (manual)
+3. Copiar credenciais para `.env.local` (manual)
+4. Configurar autenticação e URLs (manual)
 
-##### 1.2 Modelar Schema do Banco
-
-**SQL para executar no Supabase Dashboard → SQL Editor:**
-
-```sql
--- Tabela de perfis de usuários
-CREATE TABLE user_profiles (
-  id UUID PRIMARY KEY DEFAULT auth.uid(),
-  email TEXT UNIQUE NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  last_sync_at TIMESTAMPTZ,
-  FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE
-);
-
--- Tabela genérica de dados do usuário (JSONB)
-CREATE TABLE user_data (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES user_profiles(id) ON DELETE CASCADE,
-  data_key TEXT NOT NULL,
-  data_value JSONB NOT NULL,
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(user_id, data_key)
-);
-
--- Índices para performance
-CREATE INDEX idx_user_data_user_id ON user_data(user_id);
-CREATE INDEX idx_user_data_key ON user_data(data_key);
-CREATE INDEX idx_user_data_updated_at ON user_data(updated_at DESC);
-
--- Habilitar Row Level Security (RLS)
-ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE user_data ENABLE ROW LEVEL SECURITY;
-
--- Políticas RLS: usuário só acessa seus próprios dados
-CREATE POLICY "Users can view own profile"
-  ON user_profiles FOR SELECT
-  USING (auth.uid() = id);
-
-CREATE POLICY "Users can update own profile"
-  ON user_profiles FOR UPDATE
-  USING (auth.uid() = id);
-
-CREATE POLICY "Users can view own data"
-  ON user_data FOR SELECT
-  USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can insert own data"
-  ON user_data FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
-
-CREATE POLICY "Users can update own data"
-  ON user_data FOR UPDATE
-  USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can delete own data"
-  ON user_data FOR DELETE
-  USING (auth.uid() = user_id);
-```
-
-Tasks:
-- [ ] Executar SQL acima no Supabase Dashboard
-- [ ] Verificar tabelas criadas em "Table Editor"
-- [ ] Criar `src/lib/supabase/types.ts` com tipos do schema
-
-##### 1.3 Configurar Autenticação
-
-No **Supabase Dashboard → Authentication → Providers:**
-- [ ] Habilitar apenas "Email" (desabilitar password, só magic link)
-- [ ] Configurar **Email Templates** (opcional - personalizar emails)
-- [ ] Configurar **URL Configuration:**
-  - Site URL: `http://localhost:3000` (dev) e `https://seu-dominio.com` (prod)
-  - Redirect URLs: adicionar URLs permitidas
-
-**Tasks:**
-- [ ] Testar envio de magic link manualmente (Auth → Users → Invite User)
-- [ ] Verificar email recebido e link funcionando
-
-#### Arquivos a Criar
-- `src/lib/supabase/client.ts`
-- `src/lib/supabase/types.ts`
-- `.env.local`
-
-#### Verificação
-- [ ] Cliente Supabase conecta sem erros
-- [ ] Tabelas criadas e RLS ativo
-- [ ] Magic link funciona (teste manual)
+**Guia completo:** [supabase-setup-guia.md](./supabase-setup-guia.md)
 
 ---
 
@@ -360,7 +328,11 @@ Criar sistema de sincronização bidirecional (localStorage ↔ Supabase) com fi
   // Pull da nuvem
   async function syncFromCloud(dataKey: string): Promise<any>
   
-  // Sync completa (todas as chaves)
+  // Sync completa (todas as chaves) - MERGE BIDIRECIONAL
+  // IMPORTANTE: Não sobrescreve dados únicos em multi-dispositivo
+  // Exemplo: PC1 tem personagens X,Y,Z → sincroniza
+  //          PC2 tem personagens A,B,C → sincroniza
+  //          Resultado: AMBOS têm X,Y,Z,A,B,C (merge, não replace)
   async function fullSync(): Promise<void>
   
   // Adicionar à fila quando offline
@@ -370,10 +342,48 @@ Criar sistema de sincronização bidirecional (localStorage ↔ Supabase) com fi
   async function processSyncQueue(): Promise<void>
   ```
   
-  **Lógica:**
+  **Lógica da fullSync() - MERGE BIDIRECIONAL:**
+  ```typescript
+  async function fullSync(): Promise<void> {
+    // 1. Buscar TODAS as chaves do servidor
+    const remoteData = await fetchAllUserData();
+    
+    // 2. Buscar TODAS as chaves locais sincronizáveis
+    const localKeys = getAllSyncableKeys();
+    
+    // 3. DOWNLOAD: Para cada chave remota
+    for (const remote of remoteData) {
+      const local = getLocalData(remote.data_key);
+      
+      if (!local) {
+        // Não existe local → baixar do servidor
+        saveToLocalStorage(remote);
+      } else {
+        // Existe local E remoto → resolver conflito por timestamp
+        if (remote.updated_at > local.lastModified) {
+          saveToLocalStorage(remote); // Remoto mais recente
+        }
+        // Se local mais recente, mantém local e envia depois
+      }
+    }
+    
+    // 4. UPLOAD: Para cada chave local que NÃO está no servidor
+    for (const localKey of localKeys) {
+      const existsRemote = remoteData.some(r => r.data_key === localKey);
+      
+      if (!existsRemote) {
+        // Existe local mas não remoto → enviar para servidor
+        await syncToCloud(localKey, getLocalData(localKey));
+      }
+    }
+  }
+  ```
+  
+  **Comportamento geral:**
   - Verificar se está online (`navigator.onLine`)
   - Verificar se está autenticado (`use-auth`)
-  - Resolver conflitos via timestamps
+  - **Merge bidirecional:** preserva dados únicos de ambos os lados
+  - **Conflitos (mesma chave):** resolver via timestamp (last-write-wins)
   - Retry com exponential backoff (3 tentativas)
   - Atualizar `sync-status-store` durante processo
 
@@ -445,6 +455,10 @@ Criar sistema de sincronização bidirecional (localStorage ↔ Supabase) com fi
 - [ ] Editar ficha online → sync imediato
 - [ ] Status button mostra "sincronizando" durante sync
 - [ ] Conflitos resolvidos corretamente (last-write-wins)
+- [ ] **Multi-dispositivo:** Dados únicos de cada dispositivo são preservados (merge, não replace)
+  - Criar personagens X,Y,Z no PC1 → sincronizar
+  - Criar personagens A,B,C no PC2 → sincronizar
+  - Verificar que ambos os PCs têm todos os 6 personagens após sync
 
 ---
 
@@ -639,10 +653,11 @@ Testar todos os fluxos, adicionar tratamento de erros, melhorar feedback visual 
   - Criar ficha no dispositivo A
   - Login no dispositivo B → ficha aparece
   - Editar no B → mudanças aparecem no A após sync
+  - **Teste de merge:** Criar personagens X,Y,Z no dispositivo A offline, criar personagens A,B,C no dispositivo B offline, sincronizar ambos → todos os 6 personagens devem aparecer em ambos os dispositivos
 
 - [ ] **Conflitos:**
   - Editar mesma ficha em 2 dispositivos offline
-  - Voltar online → última edição vence
+  - Voltar online → última edição vence (last-write-wins)
 
 - [ ] **Funcionalidade Offline:**
   - Desconectar internet
@@ -688,7 +703,7 @@ Testar todos os fluxos, adicionar tratamento de erros, melhorar feedback visual 
 - [ ] Criar `.env.example`:
   ```env
   NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
-  NEXT_PUBLIC_SUPABASE_ANON_KEY=xxx
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=xxx
   ```
 
 - [ ] Documentar fluxo de sync (diagrama opcional)
@@ -800,6 +815,11 @@ Após completar todas as fases, considerar:
 - Logs do `sync-conflict-resolver.ts`
 - Forçar sync manual pelo botão
 
+**Comportamento multi-dispositivo:**
+- ✅ **Dados únicos são preservados:** Se PC1 tem personagens X,Y,Z e PC2 tem personagens A,B,C, após sincronizar ambos terão todos os 6 personagens
+- ⚠️ **Conflitos por chave:** Se o mesmo personagem (mesma ID) foi editado em 2 lugares, prevalece a versão com timestamp mais recente
+- 💡 **Dica:** Cada personagem tem sua própria chave única (`castles-character-data-{id}`), então sincronizações de diferentes dispositivos fazem **merge**, não substituição completa
+
 ---
 
 ## 📚 Referências
@@ -840,5 +860,5 @@ castles-character-data-{id} → {
 
 ---
 
-**Última atualização:** Fase 0 concluída em 02/05/2026  
-**Próximo passo:** Iniciar Fase 1 - Infraestrutura Supabase
+**Última atualização:** Fase 0 concluída em 02/05/2026 | Fase 1 concluída em 02/05/2026  
+**Próximo passo:** Iniciar Fase 2 - Sistema de Autenticação
