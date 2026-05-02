@@ -10,7 +10,7 @@
 |------|--------|-----------|--------------|
 | **Fase 0** | ✅ Concluída | 100% | [fase-0-refatoracao-localstorage.md](./fase-0-refatoracao-localstorage.md) |
 | **Fase 1** | ✅ Concluída | 100% | [supabase-setup-guia.md](./supabase-setup-guia.md) |
-| **Fase 2** | 🔲 Pendente | 0% | - |
+| **Fase 2** | ✅ Concluída | 100% | - |
 | **Fase 3** | 🔲 Pendente | 0% | - |
 | **Fase 4** | 🔲 Pendente | 0% | - |
 | **Fase 5** | 🔲 Pendente | 0% | - |
@@ -190,75 +190,37 @@ Para completar a configuração:
 
 ---
 
-### 🔲 Fase 2: Sistema de Autenticação
+### ✅ Fase 2: Sistema de Autenticação
 
-**Status:** 🔲 Pendente  
+**Status:** ✅ Concluída  
 **Dependências:** Fase 1 ✅  
-**Estimativa:** 3-4 horas  
-**Pode ser paralelo com:** Fase 1.2-1.3
+**Estimativa:** 3-4 horas
 
 #### Objetivos
 Implementar módulo de autenticação, UI no sidebar (login/logout), e indicador de status de sincronização.
 
-#### Tasks
+#### Arquivos Criados
+- ✅ `src/modules/auth/use-auth.tsx` - Store Zustand + AuthProvider
+- ✅ `src/modules/config/ui/auth-menu.tsx` - Menu de autenticação com dropdown
+- ✅ `src/modules/config/ui/auth-login-dialog.tsx` - Dialog de login com magic link
+- ✅ `src/modules/config/ui/sync-status-button.tsx` - Botão de status de sincronização
+- ✅ `src/lib/sync/sync-status-store.ts` - Store Zustand para status de sync (Fase 3)
+- ✅ `src/app/auth/callback/route.ts` - Rota de callback do Supabase Auth
 
-##### 2.1 Criar Módulo de Autenticação
+#### Arquivos Modificados
+- ✅ `src/modules/config/ui/index.tsx` - Exporta AuthMenu e SyncStatusButton
+- ✅ `src/modules/manager/ui/app-sidebar.tsx` - Integra componentes no footer
+- ✅ `src/app/layout.tsx` - Adiciona AuthProvider
 
-- [ ] Criar `src/modules/auth/use-auth.tsx` - Zustand store:
-  - Estado: `user`, `session`, `loading`
-  - Função `signInWithMagicLink(email)` → chama Supabase Auth
-  - Função `signOut()` → logout
-  - Listener `onAuthStateChange` → detecta mudanças de sessão
-- [ ] Criar `AuthProvider` e adicionar no `layout.tsx`
-
-##### 2.2 UI de Autenticação no Sidebar
-
-Seguir padrão de [theme-selector.tsx](../src/modules/config/ui/theme-selector.tsx)
-
-- [ ] Criar `src/modules/config/ui/auth-menu.tsx`:
-  - **Deslogado:** Botão "Entrar" com ícone de usuário
-  - **Logado:** Avatar/email + dropdown (perfil, sair)
-  - Usar `DropdownMenu` do shadcn/ui
-- [ ] Criar `src/modules/config/ui/auth-login-dialog.tsx`:
-  - Modal com input de email
-  - Botão "Enviar Link Mágico"
-  - Estados: idle, enviando, sucesso, erro
-- [ ] Adicionar `<Config.AuthMenu />` no `SidebarFooter` de [app-sidebar.tsx](../src/modules/manager/ui/app-sidebar.tsx)
-- [ ] Toast de confirmação: "Email enviado! Verifique sua caixa de entrada"
-
-##### 2.3 Indicador de Status de Sincronização
-
-- [ ] Criar `src/modules/config/ui/sync-status-button.tsx`:
-  - Botão com ícone de nuvem
-  - Estados visuais:
-    - ✅ **Sincronizado** - check verde
-    - 🔄 **Sincronizando** - spinner animado
-    - ⏳ **Pendente** - relógio amarelo
-    - ❌ **Erro** - X vermelho
-    - 📡 **Offline** - nuvem barrada
-  - Tooltip: "Última sync: há 2 minutos | 3 mudanças pendentes"
-  - Clicável: força sync manual
-  - Progress bar sutil durante sync longa
-- [ ] Adicionar no `SidebarFooter` ao lado do `AuthMenu`
-
-#### Arquivos a Criar
-- `src/modules/auth/use-auth.tsx`
-- `src/modules/config/ui/auth-menu.tsx`
-- `src/modules/config/ui/auth-login-dialog.tsx`
-- `src/modules/config/ui/sync-status-button.tsx`
-
-#### Arquivos a Modificar
-- `src/modules/manager/ui/app-sidebar.tsx` - adicionar auth menu + sync button
-- `src/app/layout.tsx` - adicionar AuthProvider
-
-#### Verificação
-- [ ] Botão "Entrar" aparece no sidebar
-- [ ] Modal de login abre e envia email
-- [ ] Email recebido e link funciona
-- [ ] Após login, avatar/email aparecem
-- [ ] Logout funciona
-- [ ] Sessão persiste após refresh
-- [ ] Status button aparece (pode ficar em "offline" por enquanto)
+#### Funcionalidades Implementadas
+- ✅ Autenticação passwordless com magic link
+- ✅ Detecção automática de sessão (persistência)
+- ✅ Listener de mudanças de autenticação
+- ✅ UI de login com validação de email
+- ✅ Menu dropdown com avatar/email quando logado
+- ✅ Botão de status de sincronização (placeholder para Fase 3)
+- ✅ Detecção de status online/offline
+- ✅ Toast notifications para feedback do usuário
 
 ---
 
@@ -860,5 +822,5 @@ castles-character-data-{id} → {
 
 ---
 
-**Última atualização:** Fase 0 concluída em 02/05/2026 | Fase 1 concluída em 02/05/2026  
-**Próximo passo:** Iniciar Fase 2 - Sistema de Autenticação
+**Última atualização:** Fase 0 concluída em 02/05/2026 | Fase 1 concluída em 02/05/2026 | Fase 2 concluída em 02/05/2026  
+**Próximo passo:** Iniciar Fase 3 - Camada de Sincronização

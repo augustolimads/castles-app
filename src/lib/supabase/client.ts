@@ -16,6 +16,8 @@ if (!supabaseUrl || !supabasePublishableKey) {
  * Este cliente é configurado com a chave pública (publishable key) e
  * respeita as políticas Row Level Security (RLS) do banco de dados.
  * 
+ * IMPORTANTE: Usa cookies (não localStorage) para sincronizar com o middleware.
+ * 
  * @example
  * ```typescript
  * import { supabase } from '@/lib/supabase/client';
@@ -37,5 +39,27 @@ export const supabase = createClient<Database>(supabaseUrl, supabasePublishableK
 		autoRefreshToken: true,
 		detectSessionInUrl: true,
 		flowType: "pkce",
+        storage: {
+            getItem: (key: string) => {
+                if (typeof window === "undefined") return null;
+                const cookies = document.cookie.split("; ");
+                const cookie = cookies.find((c) => c.startsWith(`${key}=`));
+                if (!cookie) {
+                    console.log("[Cookie Storage] getItem:", key, "não encontrado");
+                    return null;
+                }
+                const value = decodeURIComponent(cookie.split("=")[1]);
+                console.log("[Cookie Storage] getItem:", key, "encontrado");
+                return value;
+            },
+            setItem: (key: string, value: string) => {
+                if (typeof window === "undefined") return;
+                document.cookie = `${key}=${encodeURIComponent(value)}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
+            },
+            removeItem: (key: string) => {
+                if (typeof window === "undefined") return;
+                document.cookie = `${key}=; path=/; max-age=0`;
+            },
+        },
 	},
 });

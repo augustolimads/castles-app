@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/modules/auth/use-auth";
 import { StorageMigration } from "@/modules/fichas/StorageMigration";
 import { AppSidebar } from "@/modules/manager/ui/app-sidebar";
 import type { Metadata } from "next";
@@ -33,22 +34,24 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased relative`}
       >
         <StorageMigration />
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <SidebarProvider>
-            <AppSidebar />
-            <main className="relative w-full">
-              <div className="p-4 pt-0 md:p-10 md:pt-0">
-                {children}
-              </div>
-            </main>
-          </SidebarProvider>
-          <Toaster />
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <SidebarProvider>
+              <AppSidebar />
+              <main className="relative w-full">
+                <div className="p-4 pt-0 md:p-10 md:pt-0">
+                  {children}
+                </div>
+              </main>
+            </SidebarProvider>
+            <Toaster />
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

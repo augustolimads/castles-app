@@ -11,9 +11,9 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { Config } from "@/modules/config/ui"
 import { usePathname } from "next/navigation"
 import { items } from "../items"
-import { Config } from "@/modules/config/ui"
 
 export function AppSidebar() {
     const pathname = usePathname()
@@ -46,7 +46,11 @@ export function AppSidebar() {
                 </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>
-                <Config.ThemeSelector />
+                <div className="flex items-center justify-center gap-2 p-2">
+                    <Config.SyncStatusButton />
+                    <Config.AuthMenu />
+                    <Config.ThemeSelector />
+                </div>
             </SidebarFooter>
         </Sidebar>
     )
