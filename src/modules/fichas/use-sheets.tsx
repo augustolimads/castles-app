@@ -69,7 +69,8 @@ export function useSheets(filterType?: SheetType) {
       portrait: sheet.portrait,
     });
 
-    // Salvar o character básico no localStorage (pode ser sobrescrito depois)
+    // Salvar o character completo no formato unificado (character + spells + inventory)
+    // saveCharacterToStorage agora salva tudo em uma única entrada: castles-character-data-{id}
     saveCharacterToStorage(newCharacter, {
       level: { lv0: 0, lv1: 0, lv2: 0, lv3: 0, lv4: 0, lv5: 0, lv6: 0, lv7: 0, lv8: 0, lv9: 0 },
       known: []
@@ -86,7 +87,7 @@ export function useSheets(filterType?: SheetType) {
     const allSheets = getStoredSheets();
     saveSheets(allSheets.filter(sheet => sheet.id !== id));
 
-    // Também deletar o character correspondente
+    // Deletar o character correspondente (formato unificado - uma única entrada)
     deleteCharacterFromStorage(id);
   };
 

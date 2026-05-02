@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { StorageMigration } from "@/modules/fichas/StorageMigration";
 import { AppSidebar } from "@/modules/manager/ui/app-sidebar";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased relative`}
       >
+        <StorageMigration />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
