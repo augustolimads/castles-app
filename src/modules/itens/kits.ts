@@ -1,3 +1,4 @@
+import { syncedLocalStorage } from '@/lib/sync';
 import type { CartItem } from '@/modules/itens/use-cart';
 
 export type CartKit = {
@@ -33,7 +34,7 @@ export function getSavedCartKits(): CartKit[] {
     return [];
   }
 
-  return parseKits(localStorage.getItem(CART_KITS_STORAGE_KEY));
+  return parseKits(syncedLocalStorage.getItem(CART_KITS_STORAGE_KEY));
 }
 
 export function saveCartKit(items: CartItem[], name?: string): CartKit | null {
@@ -59,7 +60,7 @@ export function saveCartKit(items: CartItem[], name?: string): CartKit | null {
   const currentKits = getSavedCartKits();
   const nextKits = [newKit, ...currentKits];
 
-  localStorage.setItem(CART_KITS_STORAGE_KEY, JSON.stringify(nextKits));
+  syncedLocalStorage.setItem(CART_KITS_STORAGE_KEY, JSON.stringify(nextKits));
   window.dispatchEvent(new CustomEvent(CART_KITS_UPDATED_EVENT));
 
   return newKit;
@@ -73,6 +74,6 @@ export function deleteSavedCartKit(kitId: string): void {
   const currentKits = getSavedCartKits();
   const nextKits = currentKits.filter(kit => kit.id !== kitId);
 
-  localStorage.setItem(CART_KITS_STORAGE_KEY, JSON.stringify(nextKits));
+  syncedLocalStorage.setItem(CART_KITS_STORAGE_KEY, JSON.stringify(nextKits));
   window.dispatchEvent(new CustomEvent(CART_KITS_UPDATED_EVENT));
 }

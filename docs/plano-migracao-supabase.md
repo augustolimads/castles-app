@@ -11,7 +11,7 @@
 | **Fase 0** | ✅ Concluída | 100% | [fase-0-refatoracao-localstorage.md](./fase-0-refatoracao-localstorage.md) |
 | **Fase 1** | ✅ Concluída | 100% | [supabase-setup-guia.md](./supabase-setup-guia.md) |
 | **Fase 2** | ✅ Concluída | 100% | - |
-| **Fase 3** | 🔲 Pendente | 0% | - |
+| **Fase 3** | ✅ Concluída | 100% | - |
 | **Fase 4** | 🔲 Pendente | 0% | - |
 | **Fase 5** | 🔲 Pendente | 0% | - |
 | **Fase 6** | 🔲 Pendente | 0% | - |
@@ -224,9 +224,9 @@ Implementar módulo de autenticação, UI no sidebar (login/logout), e indicador
 
 ---
 
-### 🔲 Fase 3: Camada de Sincronização
+### ✅ Fase 3: Camada de Sincronização
 
-**Status:** 🔲 Pendente  
+**Status:** ✅ Concluída  
 **Dependências:** Fase 1 ✅ e Fase 2 ✅  
 **Estimativa:** 5-6 horas
 
@@ -237,7 +237,7 @@ Criar sistema de sincronização bidirecional (localStorage ↔ Supabase) com fi
 
 ##### 3.1 Criar Abstração de Sincronização
 
-- [ ] Criar `src/lib/sync/types.ts`:
+- [x] Criar `src/lib/sync/types.ts`:
   ```typescript
   type SyncStatus = 'idle' | 'syncing' | 'synced' | 'pending' | 'error' | 'offline';
   
@@ -255,7 +255,7 @@ Criar sistema de sincronização bidirecional (localStorage ↔ Supabase) com fi
   }
   ```
 
-- [ ] Criar `src/lib/sync/sync-status-store.ts` - Zustand store:
+- [x] Criar `src/lib/sync/sync-status-store.ts` - Zustand store:
   ```typescript
   interface SyncStatusStore {
     status: SyncStatus;
@@ -267,20 +267,20 @@ Criar sistema de sincronização bidirecional (localStorage ↔ Supabase) com fi
   }
   ```
 
-- [ ] Criar `src/lib/sync/sync-queue.ts`:
+- [x] Criar `src/lib/sync/sync-queue.ts`:
   - `addToQueue(operation)` - adiciona operação pendente
   - `getQueue()` - retorna fila
   - `removeFromQueue(id)` - remove após sync
   - `clearQueue()` - limpa fila
   - Salvar fila em `localStorage` (`sync-queue`)
 
-- [ ] Criar `src/lib/sync/sync-conflict-resolver.ts`:
+- [x] Criar `src/lib/sync/sync-conflict-resolver.ts`:
   - `resolveConflict(local, remote)` - last-write-wins via timestamp
   - Logs para debug de conflitos
 
 ##### 3.2 Implementar Sync Engine
 
-- [ ] Criar `src/lib/sync/sync-manager.ts`:
+- [x] Criar `src/lib/sync/sync-manager.ts`:
   
   **Funções principais:**
   ```typescript
@@ -351,7 +351,7 @@ Criar sistema de sincronização bidirecional (localStorage ↔ Supabase) com fi
 
 ##### 3.3 Wrapper de localStorage com Sync
 
-- [ ] Criar `src/lib/sync/synced-local-storage.ts`:
+- [x] Criar `src/lib/sync/synced-local-storage.ts`:
   
   ```typescript
   /**
@@ -382,17 +382,17 @@ Criar sistema de sincronização bidirecional (localStorage ↔ Supabase) com fi
 ##### 3.4 Integrar com Módulos Existentes
 
 **Fichas de personagens:**
-- [ ] `src/modules/fichas/stores/character.ts`:
+- [x] `src/modules/fichas/stores/character.ts`:
   - `saveCharacterToStorage()` → usar `syncToCloud()` após salvar
   - `deleteCharacterFromStorage()` → usar `syncToCloud()` com delete
 
 **Outros módulos:**
-- [ ] `src/modules/containers/use-containers.tsx` - wrapper no save
-- [ ] `src/modules/itens/kits.ts` - wrapper em `saveCartKit`, `deleteSavedCartKit`
-- [ ] `src/modules/compendium/use-favorites.tsx` - wrapper no save
-- [ ] `src/modules/itens/use-hidden-items.tsx` - wrapper em `saveHiddenItemIds`
-- [ ] `src/hooks/use-config.ts` - integrar Zustand persist com sync
-- [ ] `src/app/tempo/page.tsx` - wrapper nos setItem
+- [x] `src/modules/containers/use-containers.tsx` - wrapper no save
+- [x] `src/modules/itens/kits.ts` - wrapper em `saveCartKit`, `deleteSavedCartKit`
+- [x] `src/modules/compendium/use-favorites.tsx` - wrapper no save
+- [x] `src/modules/itens/use-hidden-items.tsx` - wrapper em `saveHiddenItemIds`
+- [x] `src/hooks/use-config.ts` - integrar Zustand persist com sync
+- [x] `src/app/tempo/page.tsx` - wrapper nos setItem
 
 #### Arquivos a Criar
 - `src/lib/sync/types.ts`
@@ -412,12 +412,12 @@ Criar sistema de sincronização bidirecional (localStorage ↔ Supabase) com fi
 - `src/app/tempo/page.tsx`
 
 #### Verificação
-- [ ] Salvar ficha offline → adiciona à fila
-- [ ] Voltar online → processa fila automaticamente
-- [ ] Editar ficha online → sync imediato
-- [ ] Status button mostra "sincronizando" durante sync
-- [ ] Conflitos resolvidos corretamente (last-write-wins)
-- [ ] **Multi-dispositivo:** Dados únicos de cada dispositivo são preservados (merge, não replace)
+- [x] Salvar ficha offline → adiciona à fila
+- [x] Voltar online → processa fila automaticamente
+- [x] Editar ficha online → sync imediato
+- [x] Status button mostra "sincronizando" durante sync
+- [x] Conflitos resolvidos corretamente (last-write-wins)
+- [x] **Multi-dispositivo:** Dados únicos de cada dispositivo são preservados (merge, não replace)
   - Criar personagens X,Y,Z no PC1 → sincronizar
   - Criar personagens A,B,C no PC2 → sincronizar
   - Verificar que ambos os PCs têm todos os 6 personagens após sync
@@ -822,5 +822,5 @@ castles-character-data-{id} → {
 
 ---
 
-**Última atualização:** Fase 0 concluída em 02/05/2026 | Fase 1 concluída em 02/05/2026 | Fase 2 concluída em 02/05/2026  
-**Próximo passo:** Iniciar Fase 3 - Camada de Sincronização
+**Última atualização:** Fase 0 concluída em 02/05/2026 | Fase 1 concluída em 02/05/2026 | Fase 2 concluída em 02/05/2026 | Fase 3 concluída em 03/05/2026  
+**Próximo passo:** Iniciar Fase 4 - Sincronização Automática e Listeners

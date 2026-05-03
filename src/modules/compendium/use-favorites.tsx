@@ -1,6 +1,7 @@
 'use client';
 
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { syncedLocalStorage } from '@/lib/sync';
+import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
 
 type FavoriteItem = {
   id: string;
@@ -30,10 +31,11 @@ const FavoritesContext = createContext<FavoritesContextType | undefined>(undefin
 
 export function FavoritesProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<FavoriteItem[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Carregar do localStorage ao inicializar
   useEffect(() => {
-    const savedFavorites = localStorage.getItem('compendium-favorites');
+    const savedFavorites = syncedLocalStorage.getItem('compendium-favorites');
     if (savedFavorites) {
       try {
         setItems(JSON.parse(savedFavorites));
@@ -41,12 +43,15 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
         console.error('Erro ao carregar favoritos:', error);
       }
     }
+    setIsLoaded(true);
   }, []);
 
-  // Salvar no localStorage sempre que items mudar
+  // Salvar no localStorage (com sincronização) sempre que items mudar
+  // Guard: não salvar antes de carregar os dados iniciais
   useEffect(() => {
-    localStorage.setItem('compendium-favorites', JSON.stringify(items));
-  }, [items]);
+    if (!isLoaded) return;
+    syncedLocalStorage.setItem('compendium-favorites', JSON.stringify(items));
+  }, [items, isLoaded]);
 
   const addFavorite = (newItem: FavoriteItem) => {
     setItems(currentItems => {

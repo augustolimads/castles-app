@@ -1,5 +1,6 @@
 'use client';
 
+import { syncedLocalStorage } from '@/lib/sync';
 import { useCallback, useEffect, useState } from 'react';
 
 const HIDDEN_ITEMS_KEY = 'hidden_items';
@@ -8,7 +9,7 @@ export const HIDDEN_ITEMS_UPDATED_EVENT = 'hidden-items-updated';
 export function getHiddenItemIds(): string[] {
   if (typeof window === 'undefined') return [];
   try {
-    const stored = localStorage.getItem(HIDDEN_ITEMS_KEY);
+    const stored = syncedLocalStorage.getItem(HIDDEN_ITEMS_KEY);
     if (!stored) return [];
     const parsed = JSON.parse(stored);
     return Array.isArray(parsed) ? (parsed as string[]) : [];
@@ -18,7 +19,7 @@ export function getHiddenItemIds(): string[] {
 }
 
 function saveHiddenItemIds(ids: string[]): void {
-  localStorage.setItem(HIDDEN_ITEMS_KEY, JSON.stringify(ids));
+  syncedLocalStorage.setItem(HIDDEN_ITEMS_KEY, JSON.stringify(ids));
     // Defer dispatch so it never fires synchronously during another component's render
     setTimeout(() => window.dispatchEvent(new Event(HIDDEN_ITEMS_UPDATED_EVENT)), 0);
 }

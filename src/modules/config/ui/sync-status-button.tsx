@@ -7,6 +7,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { fullSync, processSyncQueue } from "@/lib/sync";
 import { useSyncStatus } from "@/lib/sync/sync-status-store";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/modules/auth/use-auth";
@@ -44,8 +45,8 @@ export function SyncStatusButton() {
 		};
 	}, []);
 
-	// Função de sync manual (placeholder para Fase 3)
-	const handleManualSync = () => {
+	// Função de sync manual
+	const handleManualSync = async () => {
 		if (!user) {
 			toast.error("Faça login para sincronizar");
 			return;
@@ -56,9 +57,34 @@ export function SyncStatusButton() {
 			return;
 		}
 
-		// TODO: Implementar sync manual na Fase 3
-		toast.info("Sincronização manual será implementada na Fase 3");
+		const toastId = toast.loading("Sincronizando...");
+
+		try {
+			const result = await fullSync();
+
+			if (result.success) {
+				const parts: string[] = [];
+				if (result.uploaded > 0) parts.push(`${result.uploaded} enviado${result.uploaded > 1 ? 's' : ''}`);
+				if (result.downloaded > 0) parts.push(`${result.downloaded} baixado${result.downloaded > 1 ? 's' : ''}`);
+
+				const detail = parts.length > 0 ? ` • ${parts.join(', ')}` : '';
+				toast.success(`Sincronizado${detail}`, { id: toastId });
+			} else {
+				const errorMsg = result.errors[0] ?? "Erro desconhecido";
+				toast.error(`Falha na sincronização: ${errorMsg}`, { id: toastId });
+			}
+		} catch (error) {
+			toast.error("Erro inesperado na sincronização", { id: toastId });
+			console.error("[SyncButton] Erro:", error);
+		}
 	};
+
+	// Processar fila pendente ao voltar online
+	useEffect(() => {
+		if (isOnline && user && status === "pending") {
+			processSyncQueue().catch(console.error);
+		}
+	}, [isOnline, user, status]);
 
 	// Calcular tempo desde última sincronização
 	const getLastSyncText = () => {

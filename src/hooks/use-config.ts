@@ -1,5 +1,6 @@
 'use client';
 
+import { syncedStorage } from '@/lib/sync/zustand-synced-storage';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -16,6 +17,7 @@ export const useConfig = create<ConfigStore>()(
     }),
     {
       name: 'app-config', // nome da chave no localStorage
+      storage: syncedStorage(), // Usa storage sincronizado
     }
   )
 );

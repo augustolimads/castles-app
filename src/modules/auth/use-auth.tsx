@@ -1,6 +1,8 @@
 "use client";
 
 import { supabase } from "@/lib/supabase/client";
+import { fullSync, processSyncQueue } from "@/lib/sync";
+import { useSyncStatusStore } from "@/lib/sync/sync-status-store";
 import type { Session, User } from "@supabase/supabase-js";
 import { useEffect } from "react";
 import { create } from "zustand";
@@ -127,11 +129,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 			setUser(session?.user ?? null);
 			setLoading(false);
 
-			// Log para debug
 			if (_event === "SIGNED_IN") {
 				console.log("[Auth] Usuário logado:", session?.user?.email);
+				// Sync completa ao fazer login (merge bidirecional)
+				fullySync().catch(console.error);
 			} else if (_event === "SIGNED_OUT") {
 				console.log("[Auth] Usuário deslogado");
+				// Resetar status de sync ao deslogar
+				useSyncStatusStore.getState().setStatus("offline");
 			}
 		});
 
@@ -141,4 +146,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	}, [setUser, setSession, setLoading, setInitialized]);
 
 	return <>{children}</>;
+}
+
+/**
+ * Executa sync completa e processa fila pendente
+ */
+async function fullySync(): Promise<void> {
+	try {
+		console.log("[Auth] Iniciando sync completa após login...");
+		useSyncStatusStore.getState().setStatus("syncing");
+		await processSyncQueue();
+		await fullSync();
+		console.log("[Auth] Sync completa após login concluída");
+	} catch (error) {
+		console.error("[Auth] Erro na sync após login:", error);
+	}
 }

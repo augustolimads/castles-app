@@ -33,7 +33,7 @@ if (!supabaseUrl || !supabasePublishableKey) {
  *   .select('*');
  * ```
  */
-export const supabase = createClient<Database>(supabaseUrl, supabasePublishableKey, {
+export const supabase = createClient<Database>(supabaseUrl!, supabasePublishableKey!, {
 	auth: {
 		persistSession: true,
 		autoRefreshToken: true,

@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { syncedLocalStorage } from "@/lib/sync";
 import { Bed, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Flame, Lightbulb, Moon, Plus, Sun, Swords, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -27,10 +28,10 @@ function Tempo() {
     // Carregar dados do localStorage após montagem do componente
     useEffect(() => {
         setIsClient(true);
-        const savedHours = localStorage.getItem('tempo_hours');
-        const savedMinutes = localStorage.getItem('tempo_minutes');
-        const savedCounter = localStorage.getItem('tempo_explorationCounter');
-        const savedEvents = localStorage.getItem('tempo_customEvents');
+        const savedHours = syncedLocalStorage.getItem('tempo_hours');
+        const savedMinutes = syncedLocalStorage.getItem('tempo_minutes');
+        const savedCounter = syncedLocalStorage.getItem('tempo_explorationCounter');
+        const savedEvents = syncedLocalStorage.getItem('tempo_customEvents');
 
         if (savedHours) setHours(parseInt(savedHours, 10));
         if (savedMinutes) setMinutes(parseInt(savedMinutes, 10));
@@ -176,28 +177,28 @@ function Tempo() {
         setCustomEvents((prev) => prev.filter((event) => event.turnNumber >= explorationCounter));
     }, [explorationCounter]);
 
-    // Persistir estado no localStorage
+    // Persistir estado no localStorage (com sincronização)
     useEffect(() => {
         if (isClient) {
-            localStorage.setItem('tempo_hours', String(hours));
+            syncedLocalStorage.setItem('tempo_hours', String(hours));
         }
     }, [hours, isClient]);
 
     useEffect(() => {
         if (isClient) {
-            localStorage.setItem('tempo_minutes', String(minutes));
+            syncedLocalStorage.setItem('tempo_minutes', String(minutes));
         }
     }, [minutes, isClient]);
 
     useEffect(() => {
         if (isClient) {
-            localStorage.setItem('tempo_explorationCounter', String(explorationCounter));
+            syncedLocalStorage.setItem('tempo_explorationCounter', String(explorationCounter));
         }
     }, [explorationCounter, isClient]);
 
     useEffect(() => {
         if (isClient) {
-            localStorage.setItem('tempo_customEvents', JSON.stringify(customEvents));
+            syncedLocalStorage.setItem('tempo_customEvents', JSON.stringify(customEvents));
         }
     }, [customEvents, isClient]);
 

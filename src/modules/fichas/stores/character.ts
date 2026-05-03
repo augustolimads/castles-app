@@ -1,3 +1,4 @@
+import { syncedLocalStorage } from '@/lib/sync';
 import { create } from 'zustand';
 import { handleInputChange } from '../appChanges';
 import { updateEncumbraceRating } from '../attributeLogic';
@@ -142,9 +143,11 @@ export function saveCharacterToStorage(
             lastModified: Date.now()
         };
 
-        // Salvar em uma única entrada
+        // Salvar em uma única entrada (com sincronização)
         const storageKey = `${CHARACTER_DATA_KEY_PREFIX}${character.id}`;
-        localStorage.setItem(storageKey, JSON.stringify(unifiedData));
+
+        // Usar syncedLocalStorage para salvar E sincronizar automaticamente
+        syncedLocalStorage.setItem(storageKey, JSON.stringify(unifiedData));
 
         window.dispatchEvent(new Event(CHARACTERS_UPDATED_EVENT));
     } catch (error) {
@@ -194,14 +197,16 @@ export function loadCharacterData(id: string): CharacterData | null {
 
 /**
  * Deleta um character do localStorage (formato unificado)
- * Agora só precisa deletar uma entrada
+ * Agora só precisa deletar uma entrada (com sincronização)
  */
 export function deleteCharacterFromStorage(id: string) {
     if (typeof window === 'undefined') return;
 
     try {
         const storageKey = `${CHARACTER_DATA_KEY_PREFIX}${id}`;
-        localStorage.removeItem(storageKey);
+
+        // Usar syncedLocalStorage para deletar E sincronizar automaticamente
+        syncedLocalStorage.removeItem(storageKey);
 
         window.dispatchEvent(new Event(CHARACTERS_UPDATED_EVENT));
     } catch (error) {

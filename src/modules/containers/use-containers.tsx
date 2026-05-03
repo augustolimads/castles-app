@@ -1,5 +1,6 @@
 'use client';
 
+import { syncedLocalStorage } from '@/lib/sync';
 import { useEffect, useState } from 'react';
 import type { Item } from '../itens/use-items';
 
@@ -23,7 +24,7 @@ export function useContainers() {
 
   // Carregar do localStorage
   useEffect(() => {
-    const stored = localStorage.getItem(CONTAINERS_STORAGE_KEY);
+    const stored = syncedLocalStorage.getItem(CONTAINERS_STORAGE_KEY);
     if (stored) {
       try {
         setContainers(JSON.parse(stored));
@@ -34,10 +35,10 @@ export function useContainers() {
     setIsLoaded(true);
   }, []);
 
-  // Salvar no localStorage
+  // Salvar no localStorage (com sincronização)
   useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem(CONTAINERS_STORAGE_KEY, JSON.stringify(containers));
+      syncedLocalStorage.setItem(CONTAINERS_STORAGE_KEY, JSON.stringify(containers));
     }
   }, [containers, isLoaded]);
 
