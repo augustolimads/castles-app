@@ -149,6 +149,10 @@ export function saveCharacterToStorage(
         // Usar syncedLocalStorage para salvar E sincronizar automaticamente
         syncedLocalStorage.setItem(storageKey, JSON.stringify(unifiedData));
 
+        // Manter o índice de fichas (castles-character-sheets) sincronizado
+        // sempre que um character for salvo, independentemente do fluxo.
+        syncCharacterToSheet(character.id, character);
+
         window.dispatchEvent(new Event(CHARACTERS_UPDATED_EVENT));
     } catch (error) {
         console.error('Erro ao salvar character:', error);
@@ -292,7 +296,6 @@ export function saveCharacter(spells?: unknown, inventory?: { weapons?: unknown[
         }
 
         saveCharacterToStorage(character, spellsData, inventoryData);
-        syncCharacterToSheet(character.id);
         handleInputChange(false);
     }
 }
@@ -322,8 +325,6 @@ export function setCharacterName(event: React.ChangeEvent<HTMLInputElement>) {
             // Mesmo com erro, tenta salvar sem spells/inventory
             saveCharacterToStorage(character);
         }
-
-        syncCharacterToSheet(character.id);
     }
 }
 
@@ -412,11 +413,11 @@ function updateTitle() {
 /**
  * Atualiza o sheet correspondente quando o character é modificado
  */
-export function syncCharacterToSheet(characterId: string) {
+export function syncCharacterToSheet(characterId: string, characterState?: CharacterState) {
     if (typeof window === 'undefined' || !characterId) return;
 
     try {
-        const character = useCharacterStore.getState();
+        const character = characterState ?? useCharacterStore.getState();
         const sheetsStored = localStorage.getItem(SHEETS_STORAGE_KEY);
         if (!sheetsStored) return;
 
@@ -433,8 +434,9 @@ export function syncCharacterToSheet(characterId: string) {
                 level: character.info.level,
             };
 
-            localStorage.setItem(SHEETS_STORAGE_KEY, JSON.stringify(sheets));
+            syncedLocalStorage.setItem(SHEETS_STORAGE_KEY, JSON.stringify(sheets));
             window.dispatchEvent(new Event(SHEETS_UPDATED_EVENT));
+            window.dispatchEvent(new Event('storage'));
         }
     } catch (error) {
         console.error('Erro ao sincronizar character com sheet:', error);
