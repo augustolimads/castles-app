@@ -10,11 +10,12 @@
 
 import { supabase } from "@/lib/supabase/client";
 import { isAuthenticatedForSync } from "./auth-state";
+import { isCloudSyncEnabled } from "./feature-flags";
 import { resolveConflict } from "./sync-conflict-resolver";
 import {
-    addToQueue,
-    getQueue,
-    incrementRetries,
+	addToQueue,
+	getQueue,
+	incrementRetries,
 	removeFromQueue,
 } from "./sync-queue";
 import { useSyncStatusStore } from "./sync-status-store";
@@ -463,9 +464,9 @@ export function queueChange(dataKey: string, data: unknown): void {
 		return;
 	}
 
-	// Não enfileirar quando deslogado — evita acúmulo de fila sem utilidade
-	if (!isAuthenticatedForSync()) {
-		console.log(`[SyncManager] Não autenticado, ignorando fila: ${dataKey}`);
+	// Não enfileirar quando cloud sync está desativada ou usuário deslogado
+	if (!isCloudSyncEnabled() || !isAuthenticatedForSync()) {
+		console.log(`[SyncManager] Cloud sync inativa ou não autenticado, ignorando fila: ${dataKey}`);
 		return;
 	}
 
@@ -563,11 +564,11 @@ export async function deleteData(dataKey: string): Promise<boolean> {
  * Salva um dado localmente e tenta sincronizar
  */
 export function saveData(dataKey: string, data: unknown): void {
-	// Sempre salvar localmente (fonte local é a cache para v1)
+	// Sempre salvar localmente (fonte local é a fonte de verdade em v1)
 	localStorage.setItem(dataKey, JSON.stringify(data));
 
-	// Só enviar para cloud se o usuário estiver autenticado
-	if (!isAuthenticatedForSync()) {
+	// Só enviar para cloud se cloud sync estiver ativada E usuário autenticado
+	if (!isCloudSyncEnabled() || !isAuthenticatedForSync()) {
 		return;
 	}
 

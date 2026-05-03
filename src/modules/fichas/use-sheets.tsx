@@ -1,5 +1,6 @@
 'use client';
 
+import { syncedLocalStorage } from '@/lib/sync';
 import { useEffect, useState } from 'react';
 import { createNewCharacter, deleteCharacterFromStorage, saveCharacterToStorage } from './stores/character';
 import type { CharacterSheet, SheetType } from './types';
@@ -19,7 +20,9 @@ function getStoredSheets(): CharacterSheet[] {
 
 function saveSheets(sheets: CharacterSheet[]) {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(SHEETS_STORAGE_KEY, JSON.stringify(sheets));
+  // Usar syncedLocalStorage para que, quando cloud sync estiver ativa,
+  // a lista de fichas (metadados) também seja sincronizada entre dispositivos.
+  syncedLocalStorage.setItem(SHEETS_STORAGE_KEY, JSON.stringify(sheets));
   window.dispatchEvent(new Event(SHEETS_UPDATED_EVENT));
   window.dispatchEvent(new Event('storage'));
 }

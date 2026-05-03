@@ -10,8 +10,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { isCloudSyncEnabled } from "@/lib/sync/feature-flags";
 import { useAuth } from "@/modules/auth/use-auth";
-import { Loader2, Mail } from "lucide-react";
+import { Info, Loader2, Mail } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -24,6 +25,7 @@ export function AuthLoginDialog({ open, onOpenChange }: AuthLoginDialogProps) {
 	const [email, setEmail] = useState("");
 	const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 	const { signInWithMagicLink } = useAuth();
+	const cloudSyncEnabled = isCloudSyncEnabled();
 
 	const isValidEmail = (email: string) => {
 		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -86,6 +88,17 @@ export function AuthLoginDialog({ open, onOpenChange }: AuthLoginDialogProps) {
 						Digite seu email para receber um link mágico de login. Sem senhas!
 					</DialogDescription>
 				</DialogHeader>
+
+				{!cloudSyncEnabled && (
+					<div className="flex gap-2 rounded-md border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
+						<Info className="mt-0.5 h-4 w-4 shrink-0" />
+						<p>
+							<strong className="text-foreground">Nesta versão (v1)</strong>, seus dados locais
+							não são migrados automaticamente para a nuvem após o login.
+							Dados locais e da nuvem ficam separados.
+						</p>
+					</div>
+				)}
 
 				<form onSubmit={handleSubmit} className="space-y-4">
 					<div className="space-y-2">

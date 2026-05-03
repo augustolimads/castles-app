@@ -44,7 +44,8 @@ export interface SyncResult {
  * Chaves do localStorage que devem ser sincronizadas
  */
 export const SYNCABLE_KEY_PATTERNS = [
-	/^castles-character-data-/, // Fichas de personagens
+	/^castles-character-data-/, // Fichas de personagens (dados completos)
+	/^castles-character-sheets$/, // Lista/metadados de fichas
 	/^containers-data$/, // Containers
 	/^cart-kits$/, // Kits salvos do carrinho
 	/^hidden_items$/, // Itens ocultos

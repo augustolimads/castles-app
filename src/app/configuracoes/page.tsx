@@ -4,14 +4,18 @@ import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useConfig } from "@/hooks/use-config";
+import { isCloudSyncEnabled } from "@/lib/sync/feature-flags";
+import { useAuth } from "@/modules/auth/use-auth";
 import * as CharGen from "@/modules/char-gen/ui";
 import { Config } from "@/modules/config/ui";
-import { Download, Trash2, Upload } from "lucide-react";
+import { CloudOff, Download, Info, Trash2, Upload } from "lucide-react";
 import { useRef } from "react";
 import { toast } from "sonner";
 
 function Configuracoes() {
   const { discordWebhook, setDiscordWebhook } = useConfig();
+  const { user } = useAuth();
+  const cloudSyncEnabled = isCloudSyncEnabled();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleExportBackup = () => {
@@ -108,6 +112,43 @@ function Configuracoes() {
         <h1 className="scroll-m-20 text-3xl font-extrabold tracking-tight text-balance">
           Configurações
         </h1>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+          Conta
+        </h2>
+        <div className="flex items-center gap-3">
+          <Config.AuthMenu />
+          {user ? (
+            <p className="text-sm text-muted-foreground">
+              Logado como <strong className="text-foreground">{user.email}</strong>
+            </p>
+          ) : (
+            <p className="text-sm text-muted-foreground">Você não está logado.</p>
+          )}
+        </div>
+        {!cloudSyncEnabled && (
+          <div className="flex gap-2 rounded-md border border-border bg-muted/50 p-3 text-sm text-muted-foreground">
+            <Info className="mt-0.5 h-4 w-4 shrink-0" />
+            <div className="space-y-1">
+              <p>
+                <strong className="text-foreground flex items-center gap-1">
+                  <CloudOff className="h-3.5 w-3.5" />
+                  Sincronização na nuvem desativada (v1)
+                </strong>
+              </p>
+              <p>
+                Nesta versão, todos os dados ficam salvos apenas neste dispositivo.
+                Fazer login <strong>não</strong> sincroniza nem migra dados locais automaticamente —
+                dados locais e da nuvem ficam separados.
+              </p>
+              <p>
+                Para fazer backup manual, use a seção <em>Gerenciar Backups</em> abaixo.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col gap-4">
