@@ -23,11 +23,21 @@ const validatedKey = supabaseKey as string;
  * mantém a sessão do usuário ativa e gerencia os cookies de autenticação.
  */
 export async function middleware(request: NextRequest) {
-	const response = NextResponse.next({
-		request: {
-			headers: request.headers,
-		},
-	});
+	const code = request.nextUrl.searchParams.get("code");
+	const isCallback = request.nextUrl.pathname === "/auth/callback";
+
+	const response = isCallback
+		? NextResponse.redirect(
+			new URL(
+				request.nextUrl.searchParams.get("next") ?? "/construtor-aventureiro",
+				request.url,
+			),
+		)
+		: NextResponse.next({
+			request: {
+				headers: request.headers,
+			},
+		});
 
 	const supabase = createClient<Database>(validatedUrl, validatedKey, {
 		auth: {
@@ -61,33 +71,35 @@ export async function middleware(request: NextRequest) {
 	});
 
 	// Se estamos no callback com código, fazer exchange explicitamente
-	const code = request.nextUrl.searchParams.get("code");
-	if (request.nextUrl.pathname === "/auth/callback" && code) {
+	if (isCallback && code) {
 		console.log("[Middleware] Detectado código PKCE, fazendo exchange...");
 		const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 		
 		if (error) {
 			console.error("[Middleware] Erro ao trocar código:", error);
-			// Redirecionar mesmo com erro
-			return NextResponse.redirect(new URL("/construtor-aventureiro?error=auth_error", request.url));
+			response.headers.set("Location", new URL("/construtor-aventureiro?error=auth_error", request.url).toString());
+			return response;
 		}
 		
 		if (data.session) {
 			console.log("[Middleware] Sessão criada com sucesso:", data.session.user.email);
 		}
 		
-		// Sempre redirecionar após processar callback
-		const next = request.nextUrl.searchParams.get("next") ?? "/construtor-aventureiro";
-		return NextResponse.redirect(new URL(next, request.url));
+		// Sempre retornar o mesmo response para manter cookies setados no storage
+		return response;
 	}
 
 	// Se estamos no callback sem código (erro do Supabase), redirecionar
-	if (request.nextUrl.pathname === "/auth/callback") {
+	if (isCallback) {
 		const error = request.nextUrl.searchParams.get("error");
 		if (error) {
 			console.error("[Middleware] Erro no callback:", error);
 		}
-		return NextResponse.redirect(new URL("/construtor-aventureiro", request.url));
+		response.headers.set(
+			"Location",
+			new URL("/construtor-aventureiro", request.url).toString(),
+		);
+		return response;
 	}
 
 	// Refresh session - importante para manter o usuário logado
