@@ -8,6 +8,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { fullSync, processSyncQueue } from "@/lib/sync";
+import { isCloudSyncEnabled } from "@/lib/sync/feature-flags";
 import { useSyncStatus } from "@/lib/sync/sync-status-store";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/modules/auth/use-auth";
@@ -30,6 +31,7 @@ export function SyncStatusButton() {
 	const { status, lastSync, pendingChanges, error } = useSyncStatus();
 	const { user } = useAuth();
 	const [isOnline, setIsOnline] = useState(true);
+	const cloudSyncEnabled = isCloudSyncEnabled();
 
 	// Detectar status de conexão
 	useEffect(() => {
@@ -47,6 +49,11 @@ export function SyncStatusButton() {
 
 	// Função de sync manual
 	const handleManualSync = async () => {
+		if (!cloudSyncEnabled) {
+			toast.message("Sincronização cloud desativada nesta versão.");
+			return;
+		}
+
 		if (!user) {
 			toast.error("Faça login para sincronizar");
 			return;
@@ -81,10 +88,12 @@ export function SyncStatusButton() {
 
 	// Processar fila pendente ao voltar online
 	useEffect(() => {
+		if (!cloudSyncEnabled) return;
+
 		if (isOnline && user && status === "pending") {
 			processSyncQueue().catch(console.error);
 		}
-	}, [isOnline, user, status]);
+	}, [cloudSyncEnabled, isOnline, user, status]);
 
 	// Calcular tempo desde última sincronização
 	const getLastSyncText = () => {
@@ -104,6 +113,10 @@ export function SyncStatusButton() {
 
 	// Determinar ícone baseado no status
 	const getIcon = () => {
+		if (!cloudSyncEnabled) {
+			return <CloudOff className="h-[1.2rem] w-[1.2rem]" />;
+		}
+
 		if (!isOnline) return <CloudOff className="h-[1.2rem] w-[1.2rem]" />;
 		if (!user) return <Cloud className="h-[1.2rem] w-[1.2rem]" />;
 
@@ -125,6 +138,10 @@ export function SyncStatusButton() {
 
 	// Determinar texto do tooltip
 	const getTooltipText = () => {
+		if (!cloudSyncEnabled) {
+			return "Sincronização na nuvem desativada nesta v1";
+		}
+
 		if (!isOnline) return "Você está offline";
 		if (!user) return "Faça login para sincronizar";
 
@@ -152,6 +169,8 @@ export function SyncStatusButton() {
 
 	// Cor do ícone
 	const getIconColor = () => {
+		if (!cloudSyncEnabled) return "text-muted-foreground";
+
 		if (!isOnline || !user) return "text-muted-foreground";
 
 		switch (status) {
@@ -178,7 +197,7 @@ export function SyncStatusButton() {
 						variant={getVariant()}
 						size="icon"
 						onClick={handleManualSync}
-						disabled={!user || !isOnline || status === "syncing"}
+						disabled={!cloudSyncEnabled || !user || !isOnline || status === "syncing"}
 						title={getTooltipText()}
 					>
 						<span className={cn(getIconColor())}>{getIcon()}</span>

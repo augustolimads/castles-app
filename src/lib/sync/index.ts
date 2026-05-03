@@ -5,6 +5,12 @@
  */
 
 
+// Auth state (sync flag, no circular dep)
+export {
+    isAuthenticatedForSync,
+    setIsAuthenticatedForSync
+} from "./auth-state";
+
 // Conflict Resolution
 export {
     hasConflict,
@@ -35,18 +41,18 @@ export {
 export { useSyncStatus, useSyncStatusStore } from "./sync-status-store";
 // Wrapper de localStorage
 export { syncedLocalStorage, useSyncedLocalStorage } from "./synced-local-storage";
+export type {
+    SyncOperation,
+    SyncQueueItem,
+    SyncResult,
+    SyncStatus
+} from "./types";
 // Types
 export {
     getAllSyncableKeys,
     isSyncableKey,
     NON_SYNCABLE_KEYS,
     SYNCABLE_KEY_PATTERNS
-} from "./types";
-export type {
-    SyncOperation,
-    SyncQueueItem,
-    SyncResult,
-    SyncStatus
 } from "./types";
 
 // Zustand storage adapter

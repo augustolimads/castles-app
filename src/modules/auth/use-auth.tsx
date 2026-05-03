@@ -2,7 +2,9 @@
 
 import { supabase } from "@/lib/supabase/client";
 import { fullSync, processSyncQueue } from "@/lib/sync";
+import { setIsAuthenticatedForSync } from "@/lib/sync/auth-state";
 import { needsCloudMigration } from "@/lib/sync/cloud-migration";
+import { isCloudSyncEnabled } from "@/lib/sync/feature-flags";
 import { useSyncStatusStore } from "@/lib/sync/sync-status-store";
 import type { Session, User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
@@ -124,6 +126,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		if (error)
 			console.error("[Auth Provider] Erro ao carregar sessão:", error);
 
+			setIsAuthenticatedForSync(!!session?.user);
 		setSession(session);
 		setUser(session?.user ?? null);
 		setLoading(false);
@@ -141,20 +144,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 			session?.user?.email || "nenhum",
 		);
 
+		  setIsAuthenticatedForSync(!!session?.user);
 		setSession(session);
 		setUser(session?.user ?? null);
 		setLoading(false);
 
 		if (_event === "SIGNED_IN") {
 			console.log("[Auth] Usuário logado:", session?.user?.email);
-			// Sync completa ao fazer login (merge bidirecional)
-			fullySync().catch(console.error);
-		// Verificar se precisa de migração cloud (assíncrono, sem bloquear)
-		  needsCloudMigration()
-			  .then((needs) => {
-				  if (needs) setShowMigrationDialog(true);
-		  })
-				.catch(console.error);
+
+			if (isCloudSyncEnabled()) {
+				// Sync completa ao fazer login (merge bidirecional)
+				fullySync().catch(console.error);
+				// Verificar se precisa de migração cloud (assíncrono, sem bloquear)
+				needsCloudMigration()
+					.then((needs) => {
+						if (needs) setShowMigrationDialog(true);
+					})
+					.catch(console.error);
+			} else {
+				toast.info(
+					"Nesta v1, dados locais e nuvem ficam separados (sem migração automática).",
+				);
+			}
 		} else if (_event === "SIGNED_OUT") {
 			console.log("[Auth] Usuário deslogado");
 			// Resetar status de sync ao deslogar

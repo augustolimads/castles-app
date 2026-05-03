@@ -1,6 +1,7 @@
 "use client";
 
 import { fullSync, processSyncQueue } from "@/lib/sync";
+import { isCloudSyncEnabled } from "@/lib/sync/feature-flags";
 import { useSyncStatusStore } from "@/lib/sync/sync-status-store";
 import { useAuthStore } from "@/modules/auth/use-auth";
 import { useEffect } from "react";
@@ -19,10 +20,17 @@ const SYNC_INTERVAL_MS = 3 * 60 * 1000; // 3 minutos
 export function useSyncScheduler() {
     const user = useAuthStore((s) => s.user);
     const setStatus = useSyncStatusStore((s) => s.setStatus);
+    const cloudSyncEnabled = isCloudSyncEnabled();
+
+    useEffect(() => {
+        if (!cloudSyncEnabled) {
+            setStatus("idle");
+        }
+    }, [cloudSyncEnabled, setStatus]);
 
     // Polling periódico
     useEffect(() => {
-        if (!user) return;
+        if (!cloudSyncEnabled || !user) return;
 
       const interval = setInterval(() => {
           if (!navigator.onLine) return;
@@ -33,11 +41,11 @@ export function useSyncScheduler() {
     }, SYNC_INTERVAL_MS);
 
       return () => clearInterval(interval);
-  }, [user]);
+    }, [cloudSyncEnabled, user]);
 
     // Listener de reconexão: processa fila e faz fullSync ao voltar online
     useEffect(() => {
-        if (!user) return;
+        if (!cloudSyncEnabled || !user) return;
 
       const handleOnline = () => {
           console.log("[SyncScheduler] Voltou online — processando fila...");
@@ -63,7 +71,7 @@ export function useSyncScheduler() {
           window.removeEventListener("online", handleOnline);
           window.removeEventListener("offline", handleOffline);
       };
-  }, [user, setStatus]);
+    }, [cloudSyncEnabled, user, setStatus]);
 }
 
 /**

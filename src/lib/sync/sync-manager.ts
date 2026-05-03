@@ -9,6 +9,7 @@
  */
 
 import { supabase } from "@/lib/supabase/client";
+import { isAuthenticatedForSync } from "./auth-state";
 import { resolveConflict } from "./sync-conflict-resolver";
 import {
     addToQueue,
@@ -462,6 +463,12 @@ export function queueChange(dataKey: string, data: unknown): void {
 		return;
 	}
 
+	// Não enfileirar quando deslogado — evita acúmulo de fila sem utilidade
+	if (!isAuthenticatedForSync()) {
+		console.log(`[SyncManager] Não autenticado, ignorando fila: ${dataKey}`);
+		return;
+	}
+
 	const operation: SyncOperation = {
 		id: crypto.randomUUID(),
 		dataKey,
@@ -556,10 +563,14 @@ export async function deleteData(dataKey: string): Promise<boolean> {
  * Salva um dado localmente e tenta sincronizar
  */
 export function saveData(dataKey: string, data: unknown): void {
-	// Salvar localmente
+	// Sempre salvar localmente (fonte local é a cache para v1)
 	localStorage.setItem(dataKey, JSON.stringify(data));
 
-	// Tentar sincronizar
+	// Só enviar para cloud se o usuário estiver autenticado
+	if (!isAuthenticatedForSync()) {
+		return;
+	}
+
 	if (isOnline()) {
 		syncToCloud(dataKey, data).catch((error) => {
 			console.error(`[SyncManager] Erro ao sincronizar ${dataKey}:`, error);
