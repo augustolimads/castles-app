@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { SyncScheduler } from "@/hooks/use-sync-scheduler";
 import { AuthProvider } from "@/modules/auth/use-auth";
 import { StorageMigration } from "@/modules/fichas/StorageMigration";
 import { AppSidebar } from "@/modules/manager/ui/app-sidebar";
@@ -35,6 +36,7 @@ export default function RootLayout({
       >
         <StorageMigration />
         <AuthProvider>
+          <SyncScheduler />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

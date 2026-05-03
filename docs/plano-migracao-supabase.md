@@ -12,7 +12,7 @@
 | **Fase 1** | ✅ Concluída | 100% | [supabase-setup-guia.md](./supabase-setup-guia.md) |
 | **Fase 2** | ✅ Concluída | 100% | - |
 | **Fase 3** | ✅ Concluída | 100% | - |
-| **Fase 4** | 🔲 Pendente | 0% | - |
+| **Fase 4** | ✅ Concluída | 100% | - |
 | **Fase 5** | 🔲 Pendente | 0% | - |
 | **Fase 6** | 🔲 Pendente | 0% | - |
 
@@ -424,9 +424,9 @@ Criar sistema de sincronização bidirecional (localStorage ↔ Supabase) com fi
 
 ---
 
-### 🔲 Fase 4: Sincronização Automática e Listeners
+### ✅ Fase 4: Sincronização Automática e Listeners
 
-**Status:** 🔲 Pendente  
+**Status:** ✅ Concluída  
 **Dependências:** Fase 3 ✅  
 **Estimativa:** 2-3 horas
 
@@ -437,7 +437,7 @@ Implementar sync automática em background (polling periódico), sync na reconex
 
 ##### 4.1 Sync Automática em Background
 
-- [ ] Criar `src/hooks/use-sync-scheduler.tsx`:
+- [x] Criar `src/hooks/use-sync-scheduler.tsx`:
   ```typescript
   export function useSyncScheduler() {
     // Timer: sync a cada 2-5 minutos
@@ -455,11 +455,11 @@ Implementar sync automática em background (polling periódico), sync na reconex
     }, [isOnline, isAuthenticated]);
   }
   ```
-- [ ] Adicionar `<SyncScheduler />` no `layout.tsx`
+- [x] Adicionar `<SyncScheduler />` no `layout.tsx`
 
 ##### 4.2 Sync na Reconexão e Login
 
-- [ ] Listener de eventos `online`/`offline`:
+- [x] Listener de eventos `online`/`offline`:
   ```typescript
   window.addEventListener('online', () => {
     console.log('[Sync] Voltou online, processando fila...');
@@ -467,7 +467,7 @@ Implementar sync automática em background (polling periódico), sync na reconex
   });
   ```
 
-- [ ] Trigger `fullSync()` ao fazer login:
+- [x] Trigger `fullSync()` ao fazer login:
   ```typescript
   // Em use-auth.tsx
   onAuthStateChange((session) => {
@@ -477,7 +477,7 @@ Implementar sync automática em background (polling periódico), sync na reconex
   });
   ```
 
-- [ ] Mostrar toast durante sync inicial:
+- [x] Mostrar toast durante sync inicial:
   - "Sincronizando dados..." com progress
   - "Sincronização concluída! X itens atualizados"
 
@@ -508,11 +508,11 @@ Implementar sync automática em background (polling periódico), sync na reconex
 - `src/modules/auth/use-auth.tsx` - trigger fullSync ao logar
 
 #### Verificação
-- [ ] Sync automática executa a cada 3 minutos
-- [ ] Ao voltar online, fila é processada imediatamente
-- [ ] Ao fazer login, fullSync executa
-- [ ] Toast de progresso aparece durante sync longa
-- [ ] Pausar timer quando deslogado
+- [x] Sync automática executa a cada 3 minutos
+- [x] Ao voltar online, fila é processada imediatamente
+- [x] Ao fazer login, fullSync executa
+- [x] Toast de progresso aparece durante sync longa
+- [x] Pausar timer quando deslogado
 
 ---
 
@@ -822,5 +822,5 @@ castles-character-data-{id} → {
 
 ---
 
-**Última atualização:** Fase 0 concluída em 02/05/2026 | Fase 1 concluída em 02/05/2026 | Fase 2 concluída em 02/05/2026 | Fase 3 concluída em 03/05/2026  
-**Próximo passo:** Iniciar Fase 4 - Sincronização Automática e Listeners
+**Última atualização:** Fase 0 concluída em 02/05/2026 | Fase 1 concluída em 02/05/2026 | Fase 2 concluída em 02/05/2026 | Fase 3 concluída em 03/05/2026 | Fase 4 concluída em 03/05/2026  
+**Próximo passo:** Iniciar Fase 5 - Migração de Dados Existentes

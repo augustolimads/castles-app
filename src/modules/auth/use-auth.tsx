@@ -5,6 +5,7 @@ import { fullSync, processSyncQueue } from "@/lib/sync";
 import { useSyncStatusStore } from "@/lib/sync/sync-status-store";
 import type { Session, User } from "@supabase/supabase-js";
 import { useEffect } from "react";
+import { toast } from "sonner";
 import { create } from "zustand";
 
 /**
@@ -152,13 +153,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
  * Executa sync completa e processa fila pendente
  */
 async function fullySync(): Promise<void> {
+	const toastId = toast.loading("Sincronizando dados...");
 	try {
 		console.log("[Auth] Iniciando sync completa após login...");
 		useSyncStatusStore.getState().setStatus("syncing");
 		await processSyncQueue();
 		await fullSync();
 		console.log("[Auth] Sync completa após login concluída");
+		toast.success("Sincronização concluída!", { id: toastId });
 	} catch (error) {
 		console.error("[Auth] Erro na sync após login:", error);
+		toast.error("Erro ao sincronizar dados.", { id: toastId });
 	}
 }
