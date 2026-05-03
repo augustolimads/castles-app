@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Castles App
 
-## Getting Started
+Aplicação Next.js para utilitários de Castles & Crusades com suporte a sincronização de dados localStorage ↔ Supabase (offline-first).
+## Requisitos
 
-First, run the development server:
+- Node.js 20+
+- npm 10+
+
+## Setup Local
+
+1. Instale dependências:
+
+```bash
+npm install
+```
+
+2. Configure variáveis de ambiente:
+
+```bash
+cp .env.example .env.local
+```
+
+3. Preencha `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` no `.env.local`.
+
+4. Rode em desenvolvimento:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Variáveis de Ambiente
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Arquivo de referência: `.env.example`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-key-here
+```
 
-## Learn More
+## Setup do Supabase
 
-To learn more about Next.js, take a look at the following resources:
+1. Crie um projeto no Supabase Dashboard.
+2. Rode o SQL em `docs/supabase-schema.sql` no SQL Editor.
+3. Em Authentication:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Habilite login por email (magic link)
+- Configure `Site URL` e `Redirect URLs`
+4. Copie URL e publishable key para o `.env.local`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Fluxo de Sincronização
 
-## Deploy on Vercel
+- Dados são salvos localmente primeiro (offline-first).
+- Quando online e autenticado, mudanças sobem para o Supabase.
+- Quando offline, operações entram na fila (`sync-queue`).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Ao reconectar, fila é processada automaticamente.
+- Conflitos usam `last-write-wins` por timestamp.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Arquivos principais:
+
+- `src/lib/sync/sync-manager.ts`
+- `src/lib/sync/sync-queue.ts`
+- `src/lib/sync/synced-local-storage.ts`
+- `src/hooks/use-sync-scheduler.tsx`
+- `src/modules/auth/use-auth.tsx`
+
+## Scripts
+
+- `npm run dev` - ambiente local
+- `npm run build` - build de produção
+- `npm run start` - servidor produção local
+- `npm run lint` - checagem com Biome
+- `npm run format` - formatação com Biome
+
+## Checklist de Validação (Fase 6)
+
+- Login por magic link funciona
+- Sessão persiste após refresh
+- Offline: criar/editar/deletar dados continua funcionando
+- Reconexão processa fila automaticamente
+- Multi-dispositivo sincroniza via merge bidirecional
+- Migração local → nuvem aparece no primeiro login quando aplicável
+
+## Deploy (Vercel)
+
+1. Conecte o repositório no Vercel.
+2. Configure as variáveis de ambiente (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`).
+3. Deploy.
+4. Atualize no Supabase Authentication:
+
+- `Site URL` para domínio de produção
+- `Redirect URL` para `https://seu-dominio.com/auth/callback`
+
+## Testes em Produção
+
+- Magic link abre e autentica corretamente
+- Sincronização manual e automática funcionando
+- Performance de sync aceitável em conexões móveis

@@ -52,20 +52,20 @@ export const useAuthStore = create<AuthState & AuthActions>((set) => ({
 		try {
 			set({ loading: true });
 
-			const { error } = await supabase.auth.signInWithOtp({
-				email,
-				options: {
-					emailRedirectTo: `${window.location.origin}/auth/callback`,
-				},
-			});
+		const { error } = await supabase.auth.signInWithOtp({
+			email,
+			options: {
+				emailRedirectTo: `${window.location.origin}/auth/callback`,
+			},
+		});
 
-			if (error) {
-				console.error("[Auth] Erro ao enviar magic link:", error);
-				return {
-					success: false,
-					error: error.message,
-				};
-			}
+		if (error) {
+			console.error("[Auth] Erro ao enviar magic link:", error);
+			return {
+				success: false,
+				error: error.message,
+			};
+		}
 
 			return { success: true };
 		} catch (error) {
@@ -107,54 +107,69 @@ export const useAuth = () => {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const { setUser, setSession, setLoading, setInitialized } = useAuthStore();
 	const [showMigrationDialog, setShowMigrationDialog] = useState(false);
+	type MigrationDialogProps = {
+		open: boolean;
+		onOpenChange: (open: boolean) => void;
+	};
 
 	useEffect(() => {
 		console.log("[Auth Provider] Iniciando...");
-		
+
 		// Carregar sessão inicial
 		supabase.auth.getSession().then(({ data: { session }, error }) => {
-			console.log("[Auth Provider] Sessão inicial:", session?.user?.email || "nenhuma");
-			if (error) console.error("[Auth Provider] Erro ao carregar sessão:", error);
-			
-			setSession(session);
-			setUser(session?.user ?? null);
-			setLoading(false);
-			setInitialized(true);
-		});
+		console.log(
+			"[Auth Provider] Sessão inicial:",
+			session?.user?.email || "nenhuma",
+		);
+		if (error)
+			console.error("[Auth Provider] Erro ao carregar sessão:", error);
 
-		// Listener para mudanças de autenticação
-		const {
-			data: { subscription },
-		} = supabase.auth.onAuthStateChange((_event, session) => {
-			console.log("[Auth] Evento:", _event, "| Usuário:", session?.user?.email || "nenhum");
-			
-			setSession(session);
-			setUser(session?.user ?? null);
-			setLoading(false);
+		setSession(session);
+		setUser(session?.user ?? null);
+		setLoading(false);
+		setInitialized(true);
+	});
 
-			if (_event === "SIGNED_IN") {
-				console.log("[Auth] Usuário logado:", session?.user?.email);
-				// Sync completa ao fazer login (merge bidirecional)
-				fullySync().catch(console.error);
-				// Verificar se precisa de migração cloud (assíncrono, sem bloquear)
-				needsCloudMigration().then((needs) => {
-					if (needs) setShowMigrationDialog(true);
-				}).catch(console.error);
-			} else if (_event === "SIGNED_OUT") {
-				console.log("[Auth] Usuário deslogado");
-				// Resetar status de sync ao deslogar
-				useSyncStatusStore.getState().setStatus("offline");
-			}
-		});
+	  // Listener para mudanças de autenticação
+	  const {
+		  data: { subscription },
+	  } = supabase.auth.onAuthStateChange((_event, session) => {
+		console.log(
+			"[Auth] Evento:",
+			_event,
+			"| Usuário:",
+			session?.user?.email || "nenhum",
+		);
 
-		return () => {
-			subscription.unsubscribe();
-		};
-	}, [setUser, setSession, setLoading, setInitialized]);
+		setSession(session);
+		setUser(session?.user ?? null);
+		setLoading(false);
+
+		if (_event === "SIGNED_IN") {
+			console.log("[Auth] Usuário logado:", session?.user?.email);
+			// Sync completa ao fazer login (merge bidirecional)
+			fullySync().catch(console.error);
+		// Verificar se precisa de migração cloud (assíncrono, sem bloquear)
+		  needsCloudMigration()
+			  .then((needs) => {
+				  if (needs) setShowMigrationDialog(true);
+		  })
+				.catch(console.error);
+		} else if (_event === "SIGNED_OUT") {
+			console.log("[Auth] Usuário deslogado");
+			// Resetar status de sync ao deslogar
+			useSyncStatusStore.getState().setStatus("offline");
+		}
+	});
+
+	  return () => {
+		  subscription.unsubscribe();
+	  };
+  }, [setUser, setSession, setLoading, setInitialized]);
 
 	// Import dinâmico para evitar circular dependency (dialog importa cloud-migration, use-auth importa sync)
-	// biome-ignore lint/suspicious/noExplicitAny: lazy import do dialog
-	const [MigrationDialog, setMigrationDialog] = useState<React.ComponentType<any> | null>(null);
+	const [MigrationDialog, setMigrationDialog] =
+		useState<React.ComponentType<MigrationDialogProps> | null>(null);
 
 	useEffect(() => {
 		if (showMigrationDialog && !MigrationDialog) {

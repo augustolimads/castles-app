@@ -1,6 +1,6 @@
 /**
  * Tipos do Schema do Supabase
- * 
+ *
  * Estes tipos são gerados manualmente baseados no schema SQL.
  * Para gerar automaticamente, use: npx supabase gen types typescript
  */
@@ -38,35 +38,37 @@ export interface Database {
 					created_at?: string;
 					last_sync_at?: string | null;
 				};
-			};
-			user_data: {
-				Row: {
-					id: string;
-					user_id: string;
-					data_key: string;
-					data_value: Json;
-					updated_at: string;
-				};
-				Insert: {
-					id?: string;
-					user_id: string;
-					data_key: string;
-					data_value: Json;
-					updated_at?: string;
-				};
-				Update: {
-					id?: string;
-					user_id?: string;
-					data_key?: string;
-					data_value?: Json;
-					updated_at?: string;
-				};
-			};
+			Relationships: [];
+		  };
+		  user_data: {
+			  Row: {
+				  id: string;
+				  user_id: string;
+				  data_key: string;
+				  data_value: Json;
+				  updated_at: string;
+			  };
+			  Insert: {
+				  id?: string;
+				  user_id: string;
+				  data_key: string;
+				  data_value: Json;
+				  updated_at?: string;
+			  };
+			  Update: {
+				  id?: string;
+				  user_id?: string;
+				  data_key?: string;
+				  data_value?: Json;
+				  updated_at?: string;
+			  };
+		  Relationships: [];
 		};
-		Views: Record<string, never>;
-		Functions: Record<string, never>;
-		Enums: Record<string, never>;
 	};
+	  Views: Record<string, never>;
+	  Functions: Record<string, never>;
+	  Enums: Record<string, never>;
+  };
 }
 
 /**

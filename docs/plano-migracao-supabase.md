@@ -14,7 +14,7 @@
 | **Fase 3** | ✅ Concluída | 100% | - |
 | **Fase 4** | ✅ Concluída | 100% | - |
 | **Fase 5** | ✅ Concluída | 100% | - |
-| **Fase 6** | 🔲 Pendente | 0% | - |
+| **Fase 6** | 🚧 Em Progresso | 70% | - |
 
 **Legenda:** ✅ Concluída | 🚧 Em Progresso | 🔲 Pendente | ⏸️ Pausada
 
@@ -585,9 +585,9 @@ Migrar dados locais existentes para a nuvem no primeiro login, com confirmação
 
 ---
 
-### 🔲 Fase 6: Testes e Polimento
+### 🚧 Fase 6: Testes e Polimento
 
-**Status:** 🔲 Pendente  
+**Status:** 🚧 Em Progresso  
 **Dependências:** Fase 4 ✅ e Fase 5 ✅  
 **Estimativa:** 3-4 horas
 
@@ -634,20 +634,20 @@ Testar todos os fluxos, adicionar tratamento de erros, melhorar feedback visual 
 
 ##### 6.2 Tratamento de Erros
 
-- [ ] Erro de rede → retry com exponential backoff
-- [ ] Erro de autenticação → forçar relogin
-- [ ] Erro do Supabase → toast de erro amigável
-- [ ] Timeout → adicionar à fila e tentar depois
-- [ ] Conflito complexo → log detalhado para debug
+- [x] Erro de rede → retry com exponential backoff
+- [x] Erro de autenticação → forçar relogin
+- [x] Erro do Supabase → toast de erro amigável
+- [x] Timeout → adicionar à fila e tentar depois
+- [x] Conflito complexo → log detalhado para debug
 
 ##### 6.3 Melhorias de UX
 
-- [ ] Toast de feedback:
+- [x] Toast de feedback:
   - "Sincronizando..."
   - "Sincronização concluída!"
   - "Erro ao sincronizar, tentando novamente..."
   
-- [ ] Loading states:
+- [x] Loading states:
   - Skeleton na lista de fichas durante carregamento
   - Spinner no botão de sync
   
@@ -657,20 +657,20 @@ Testar todos os fluxos, adicionar tratamento de erros, melhorar feedback visual 
 
 ##### 6.4 Documentação
 
-- [ ] Atualizar `README.md`:
+- [x] Atualizar `README.md`:
   - Seção "Setup do Supabase"
   - Variáveis de ambiente necessárias
   - Instruções de deploy
 
-- [ ] Criar `.env.example`:
+- [x] Criar `.env.example`:
   ```env
   NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=xxx
   ```
 
-- [ ] Documentar fluxo de sync (diagrama opcional)
+- [x] Documentar fluxo de sync (diagrama opcional)
 
-- [ ] Comentários no código (JSDoc)
+- [x] Comentários no código (JSDoc)
 
 ##### 6.5 Deploy e Testes em Produção
 
@@ -690,9 +690,9 @@ Testar todos os fluxos, adicionar tratamento de erros, melhorar feedback visual 
 
 #### Verificação
 - [ ] Todos os fluxos testados e funcionando
-- [ ] Erros tratados adequadamente
-- [ ] Feedback visual claro
-- [ ] Documentação completa
+- [x] Erros tratados adequadamente
+- [x] Feedback visual claro
+- [x] Documentação completa
 - [ ] Deploy em produção funcionando
 
 ---
@@ -822,5 +822,5 @@ castles-character-data-{id} → {
 
 ---
 
-**Última atualização:** Fase 0 concluída em 02/05/2026 | Fase 1 concluída em 02/05/2026 | Fase 2 concluída em 02/05/2026 | Fase 3 concluída em 03/05/2026 | Fase 4 concluída em 03/05/2026 | Fase 5 concluída em 03/05/2026  
-**Próximo passo:** Iniciar Fase 6 - Testes e Polimento
+**Última atualização:** Fase 0 concluída em 02/05/2026 | Fase 1 concluída em 02/05/2026 | Fase 2 concluída em 02/05/2026 | Fase 3 concluída em 03/05/2026 | Fase 4 concluída em 03/05/2026 | Fase 5 concluída em 03/05/2026 | Fase 6 em progresso em 03/05/2026  
+**Próximo passo:** Executar testes E2E manuais e deploy em produção
