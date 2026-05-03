@@ -13,7 +13,7 @@
 | **Fase 2** | ✅ Concluída | 100% | - |
 | **Fase 3** | ✅ Concluída | 100% | - |
 | **Fase 4** | ✅ Concluída | 100% | - |
-| **Fase 5** | 🔲 Pendente | 0% | - |
+| **Fase 5** | ✅ Concluída | 100% | - |
 | **Fase 6** | 🔲 Pendente | 0% | - |
 
 **Legenda:** ✅ Concluída | 🚧 Em Progresso | 🔲 Pendente | ⏸️ Pausada
@@ -516,9 +516,9 @@ Implementar sync automática em background (polling periódico), sync na reconex
 
 ---
 
-### 🔲 Fase 5: Migração de Dados Existentes
+### ✅ Fase 5: Migração de Dados Existentes
 
-**Status:** 🔲 Pendente  
+**Status:** ✅ Concluída  
 **Dependências:** Fase 3 ✅  
 **Estimativa:** 2 horas
 
@@ -529,7 +529,7 @@ Migrar dados locais existentes para a nuvem no primeiro login, com confirmação
 
 ##### 5.1 Utilitário de Migração para Nuvem
 
-- [ ] Criar `src/lib/sync/cloud-migration.ts`:
+- [x] Criar `src/lib/sync/cloud-migration.ts`:
   ```typescript
   /**
    * Detecta se há dados locais e nenhum dado na nuvem
@@ -548,7 +548,7 @@ Migrar dados locais existentes para a nuvem no primeiro login, com confirmação
 
 ##### 5.2 Modal de Confirmação
 
-- [ ] Criar `src/modules/auth/cloud-migration-dialog.tsx`:
+- [x] Criar `src/modules/auth/cloud-migration-dialog.tsx`:
   - Título: "Sincronizar dados com a nuvem?"
   - Mensagem: "Encontramos X fichas e dados salvos localmente. Deseja enviar para a nuvem?"
   - Botões: "Sim, sincronizar" | "Agora não"
@@ -557,7 +557,7 @@ Migrar dados locais existentes para a nuvem no primeiro login, com confirmação
 
 ##### 5.3 Trigger no Primeiro Login
 
-- [ ] No `use-auth.tsx`, ao detectar primeiro login:
+- [x] No `use-auth.tsx`, ao detectar primeiro login:
   ```typescript
   if (isFirstLogin && await needsCloudMigration()) {
     // Mostrar modal de confirmação
@@ -565,7 +565,7 @@ Migrar dados locais existentes para a nuvem no primeiro login, com confirmação
   }
   ```
 
-- [ ] Após migração bem-sucedida:
+- [x] Após migração bem-sucedida:
   - Salvar flag `cloud-migration-completed` no localStorage
   - Não mostrar modal novamente
 
@@ -577,11 +577,11 @@ Migrar dados locais existentes para a nuvem no primeiro login, com confirmação
 - `src/modules/auth/use-auth.tsx` - trigger de migração
 
 #### Verificação
-- [ ] Usuário com dados locais faz primeiro login → modal aparece
-- [ ] Aceitar migração → dados enviados para Supabase
-- [ ] Recusar migração → dados permanecem locais
-- [ ] Segundo login → modal não aparece mais
-- [ ] Após migração, dados acessíveis em outro dispositivo
+- [x] Usuário com dados locais faz primeiro login → modal aparece
+- [x] Aceitar migração → dados enviados para Supabase
+- [x] Recusar migração → dados permanecem locais
+- [x] Segundo login → modal não aparece mais
+- [x] Após migração, dados acessíveis em outro dispositivo
 
 ---
 
@@ -822,5 +822,5 @@ castles-character-data-{id} → {
 
 ---
 
-**Última atualização:** Fase 0 concluída em 02/05/2026 | Fase 1 concluída em 02/05/2026 | Fase 2 concluída em 02/05/2026 | Fase 3 concluída em 03/05/2026 | Fase 4 concluída em 03/05/2026  
-**Próximo passo:** Iniciar Fase 5 - Migração de Dados Existentes
+**Última atualização:** Fase 0 concluída em 02/05/2026 | Fase 1 concluída em 02/05/2026 | Fase 2 concluída em 02/05/2026 | Fase 3 concluída em 03/05/2026 | Fase 4 concluída em 03/05/2026 | Fase 5 concluída em 03/05/2026  
+**Próximo passo:** Iniciar Fase 6 - Testes e Polimento

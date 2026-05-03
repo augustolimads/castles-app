@@ -2,9 +2,10 @@
 
 import { supabase } from "@/lib/supabase/client";
 import { fullSync, processSyncQueue } from "@/lib/sync";
+import { needsCloudMigration } from "@/lib/sync/cloud-migration";
 import { useSyncStatusStore } from "@/lib/sync/sync-status-store";
 import type { Session, User } from "@supabase/supabase-js";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { create } from "zustand";
 
@@ -105,6 +106,7 @@ export const useAuth = () => {
  */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const { setUser, setSession, setLoading, setInitialized } = useAuthStore();
+	const [showMigrationDialog, setShowMigrationDialog] = useState(false);
 
 	useEffect(() => {
 		console.log("[Auth Provider] Iniciando...");
@@ -134,6 +136,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 				console.log("[Auth] Usuário logado:", session?.user?.email);
 				// Sync completa ao fazer login (merge bidirecional)
 				fullySync().catch(console.error);
+				// Verificar se precisa de migração cloud (assíncrono, sem bloquear)
+				needsCloudMigration().then((needs) => {
+					if (needs) setShowMigrationDialog(true);
+				}).catch(console.error);
 			} else if (_event === "SIGNED_OUT") {
 				console.log("[Auth] Usuário deslogado");
 				// Resetar status de sync ao deslogar
@@ -146,7 +152,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		};
 	}, [setUser, setSession, setLoading, setInitialized]);
 
-	return <>{children}</>;
+	// Import dinâmico para evitar circular dependency (dialog importa cloud-migration, use-auth importa sync)
+	// biome-ignore lint/suspicious/noExplicitAny: lazy import do dialog
+	const [MigrationDialog, setMigrationDialog] = useState<React.ComponentType<any> | null>(null);
+
+	useEffect(() => {
+		if (showMigrationDialog && !MigrationDialog) {
+			import("@/modules/auth/cloud-migration-dialog").then((mod) => {
+				setMigrationDialog(() => mod.CloudMigrationDialog);
+			});
+		}
+	}, [showMigrationDialog, MigrationDialog]);
+
+	return (
+		<>
+			{children}
+			{showMigrationDialog && MigrationDialog && (
+				<MigrationDialog
+					open={showMigrationDialog}
+					onOpenChange={setShowMigrationDialog}
+				/>
+			)}
+		</>
+	);
 }
 
 /**
