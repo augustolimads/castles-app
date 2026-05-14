@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { v4 } from 'uuid';
-import { handleInputChange } from '../appChanges';
-import { saveCharacter } from '../stores/character';
-import { useSpellsStore } from '../stores/spell';
+import { handleInputChange } from '../../appChanges';
+import { saveCharacter } from '../../stores/character';
+import { useSpellsStore } from '../../stores/spell';
 import Spell from './spell';
 import SpellTitle from './spell-title';
 

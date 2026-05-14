@@ -2,9 +2,9 @@
 
 import { X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { handleInputChange } from '../appChanges';
-import { saveCharacter } from '../stores/character';
-import { useEquipmentsStore, useInventoryStore } from '../stores/inventory';
+import { handleInputChange } from '../../appChanges';
+import { saveCharacter } from '../../stores/character';
+import { useEquipmentsStore, useInventoryStore } from '../../stores/inventory';
 
 interface EquipmentData {
     id: string;

@@ -1,7 +1,7 @@
 'use client';
 
-import { handleInputChange } from '../appChanges';
-import { saveCharacter } from '../stores/character';
+import { handleInputChange } from '../../appChanges';
+import { saveCharacter } from '../../stores/character';
 
 interface StatProps {
     id: string;

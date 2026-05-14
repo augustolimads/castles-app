@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import { handleInputChange } from '../appChanges';
-import { type TAttr, updateAttr, updateEncumbraceRating } from '../attributeLogic';
-import { saveCharacter, useCharacterStore } from '../stores/character';
+import { handleInputChange } from '../../appChanges';
+import { type TAttr, updateAttr, updateEncumbraceRating } from '../../attributeLogic';
+import { saveCharacter, useCharacterStore } from '../../stores/character';
 import Attribute from './attribute';
 
 function AttributeList() {

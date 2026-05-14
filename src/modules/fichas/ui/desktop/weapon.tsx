@@ -2,11 +2,11 @@
 
 import { DicesIcon, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { handleInputChange } from '../appChanges';
-import { saveCharacter } from '../stores/character';
-import { useInventoryStore, useWeaponsStore } from '../stores/inventory';
-import { setRollDice } from '../stores/rollDice';
-import { useDiscordStore } from '../stores/sheet';
+import { handleInputChange } from '../../appChanges';
+import { saveCharacter } from '../../stores/character';
+import { useInventoryStore, useWeaponsStore } from '../../stores/inventory';
+import { setRollDice } from '../../stores/rollDice';
+import { useDiscordStore } from '../../stores/sheet';
 
 interface WeaponData {
     id: string;

@@ -1,6 +1,6 @@
 'use client';
 
-import { handleInputChange } from '../appChanges';
+import { handleInputChange } from '../../appChanges';
 
 interface TextInputProps {
     id: string;

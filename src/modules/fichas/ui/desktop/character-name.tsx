@@ -4,7 +4,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import {
     setCharacterName,
     useCharacterStore,
-} from '../stores/character';
+} from '../../stores/character';
 
 function CharacterName() {
     const character = useCharacterStore();

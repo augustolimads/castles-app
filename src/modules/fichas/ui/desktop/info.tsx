@@ -2,8 +2,8 @@
 
 import { charClasses } from '@/modules/compendium/charClasses';
 import { useEffect, useMemo } from 'react';
-import { handleInputChange } from '../appChanges';
-import { saveCharacter, useCharacterStore } from '../stores/character';
+import { handleInputChange } from '../../appChanges';
+import { saveCharacter, useCharacterStore } from '../../stores/character';
 import TextInput from './text-input';
 
 function Info() {

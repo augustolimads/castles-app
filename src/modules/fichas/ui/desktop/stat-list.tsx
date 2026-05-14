@@ -1,8 +1,8 @@
 'use client';
 
-import { handleInputChange } from '../appChanges';
-import { updateEncumbraceRating } from '../attributeLogic';
-import { saveCharacter, useCharacterStore } from '../stores/character';
+import { handleInputChange } from '../../appChanges';
+import { updateEncumbraceRating } from '../../attributeLogic';
+import { saveCharacter, useCharacterStore } from '../../stores/character';
 import Ac from './Ac';
 import Hp from './Hp';
 import Stat from './stat';

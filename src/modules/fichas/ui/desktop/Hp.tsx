@@ -1,7 +1,7 @@
 'use client';
 
-import { handleInputChange } from '../appChanges';
-import { saveCharacter, useCharacterStore } from '../stores/character';
+import { handleInputChange } from '../../appChanges';
+import { saveCharacter, useCharacterStore } from '../../stores/character';
 
 function Hp() {
     const character = useCharacterStore();

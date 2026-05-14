@@ -1,7 +1,7 @@
 import { Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
-import { useRollDiceStore } from '../stores/rollDice';
-import { setDiscordTitle } from '../stores/sheet';
+import { useRollDiceStore } from '../../stores/rollDice';
+import { setDiscordTitle } from '../../stores/sheet';
 import TextInput from './text-input';
 
 type TDiceKey = 'd3' | 'd4' | 'd6' | 'd8' | 'd10' | 'd12' | 'd20' | 'd100';

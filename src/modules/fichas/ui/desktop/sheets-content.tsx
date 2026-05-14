@@ -7,8 +7,8 @@ import { usePagination } from "@/hooks/use-pagination";
 import { FileText, Skull, Users } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
-import type { SheetType } from '../types';
-import { useSheets } from '../use-sheets';
+import type { SheetType } from '../../types';
+import { useSheets } from '../../use-sheets';
 import { CreateSheetDialog } from './create-sheet-dialog';
 import { SheetCard } from './sheet-card';
 

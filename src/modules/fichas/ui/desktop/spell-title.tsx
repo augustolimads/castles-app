@@ -1,6 +1,6 @@
 import { Plus } from 'lucide-react';
-import { saveCharacter } from '../stores/character';
-import { useSpellsStore } from '../stores/spell';
+import { saveCharacter } from '../../stores/character';
+import { useSpellsStore } from '../../stores/spell';
 import TextInput from './text-input';
 
 interface IAction {

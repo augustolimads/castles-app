@@ -2,9 +2,9 @@
 
 import { cn } from '@/lib/utils';
 import { useMemo } from 'react';
-import { handleInputChange } from '../appChanges';
-import { setAttributeMod, type TAttr } from '../attributeLogic';
-import { saveCharacter } from '../stores/character';
+import { handleInputChange } from '../../appChanges';
+import { setAttributeMod, type TAttr } from '../../attributeLogic';
+import { saveCharacter } from '../../stores/character';
 
 interface AttributeProps {
     id: TAttr;

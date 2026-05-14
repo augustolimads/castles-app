@@ -1,5 +1,5 @@
 import { Textarea } from '@/components/ui/textarea';
-import { saveCharacter, useCharacterStore } from '../stores/character';
+import { saveCharacter, useCharacterStore } from '../../stores/character';
 import DiceSelector from './dice-selector';
 import Title from './title';
 import ValueInput from './value-input';

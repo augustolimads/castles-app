@@ -1,4 +1,4 @@
-import { SheetsContent } from "@/modules/fichas/ui/sheets-content";
+import { SheetsContent } from "@/modules/fichas/ui/desktop/sheets-content";
 import { Suspense } from "react";
 
 function SheetsContentFallback() {

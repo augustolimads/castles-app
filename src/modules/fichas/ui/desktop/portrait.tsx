@@ -1,4 +1,4 @@
-import { saveCharacter, useCharacterStore } from '../stores/character';
+import { saveCharacter, useCharacterStore } from '../../stores/character';
 import ChangeImage from './change-image';
 
 function Portrait() {

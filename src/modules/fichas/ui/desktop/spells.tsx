@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSpellsStore } from '../stores/spell';
+import { useSpellsStore } from '../../stores/spell';
 import SpellBlock from './spell-block';
 
 function Spells() {

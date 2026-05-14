@@ -1,8 +1,10 @@
+'use client'
+
 import { X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { handleInputChange } from '../appChanges';
-import { saveCharacter } from '../stores/character';
-import { useSpellsStore } from '../stores/spell';
+import { handleInputChange } from '../../appChanges';
+import { saveCharacter } from '../../stores/character';
+import { useSpellsStore } from '../../stores/spell';
 
 interface SpellData {
     id: string;

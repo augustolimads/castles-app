@@ -1,4 +1,4 @@
-import { handleInputChange } from '../appChanges';
+import { handleInputChange } from '../../appChanges';
 
 interface ValueInputProps {
     id: string;

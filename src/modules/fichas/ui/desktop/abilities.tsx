@@ -3,7 +3,7 @@ import { Separator } from '@/components/ui/separator';
 import { charClasses } from '@/modules/compendium/charClasses';
 import { races } from '@/modules/compendium/races';
 import { useMemo } from 'react';
-import { useCharacterStore } from '../stores/character';
+import { useCharacterStore } from '../../stores/character';
 
 function Abilities() {
     const character = useCharacterStore();

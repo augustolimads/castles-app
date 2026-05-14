@@ -1,5 +1,5 @@
-import { handleInputChange } from '../appChanges';
-import { saveCharacter, useCharacterStore } from '../stores/character';
+import { handleInputChange } from '../../appChanges';
+import { saveCharacter, useCharacterStore } from '../../stores/character';
 
 function Notes() {
     const character = useCharacterStore();
