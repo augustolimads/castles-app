@@ -16,3 +16,21 @@ export function formatNumber(value: number): string {
 export function selectAllText(event: FocusEvent): void {
     (event.target as HTMLInputElement).select();
 }
+
+export function formatAttributeModifier(value: number): string {
+    if (value >= 18) {
+        return "+3";
+    } else if (value >= 16) {
+        return "+2";
+    } else if (value >= 13) {
+        return "+1";
+    } else if (value >= 9) {
+        return "0";
+    } else if (value >= 6) {
+        return "-1";
+    } else if (value >= 4) {
+        return "-2";
+    } else {
+        return "-3";
+    }
+}

@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
-import Abilities from './abilities';
+import Abilities from '../shared/abilities';
 import Combat from './combat';
 import Inventory from './inventory';
-import Notes from './notes';
-import Spells from './spells';
+import Notes from '../shared/notes';
+import Spells from '../shared/spells';
 import Tabs from './tabs';
 
 function More() {
