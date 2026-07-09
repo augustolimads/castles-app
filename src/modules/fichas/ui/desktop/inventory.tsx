@@ -27,6 +27,7 @@ function Inventory() {
             qtd: 1,
             description: item.effect || item.obs || '',
             ev: item.ev ?? 0,
+            icon: item.icon,
         };
         updateInventory({
             ...inventory,
@@ -111,6 +112,7 @@ function Inventory() {
             qtd: 1,
             description: '',
             ev: 0,
+            icon: '',
         };
         updateInventory({
             ...inventory,

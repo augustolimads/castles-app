@@ -130,7 +130,7 @@ export const items: Item[] = [
       "assassino",
       "trapaceiro"
     ],
-    "icon": "dagger",
+    "icon": "adaga",
     "tags": "undefined",
     "image": "undefined"
   },
@@ -162,7 +162,7 @@ export const items: Item[] = [
       "explorador",
       "paladino"
     ],
-    "icon": "dagger",
+    "icon": "alabarda",
     "tags": "undefined",
     "image": "undefined"
   },
@@ -874,7 +874,7 @@ export const items: Item[] = [
     "obs": "",
     "effect": "dano 1d6",
     "proficience": [],
-    "icon": "dagger",
+    "icon": "cajado",
     "tags": "undefined",
     "image": "undefined"
   },

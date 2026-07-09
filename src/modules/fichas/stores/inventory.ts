@@ -21,6 +21,8 @@ interface IItem {
     name: string;
     description: string;
     ev: number;
+    icon?: string;
+    slot?: number;
 }
 
 interface InventoryState {

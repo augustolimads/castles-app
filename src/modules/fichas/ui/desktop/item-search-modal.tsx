@@ -10,6 +10,7 @@ import {
 import { Input } from '@/components/ui/input';
 import type { Item } from '@/modules/itens/use-items';
 import { Plus, Search } from 'lucide-react';
+import Image from 'next/image';
 import { useMemo, useState } from 'react';
 
 interface ItemSearchModalProps {
@@ -90,19 +91,28 @@ export function ItemSearchModal({
                                 >
                                     <button
                                         type="button"
-                                        className="flex-1 text-left"
+                                        className="flex-1 text-left flex items-center gap-3"
                                         onClick={() => handleSelectItem(item)}
                                     >
-                                        <div className="font-medium">{item.name}</div>
-                                        <div className="text-sm text-muted-foreground">
-                                            {item.type} • {item.gold} PO
-                                            {item.ev !== null && ` • ${item.ev} EV`}
-                                        </div>
-                                        {item.effect && (
-                                            <div className="text-xs text-muted-foreground mt-1">
-                                                {item.effect}
+                                        <Image
+                                            src={`/icons/${item.icon}.webp`}
+                                            alt={item.name}
+                                            width={32}
+                                            height={32}
+                                            className="rounded-sm"
+                                        />
+                                        <div>
+                                            <div className="font-medium">{item.name}</div>
+                                            <div className="text-sm text-muted-foreground">
+                                                {item.type} • {item.gold} PO
+                                                {item.ev !== null && ` • ${item.ev} EV`}
                                             </div>
-                                        )}
+                                            {item.effect && (
+                                                <div className="text-xs text-muted-foreground mt-1">
+                                                    {item.effect}
+                                                </div>
+                                            )}
+                                        </div>
                                     </button>
                                     <Button
                                         size="sm"
