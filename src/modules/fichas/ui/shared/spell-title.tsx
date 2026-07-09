@@ -35,9 +35,9 @@ function SpellTitle({ name, primary, secondary, lv }: SpellTitleProps) {
 
     return (
         <div className="flex items-center justify-between pl-4 pr-2 bg-amber-50/15">
-            <h2 className="font-bold text-xl text-left pb-1">{name}</h2>
-            <div className="flex gap-2">
-                <div className="flex gap-1 w-15 items-center">
+            <h2 className="flex-1 font-bold text-xl text-left pb-1">{name}</h2>
+            <div className="flex-1 flex gap-2">
+                <div className="flex-1 flex gap-1 min-w-1/8 items-center">
                     <span>espaços</span>
                     <TextInput id={id} name="" value={slots} updateInput={handleUpdateSlots} isNumber />
                 </div>

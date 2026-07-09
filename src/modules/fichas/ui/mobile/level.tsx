@@ -1,5 +1,3 @@
-import { Progress } from "@/components/ui/progress"
-
 function Level() {
   return (
     <div className="border bg-card rounded-lg p-2">
@@ -7,7 +5,7 @@ function Level() {
         <span className="font-bold">Guerreiro NV 1</span>
         <span>XP: 9/10</span>
       </div>
-      <Progress value={55} />
+      
     </div>
   )
 }

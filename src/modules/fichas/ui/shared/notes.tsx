@@ -17,7 +17,7 @@ function Notes() {
     return (
         <textarea
             id="notes"
-            className="h-162.5 w-full p-0.5"
+            className="h-[calc(100vh-25rem)] md:h-162.5 w-full p-0.5"
             onInput={updateNotes}
             value={character.notes}
         />

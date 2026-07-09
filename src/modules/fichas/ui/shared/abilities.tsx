@@ -32,9 +32,9 @@ function Abilities() {
     }, [classInfo, character.info.level]);
 
     return (
-        <div className="flex flex-col gap-2 h-[65vh] overflow-y-auto border">
+        <div className="flex flex-col gap-2 md:h-[65vh] md:overflow-y-auto">
             {raceInfo && (
-                <div id="raceInfo" className="flex-1 py-3">
+                <div id="raceInfo" className="md:flex-1 py-3">
                     <h2 className="font-bold text-2xl text-left mb-4">{raceInfo.name}</h2>
                     <div className="space-y-4">
                         {raceInfo.traits && raceInfo.traits.length > 0 && (

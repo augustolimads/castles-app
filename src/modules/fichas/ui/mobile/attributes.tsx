@@ -1,83 +1,168 @@
 'use client'
 
-import { Button } from "@/components/ui/button"
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import { formatAttributeModifier } from "@/lib/utils"
+import { handleInputChange } from "@/modules/fichas/appChanges"
+import { updateEncumbraceRating } from "@/modules/fichas/attributeLogic"
+import { saveCharacter, useCharacterStore } from "@/modules/fichas/stores/character"
 import { useState } from "react"
 
 type AttributeType = "primary" | "secondary" | "tertiary"
 
 type AttributeKey = "str" | "dex" | "con" | "int" | "wis" | "cha"
 
-type CharacterAttribute = {
-    value: number
-    type: AttributeType
-}
-
-type CharacterAttributes = Record<AttributeKey, CharacterAttribute>
-
 type AttributeProps = {
     label: string
+    attributeKey: AttributeKey
     type: AttributeType
     value?: number
+    isEditing: boolean
+    onStartEdit: (key: AttributeKey) => void
+    onFinishEdit: () => void
+    onValueChange: (key: AttributeKey, value: string) => void
+    onToggleType: (key: AttributeKey) => void
 }
 
-function Attribute({ label, type, value }: AttributeProps) {
+function Attribute({
+    label,
+    attributeKey,
+    type,
+    value,
+    isEditing,
+    onStartEdit,
+    onFinishEdit,
+    onValueChange,
+    onToggleType,
+}: AttributeProps) {
     if (type === "primary") {
         return (
             <div className='relative rounded-lg border-2 border-card-400 bg-card-400 text-sm flex flex-col items-center text-card-foreground'>
                 <span>{label}</span>
-                <span className='font-bold text-xl'>{value}</span>
-                <span className='bg-amber-500 w-full text-center rounded-b-md text-white font-bold'>{formatAttributeModifier(value ?? 0)}</span>
+                {isEditing ? (
+                    <Input
+                        id={`attr-${attributeKey}`}
+                        type="number"
+                        min={0}
+                        max={20}
+                        value={value}
+                        autoFocus
+                        className="h-8 border-none bg-transparent text-center font-bold text-xl shadow-none focus-visible:ring-0"
+                        onFocus={(event) => event.target.select()}
+                        onBlur={onFinishEdit}
+                        onKeyDown={(event) => {
+                            if (event.key === "Enter" || event.key === "Escape") {
+                                onFinishEdit()
+                            }
+                        }}
+                        onChange={(event) => onValueChange(attributeKey, event.target.value)}
+                    />
+                ) : (
+                    <button
+                        type="button"
+                        className='font-bold text-xl leading-none py-1 px-2'
+                        onClick={() => onStartEdit(attributeKey)}
+                    >
+                        {value}
+                    </button>
+                )}
+                <button
+                    type="button"
+                    className='bg-amber-500 w-full text-center rounded-b-md text-white font-bold'
+                    onClick={() => onToggleType(attributeKey)}
+                >
+                    {formatAttributeModifier(value ?? 0)}
+                </button>
             </div>
         )
     }
+
     if (type === "secondary") {
         return (
             <div className='relative rounded-lg border-2 border-card-300 bg-card-300 text-sm flex flex-col items-center text-card-foreground'>
                 <span>{label}</span>
-                <span className='font-bold text-xl'>{value}</span>
-                <span className='bg-slate-400 w-full text-center rounded-b-md text-white font-bold'>{formatAttributeModifier(value ?? 0)}</span>
+                {isEditing ? (
+                    <Input
+                        id={`attr-${attributeKey}`}
+                        type="number"
+                        min={0}
+                        max={20}
+                        value={value}
+                        autoFocus
+                        className="h-8 border-none bg-transparent text-center font-bold text-xl shadow-none focus-visible:ring-0"
+                        onFocus={(event) => event.target.select()}
+                        onBlur={onFinishEdit}
+                        onKeyDown={(event) => {
+                            if (event.key === "Enter" || event.key === "Escape") {
+                                onFinishEdit()
+                            }
+                        }}
+                        onChange={(event) => onValueChange(attributeKey, event.target.value)}
+                    />
+                ) : (
+                    <button
+                        type="button"
+                        className='font-bold text-xl leading-none py-1 px-2'
+                        onClick={() => onStartEdit(attributeKey)}
+                    >
+                        {value}
+                    </button>
+                )}
+                <button
+                    type="button"
+                    className='bg-slate-400 w-full text-center rounded-b-md text-white font-bold'
+                    onClick={() => onToggleType(attributeKey)}
+                >
+                    {formatAttributeModifier(value ?? 0)}
+                </button>
             </div>
         )
     }
+
     return (
         <div className='relative rounded-lg border-2 border-card-700 bg-card-700 text-sm flex flex-col items-center text-card-foreground'>
             <span>{label}</span>
-            <span className='font-bold text-xl'>{value}</span>
-            <span className='bg-orange-900 w-full text-center rounded-b-md text-white font-bold'>{formatAttributeModifier(value ?? 0)}</span>
+            {isEditing ? (
+                <Input
+                    id={`attr-${attributeKey}`}
+                    type="number"
+                    min={0}
+                    max={20}
+                    value={value}
+                    autoFocus
+                    className="h-8 border-none bg-transparent text-center font-bold text-xl shadow-none focus-visible:ring-0"
+                    onFocus={(event) => event.target.select()}
+                    onBlur={onFinishEdit}
+                    onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === "Escape") {
+                            onFinishEdit()
+                        }
+                    }}
+                    onChange={(event) => onValueChange(attributeKey, event.target.value)}
+                />
+            ) : (
+                <button
+                    type="button"
+                    className='font-bold text-xl leading-none py-1 px-2'
+                    onClick={() => onStartEdit(attributeKey)}
+                >
+                    {value}
+                </button>
+            )}
+            <button
+                type="button"
+                className='bg-orange-900 w-full text-center rounded-b-md text-white font-bold'
+                onClick={() => onToggleType(attributeKey)}
+            >
+                {formatAttributeModifier(value ?? 0)}
+            </button>
         </div>
     )
 }
 
 function Attributes() {
-    const [isOpen, setIsOpen] = useState(false)
-    const [attributes, setAttributes] = useState<CharacterAttributes>({
-        str: { value: 10, type: "primary" },
-        dex: { value: 10, type: "primary" },
-        con: { value: 10, type: "primary" },
-        int: { value: 10, type: "secondary" },
-        wis: { value: 10, type: "secondary" },
-        cha: { value: 10, type: "tertiary" },
-    })
-    const [draftAttributes, setDraftAttributes] = useState<CharacterAttributes>(attributes)
+    const [editingAttribute, setEditingAttribute] = useState<AttributeKey | null>(null)
+    const character = useCharacterStore()
+    const updateCharacter = useCharacterStore((state) => state.updateCharacter)
 
     const fields: Array<{ key: AttributeKey, label: string, shortLabel: string }> = [
         { key: "str", label: "Forca", shortLabel: "FOR" },
@@ -88,96 +173,66 @@ function Attributes() {
         { key: "cha", label: "Carisma", shortLabel: "CAR" },
     ]
 
-    const handleDialogOpenChange = (open: boolean) => {
-        setIsOpen(open)
+    const updateAttribute = (key: AttributeKey, updates: { value?: number, type?: number }) => {
+        const currentAttribute = character.attr[key]
 
-        if (open) {
-            setDraftAttributes(attributes)
-        }
+        handleInputChange()
+        updateCharacter({
+            attr: {
+                ...character.attr,
+                [key]: {
+                    value: updates.value ?? currentAttribute.value,
+                    type: updates.type ?? currentAttribute.type,
+                },
+            },
+        })
+        updateEncumbraceRating()
+        saveCharacter()
     }
 
-    const handleSave = () => {
-        setAttributes(draftAttributes)
-        setIsOpen(false)
+    const handleValueChange = (key: AttributeKey, inputValue: string) => {
+        const parsedValue = Number(inputValue)
+        const safeValue = Math.min(20, Math.max(0, Number.isNaN(parsedValue) ? 0 : parsedValue))
+
+        updateAttribute(key, { value: safeValue })
+    }
+
+    const handleToggleType = (key: AttributeKey) => {
+        const currentType = character.attr[key].type
+        const nextType = currentType === 1 ? 2 : currentType === 2 ? 3 : 1
+
+        updateAttribute(key, { type: nextType })
     }
 
     return (
-        <Dialog open={isOpen} onOpenChange={handleDialogOpenChange}>
-            <DialogTrigger asChild>
-                <button type="button" className='grid grid-cols-6 gap-1'>
-                    {fields.map((field) => (
-                        <Attribute
-                            key={field.key}
-                            label={field.shortLabel}
-                            value={attributes[field.key].value}
-                            type={attributes[field.key].type}
-                        />
-                    ))}
-                </button>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Atributos</DialogTitle>
-                    <DialogDescription>
-                        Altere os valores atuais de cada atributo.
-                    </DialogDescription>
-                </DialogHeader>
-
-                <div className="space-y-2">
-                    {fields.map((field) => (
-                        <div key={field.key} className="grid grid-cols-[72px_1fr_88px] items-center gap-2">
-                            <Label htmlFor={`attr-${field.key}`}>{field.label}</Label>
-                            <Select
-                                value={draftAttributes[field.key].type}
-                                onValueChange={(value) => {
-                                    setDraftAttributes((prev) => ({
-                                        ...prev,
-                                        [field.key]: {
-                                            ...prev[field.key],
-                                            type: value as AttributeType,
-                                        },
-                                    }))
-                                }}
-                            >
-                                <SelectTrigger id={`attr-type-${field.key}`} className="w-full">
-                                    <SelectValue placeholder="Tipo" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="primary">Primário</SelectItem>
-                                    <SelectItem value="secondary">Secundário</SelectItem>
-                                    <SelectItem value="tertiary">Terciário</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <Input
-                                id={`attr-${field.key}`}
-                                type="number"
-                                min={0}
-                                max={20}
-                                value={draftAttributes[field.key].value}
-                                onFocus={(event) => event.target.select()}
-                                onChange={(event) => {
-                                    const parsedValue = Number(event.target.value)
-                                    const safeValue = Math.min(20, Math.max(0, Number.isNaN(parsedValue) ? 0 : parsedValue))
-
-                                    setDraftAttributes((prev) => ({
-                                        ...prev,
-                                        [field.key]: {
-                                            ...prev[field.key],
-                                            value: safeValue,
-                                        },
-                                    }))
-                                }}
-                            />
-                        </div>
-                    ))}
-                </div>
-
-                <DialogFooter>
-                    <Button type="button" onClick={handleSave}>Salvar</Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+        <div className='grid grid-cols-6 gap-1'>
+            {fields.map((field) => (
+                <Attribute
+                    key={field.key}
+                    label={field.shortLabel}
+                    attributeKey={field.key}
+                    value={character.attr[field.key].value}
+                    type={attributeTypeToLabel(character.attr[field.key].type)}
+                    isEditing={editingAttribute === field.key}
+                    onStartEdit={setEditingAttribute}
+                    onFinishEdit={() => setEditingAttribute(null)}
+                    onValueChange={handleValueChange}
+                    onToggleType={handleToggleType}
+                />
+            ))}
+        </div>
     )
 }
 
+function attributeTypeToLabel(type: number): AttributeType {
+    if (type === 1) {
+        return "primary"
+    }
+
+    if (type === 2) {
+        return "secondary"
+    }
+
+    return "tertiary"
+}
 export default Attributes

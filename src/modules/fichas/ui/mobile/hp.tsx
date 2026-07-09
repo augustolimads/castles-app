@@ -2,23 +2,26 @@
 
 import { Button } from '@/components/ui/button';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
+import { saveCharacter, useCharacterStore } from '@/modules/fichas/stores/character';
 import { Heart, Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
 
 function HitPoints() {
-    const [currentHP, setCurrentHP] = useState(5);
+    const character = useCharacterStore();
+    const updateCharacter = useCharacterStore((state) => state.updateCharacter);
     const [hpDelta, setHpDelta] = useState(0);
-    const [lastModalHP, setLastModalHP] = useState<number | null>(null);
-    const maxHP = 8;
+    const currentHP = character.hp.current;
+    const maxHP = character.hp.max;
     const minHP = -10;
     const maxCapHP = maxHP + 20;
 
@@ -29,22 +32,22 @@ function HitPoints() {
         hpState === 'extra'
             ? 'bg-sky-500/20 text-sky-600 border-sky-500/40'
             : hpState === 'negative'
-              ? 'bg-red-900/30 text-red-900 border-red-800/70'
-              : 'bg-emerald-500/20 text-emerald-600 border-emerald-500/40';
+                ? 'bg-red-900/30 text-red-900 border-red-800/70'
+                : 'bg-emerald-500/20 text-emerald-600 border-emerald-500/40';
 
     const sliderStateClass =
         hpState === 'extra'
             ? '[&_[data-slot=slider-range]]:bg-sky-500 [&_[data-slot=slider-thumb]]:border-sky-500'
             : hpState === 'negative'
-              ? '[&_[data-slot=slider-range]]:bg-red-900 [&_[data-slot=slider-thumb]]:border-red-900'
-              : '[&_[data-slot=slider-range]]:bg-emerald-500 [&_[data-slot=slider-thumb]]:border-emerald-500';
+                ? '[&_[data-slot=slider-range]]:bg-red-900 [&_[data-slot=slider-thumb]]:border-red-900'
+                : '[&_[data-slot=slider-range]]:bg-emerald-500 [&_[data-slot=slider-thumb]]:border-emerald-500';
 
     const progressStateClass =
         hpState === 'extra'
             ? '[&_[data-slot=progress-indicator]]:bg-sky-500'
             : hpState === 'negative'
-              ? '[&_[data-slot=progress-indicator]]:bg-red-900'
-              : '[&_[data-slot=progress-indicator]]:bg-emerald-500';
+                ? '[&_[data-slot=progress-indicator]]:bg-red-900'
+                : '[&_[data-slot=progress-indicator]]:bg-emerald-500';
 
     const normalizedHP = Math.min(Math.max(currentHP, 0), maxHP);
     const progressValue = (normalizedHP / maxHP) * 100;
@@ -52,6 +55,8 @@ function HitPoints() {
     const minDelta = minHP - currentHP;
     const maxDelta = maxCapHP - currentHP;
     const sliderDeltaLimit = Math.max(Math.abs(minDelta), Math.abs(maxDelta));
+    const isHealing = hpDelta > 0;
+    const sliderActionLabel = isHealing ? `Curando +${hpDelta}` : `Dano ${Math.abs(hpDelta)}`;
 
     const applyModalHPChange = (nextHP: number) => {
         const clampedHP = Math.min(Math.max(nextHP, minHP), maxCapHP);
@@ -60,8 +65,13 @@ function HitPoints() {
             return;
         }
 
-        setLastModalHP(currentHP);
-        setCurrentHP(clampedHP);
+        updateCharacter({
+            hp: {
+                ...character.hp,
+                current: clampedHP,
+            },
+        });
+        saveCharacter();
     };
 
     const applyDeltaHP = (delta: number) => {
@@ -74,7 +84,19 @@ function HitPoints() {
 
     return (
         <div className="flex gap-2">
-            <Button type="button" className="bg-accent text-card-foreground" onClick={() => setCurrentHP((prev) => Math.max(prev - 1, minHP))}>
+            <Button
+                type="button"
+                className="bg-accent text-card-foreground"
+                onClick={() => {
+                    updateCharacter({
+                        hp: {
+                            ...character.hp,
+                            current: Math.max(currentHP - 1, minHP),
+                        },
+                    });
+                    saveCharacter();
+                }}
+            >
                 <Minus size={20} />
             </Button>
             <Dialog>
@@ -98,10 +120,44 @@ function HitPoints() {
                             <span className={`text-xs px-2 py-0.5 rounded-full border ${hpStateBadgeClass}`}>{hpStateLabel}</span>
                         </div>
                         <div className="space-y-2">
-                            <div className="flex items-center justify-between text-sm">
-                                <span>Ajuste de PV</span>
-                                <span>{hpDelta > 0 ? `+${hpDelta}` : hpDelta}</span>
+                            <label htmlFor="max-hp" className="text-sm font-medium">PV Maximo</label>
+                            <Input
+                                id="max-hp"
+                                type="number"
+                                min={1}
+                                value={maxHP}
+                                onFocus={(event) => event.target.select()}
+                                onChange={(event) => {
+                                    const parsedValue = Number(event.target.value)
+                                    const safeMaxHP = Math.max(1, Number.isNaN(parsedValue) ? 1 : parsedValue)
+
+                                    updateCharacter({
+                                        hp: {
+                                            ...character.hp,
+                                            max: safeMaxHP,
+                                        },
+                                    })
+                                    saveCharacter()
+                                }}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between text-sm gap-1">
+                                <span className="flex-1">Curar / Aplicar dano</span>
+                                {hpDelta !== 0 ? (
+                                    <div className="flex justify-end">
+                                        <span
+                                            className={`text-xs px-2 py-0.5 rounded-full border ${isHealing
+                                                ? 'bg-emerald-500/20 text-emerald-600 border-emerald-500/40'
+                                                : 'bg-red-900/30 text-red-900 border-red-800/70'
+                                                }`}
+                                        >
+                                            {sliderActionLabel}
+                                        </span>
+                                    </div>
+                                ) : null}
                             </div>
+
                             <Slider
                                 value={[hpDelta]}
                                 min={-sliderDeltaLimit}
@@ -132,30 +188,25 @@ function HitPoints() {
                         >
                             Resetar para o maxHP
                         </Button>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            className="w-full"
-                            disabled={lastModalHP === null}
-                            onClick={() => {
-                                if (lastModalHP === null) {
-                                    return;
-                                }
-
-                                setCurrentHP(lastModalHP);
-                                setLastModalHP(null);
-                                setHpDelta(0);
-                            }}
-                        >
-                            Desfazer ultima acao
-                        </Button>
                         <div className="text-xs text-muted-foreground">
                             Limites atuais: {minHP} a {maxCapHP} PV.
                         </div>
                     </div>
                 </DialogContent>
             </Dialog>
-            <Button type="button" className="bg-accent text-card-foreground" onClick={() => setCurrentHP((prev) => prev + 1)}>
+            <Button
+                type="button"
+                className="bg-accent text-card-foreground"
+                onClick={() => {
+                    updateCharacter({
+                        hp: {
+                            ...character.hp,
+                            current: currentHP + 1,
+                        },
+                    });
+                    saveCharacter();
+                }}
+            >
                 <Plus size={20} />
             </Button>
         </div>

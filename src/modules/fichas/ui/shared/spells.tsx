@@ -7,7 +7,7 @@ function Spells() {
     const spellsLevel = useMemo(() => Object.keys(spells.level), [spells.level]);
 
     return (
-        <div className="flex flex-col gap-2 overflow-y-scroll max-h-170 pb-4">
+        <div className="flex flex-col gap-2 md:overflow-y-scroll md:max-h-170 pb-4">
             {spellsLevel.map((spellLevel) => (
                 <SpellBlock key={spellLevel} spellLevel={spellLevel} />
             ))}
