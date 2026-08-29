@@ -19,7 +19,7 @@ export function ContainerItem({
   onUpdateQuantity,
 }: ContainerItemProps) {
   const handleDragStart = (e: React.DragEvent) => {
-      e.stopPropagation(); // Impede que o evento propague para o container pai
+    e.stopPropagation(); // Impede que o evento propague para o container pai
     e.dataTransfer.setData(
       'application/json',
       JSON.stringify({ fromContainerId: containerId, itemId: item.id })
@@ -31,33 +31,20 @@ export function ContainerItem({
   const totalPrice = item.gold * item.quantity;
 
   return (
-      // biome-ignore lint: draggable item
+    // biome-ignore lint: draggable item
     <div
       draggable
       onDragStart={handleDragStart}
-          className="bg-accent/30 hover:bg-accent/50 rounded p-2 border border-border/50 cursor-move transition-colors"
+      className="bg-accent/30 hover:bg-accent/50 rounded p-2 border border-border/50 cursor-move transition-colors"
     >
       <div className="flex items-start gap-2">
-              <GripVertical className="w-4 h-4 text-muted-foreground mt-1 shrink-0" />
-        
+        <GripVertical className="w-4 h-4 text-muted-foreground mt-1 shrink-0" />
+
         <div className="flex-1 min-w-0">
           <div className="font-medium text-sm truncate">{item.name}</div>
-          <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
-            <span className="capitalize">{item.type}</span>
-            {item.ev !== null && (
-              <span className="flex items-center gap-1">
-                <Scale className="w-3 h-3" />
-                              {formatNumber(totalWeight)} EV
-              </span>
-            )}
-            <span className="flex items-center gap-1">
-              <Coins className="w-3 h-3 text-yellow-600" />
-                          {formatNumber(totalPrice)} PO
-            </span>
-          </div>
         </div>
 
-              <div className="flex items-center gap-1 shrink-0">
+        <div className="flex items-center gap-1 shrink-0">
           <Button
             size="sm"
             variant="ghost"
@@ -66,11 +53,11 @@ export function ContainerItem({
           >
             <Minus className="w-3 h-3" />
           </Button>
-          
+
           <span className="text-sm font-medium w-8 text-center">
             {item.quantity}
           </span>
-          
+
           <Button
             size="sm"
             variant="ghost"
@@ -79,7 +66,7 @@ export function ContainerItem({
           >
             <Plus className="w-3 h-3" />
           </Button>
-          
+
           <Button
             size="sm"
             variant="ghost"
@@ -91,8 +78,22 @@ export function ContainerItem({
         </div>
       </div>
 
+      <div className="items-center gap-3 text-xs text-muted-foreground mt-1 flex">
+        <span className="capitalize">{item.type}</span>
+        {item.ev !== null && (
+          <span className="flex items-center gap-1">
+            <Scale className="w-3 h-3" />
+            {formatNumber(totalWeight)} EV
+          </span>
+        )}
+        <span className="flex items-center gap-1">
+          <Coins className="w-3 h-3 text-yellow-600" />
+          {formatNumber(totalPrice)} PO
+        </span>
+      </div>
+
       {item.effect && (
-        <p className="text-xs text-muted-foreground mt-1 ml-6 truncate">
+        <p className="text-xs text-muted-foreground mt-1 truncate">
           {item.effect}
         </p>
       )}
