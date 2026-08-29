@@ -1,15 +1,19 @@
 import { useMemo, useState } from 'react';
 import Abilities from '../shared/abilities';
-import Combat from './combat';
-import Inventory from './inventory';
 import Notes from '../shared/notes';
 import Spells from '../shared/spells';
+import Combat from './combat';
+import Inventory from './inventory';
 import Tabs from './tabs';
 
 function More() {
     const [selectedId, setSelectedId] = useState<string | null>('inventory');
 
     const tabs = useMemo(() => [
+        {
+            id: 'combat',
+            name: 'Combate',
+        },
         {
             id: 'abilities',
             name: 'Habilidades',
@@ -28,26 +32,13 @@ function More() {
         },
     ], []);
 
-    const mobileTabs = useMemo(() => [
-        {
-            id: 'combat',
-            name: 'Combate',
-        },
-        ...tabs,
-    ], [tabs]);
-
     function handleSelected(id: string) {
         setSelectedId(id);
     }
 
     return (
         <div id="More" className="card overflow-hidden h-full">
-            <div className="block lg:hidden">
-                <Tabs tabs={mobileTabs} selectedId={selectedId} handleSelected={handleSelected} />
-            </div>
-            <div className="hidden lg:block">
-                <Tabs tabs={tabs} selectedId={selectedId} handleSelected={handleSelected} />
-            </div>
+            <Tabs tabs={tabs} selectedId={selectedId} handleSelected={handleSelected} />
             {selectedId === 'inventory' && <Inventory />}
             {selectedId === 'abilities' && <Abilities />}
             {selectedId === 'spells' && <Spells />}

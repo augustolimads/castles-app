@@ -19,7 +19,7 @@ function SheetsContentFallback() {
 
 export default function FichasPage() {
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto md:px-4 py-6">
       <Suspense fallback={<SheetsContentFallback />}>
         <SheetsContent />
       </Suspense>

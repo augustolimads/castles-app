@@ -15,6 +15,8 @@ interface IEquipment {
     ev: number;
 }
 
+type ItemClassification = 'expert' | 'greater expert' | 'magica' | 'prateada';
+
 interface IItem {
     id: string;
     qtd: number;
@@ -23,6 +25,11 @@ interface IItem {
     ev: number;
     icon?: string;
     slot?: number;
+    itemType?: string;
+    attackBonus?: number;
+    customDamage?: string;
+    customArmorClass?: number;
+    classification?: ItemClassification;
 }
 
 interface InventoryState {

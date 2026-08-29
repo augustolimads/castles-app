@@ -53,12 +53,19 @@ export interface IEquipment {
   ev: number;
 }
 
+export type ItemClassification = 'expert' | 'greater expert' | 'magica' | 'prateada';
+
 export interface IItem {
   id: string;
   qtd: number;
   name: string;
   description: string;
   ev: number;
+  itemType?: string;
+  attackBonus?: number;
+  customDamage?: string;
+  customArmorClass?: number;
+  classification?: ItemClassification;
 }
 
 export interface InventoryData {

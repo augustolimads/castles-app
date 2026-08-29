@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import type { CharacterSheet } from '../../types';
 
 interface SheetCardProps {
@@ -12,26 +13,16 @@ interface SheetCardProps {
   onDragEnd: () => void;
 }
 
-const typeLabels = {
-  personagem: 'Personagem',
-  npc: 'NPC',
-  monstro: 'Monstro',
-};
-
-const typeColors = {
-  personagem: 'default',
-  npc: 'secondary',
-  monstro: 'destructive',
-} as const;
-
 export function SheetCard({
   sheet,
   onDelete,
   onDragStart,
   onDragEnd,
 }: SheetCardProps) {
+  const router = useRouter();
+
   const handleCardClick = () => {
-    window.open(`/fichas/${sheet.id}`, '_blank');
+    router.push(`/fichas/${sheet.id}`);
   };
 
   const handleDelete = (e: React.MouseEvent) => {
@@ -52,7 +43,7 @@ export function SheetCard({
         <button
           type="button"
           onClick={handleCardClick}
-          className="flex min-w-0 flex-1 items-center gap-3 text-left"
+          className="flex items-center gap-3 text-left"
         >
           <div
             className="h-12 w-12 shrink-0 rounded-md bg-cover bg-center border"
@@ -61,34 +52,30 @@ export function SheetCard({
               backgroundColor: '#ccc'
             }}
           />
+        </button>
 
-          <div className="min-w-0">
-            <p className="truncate text-sm font-semibold leading-tight">{sheet.name}</p>
+        <div>
+          <div className="">
+            <p className="truncate text-sm font-semibold leading-tight w-37 md:w-auto">{sheet.name}</p>
             <p className="truncate text-xs text-muted-foreground">
               {sheet.race || 'Sem raça'} - {sheet.class || 'Sem classe'}
             </p>
           </div>
-        </button>
 
-        <Badge variant="outline" className="h-6 shrink-0">
-          Nv. {sheet.level}
-        </Badge>
+          <Badge variant="outline" className="h-6 shrink-0">
+            Nv. {sheet.level}
+          </Badge>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleDelete}
-          className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
-          title="Excluir ficha"
-        >
-          <Trash2 size={15} />
-        </Button>
-      </div>
-
-      <div className="mt-3 flex items-center gap-2">
-        <Badge variant={typeColors[sheet.type]}>
-          {typeLabels[sheet.type]}
-        </Badge>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleDelete}
+            className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+            title="Excluir ficha"
+          >
+            <Trash2 size={15} />
+          </Button>
+        </div>
       </div>
     </article>
   );

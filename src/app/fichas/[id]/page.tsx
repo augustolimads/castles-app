@@ -1,15 +1,12 @@
 'use client';
 
-import { useIsMobile } from "@/hooks/use-mobile";
-import SheetDesktop from "@/modules/fichas/ui/desktop/sheetDesktop";
 import { handleBeforeUnload } from "@/modules/fichas/appChanges";
 import { loadCharacter, saveCharacter, useCharacterStore } from "@/modules/fichas/stores/character";
-import { use, useEffect } from 'react';
 import SheetMobile from "@/modules/fichas/ui/mobile/sheetMobile";
+import { use, useEffect } from 'react';
 
 export default function SheetDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
-    const isMobile = useIsMobile();
 
     useEffect(() => {
         // Carregar o character pelo ID da URL
@@ -48,7 +45,7 @@ export default function SheetDetailPage({ params }: { params: Promise<{ id: stri
 
     return (
         <>
-            {isMobile ? <SheetMobile /> : <SheetDesktop />}
+            <SheetMobile currentSheetId={id} />
         </>
     )
 }

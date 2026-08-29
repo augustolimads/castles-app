@@ -6,10 +6,15 @@ import Info from '@/modules/fichas/ui/desktop/info';
 import More from '@/modules/fichas/ui/desktop/more';
 import Portrait from '@/modules/fichas/ui/desktop/portrait';
 import StatList from '@/modules/fichas/ui/desktop/stat-list';
+import { GroupNavigationFooter } from '@/modules/fichas/ui/mobile/group-navigation-footer';
 
-function SheetDesktop() {
+interface SheetDesktopProps {
+    currentSheetId: string;
+}
+
+function SheetDesktop({ currentSheetId }: SheetDesktopProps) {
   return (
-        <main>
+      <main className="pb-20">
             {/* <DiceBox /> */}
             <div
                 id="Grid"
@@ -48,16 +53,18 @@ function SheetDesktop() {
                     <More />
                 </div>
                 <div
-                    className="col-start-1 col-span-2 row-start-23 mb-4 md:mb-0 md:mt-4 md:col-start-3 md:col-span-3 md:row-start-7 md:row-span-4 lg:col-start-9 lg:col-span-2 lg:row-start-3 lg:row-span-4"
+                    className="col-start-1 col-span-4 row-start-24 mb-4 md:mb-0 md:mt-4 md:col-start-3 md:col-span-3 md:row-start-7 md:row-span-4 lg:col-start-9 lg:col-span-2 lg:row-start-3 lg:row-span-4"
                 >
                     <Portrait />
                 </div>
                 <div
-                    className="col-start-3 col-span-2 row-start-23 mb-4 md:my-4 lg:mb-4 md:col-start-3 md:col-span-3 md:row-start-12 lg:col-start-9 lg:col-span-2 lg:row-start-8 lg:row-span-6"
+                    className="col-start-1 col-span-4 row-start-23 mb-4 md:my-4 lg:mb-4 md:col-start-3 md:col-span-3 md:row-start-12 lg:col-start-9 lg:col-span-2 lg:row-start-8 lg:row-span-6"
                 >
                     <Conditions />
                 </div>
             </div>
+
+          <GroupNavigationFooter currentSheetId={currentSheetId} />
         </main>
     );
 }
