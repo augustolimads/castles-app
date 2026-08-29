@@ -246,7 +246,7 @@ export function Header({ activeView, onSetView }: HeaderProps) {
                             onChange={(e) => handleSearchChange(e.target.value)}
                         />
                     </div>
-                    <div className="flex gap-4 items-center flex-wrap">
+                    <div className="flex gap-2 sm:gap-4 items-center flex-wrap">
                         <span className="hidden md:block">Filtros:</span>
                         <DropdownMenu>
                             <DropdownMenuTrigger className="cursor-pointer font-semibold">

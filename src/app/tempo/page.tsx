@@ -379,7 +379,7 @@ function Tempo() {
     const explorationEvents = getExplorationEvents(explorationCounter);
 
     return (
-        <div className="flex flex-col gap-8 pt-8 max-w-4xl mx-auto px-4">
+        <div className="flex flex-col gap-8 pt-8 max-w-4xl mx-auto md:px-4">
             <div className="flex gap-2">
                 <SidebarTrigger />
                 <h1 className="scroll-m-20 text-2xl lg:text-3xl font-extrabold tracking-tight text-balance">

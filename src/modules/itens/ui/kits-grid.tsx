@@ -94,7 +94,7 @@ export function KitsGrid() {
               </Button>
               <Button size="sm" onClick={() => handleAddKit(kit)}>
                 <ShoppingBasket size={14} />
-                Adicionar
+                <span className="hidden md:inline">Adicionar</span>
               </Button>
             </div>
           </div>

@@ -11,6 +11,7 @@ import type { SheetType } from '../../types';
 import { useSheets } from '../../use-sheets';
 import { CreateSheetDialog } from './create-sheet-dialog';
 import { SheetCard } from './sheet-card';
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 const sheetTypes = [
   { id: 'personagem' as const, label: 'Personagens', icon: FileText },
@@ -24,10 +25,10 @@ export function SheetsContent() {
   const pathname = usePathname();
   const initialPage = Number.parseInt(searchParams.get('page') ?? '1', 10);
   const typeParam = searchParams.get('type') as SheetType | null;
-  
+
   const [activeType, setActiveType] = useState<SheetType>(
-    typeParam && ['personagem', 'npc', 'monstro'].includes(typeParam) 
-      ? typeParam 
+    typeParam && ['personagem', 'npc', 'monstro'].includes(typeParam)
+      ? typeParam
       : 'personagem'
   );
 
@@ -57,7 +58,7 @@ export function SheetsContent() {
 
   const updateSearchParams = useCallback((updates: { page?: number; type?: SheetType }) => {
     const params = new URLSearchParams(searchParams.toString());
-    
+
     if (updates.page !== undefined) {
       if (updates.page === 1) {
         params.delete('page');
@@ -102,7 +103,10 @@ export function SheetsContent() {
       {/* Header */}
       <div className="sticky top-2 bg-secondary py-4 px-4 border rounded-lg">
         <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
-          <h1 className="text-2xl font-bold">Fichas de Personagens</h1>
+          <div className="flex items-center gap-2">
+            <SidebarTrigger variant='outline' size='lg' className="p-4" />
+            <h1 className="text-2xl font-bold">Fichas de Personagens</h1>
+          </div>
           <CreateSheetDialog type={activeType} onCreateSheet={addSheet} />
         </div>
 
@@ -112,8 +116,8 @@ export function SheetsContent() {
               const Icon = type.icon;
               const count = sheets.length;
               return (
-                <TabsTrigger 
-                  key={type.id} 
+                <TabsTrigger
+                  key={type.id}
                   value={type.id}
                   className="flex items-center gap-2 py-3"
                 >
@@ -136,9 +140,9 @@ export function SheetsContent() {
         {currentData.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {currentData.map(sheet => (
-              <SheetCard 
-                key={sheet.id} 
-                sheet={sheet} 
+              <SheetCard
+                key={sheet.id}
+                sheet={sheet}
                 onDelete={deleteSheet}
               />
             ))}

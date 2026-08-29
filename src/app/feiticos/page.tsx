@@ -3,7 +3,7 @@ import { SpellsContent } from "@/modules/feiticos/ui/spells-content";
 
 export default function FeiticosPage() {
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto md:px-4 md:py-6">
       <SpellsContent spells={spells} />
     </div>
   );

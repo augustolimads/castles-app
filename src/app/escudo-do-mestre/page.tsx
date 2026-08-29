@@ -87,7 +87,7 @@ function DmScreenContent() {
   }, [closeDetails, selectedTopic])
 
   return (
-    <div className="flex w-full flex-col gap-8 px-4 py-6 md:px-6">
+    <div className="flex w-full flex-col gap-8 py-4 md:py-6 md:px-6">
       <header className="relative overflow-hidden rounded-3xl border bg-muted/20 shadow-sm">
         <div className="relative h-44 w-full sm:h-56 lg:h-64">
           <Image

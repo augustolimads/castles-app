@@ -61,7 +61,7 @@ export function ItemHorizontalCard({ item, onHide, onRestore }: ItemHorizontalCa
         <div className="flex gap-2">
           <div className="flex flex-1 items-center gap-1">
             <CircleDollarSignIcon size={16} className="text-amber-500" />
-            <span className="flex w-full items-center font-semibold text-sm">{item.gold} PO</span>
+            <span className="flex w-full flex-1 items-center font-semibold text-sm">{item.gold} PO</span>
           </div>
           {item.ev !== null && item.ev !== undefined && <Badge variant="outline">
             <div className="flex gap-1">
@@ -71,7 +71,7 @@ export function ItemHorizontalCard({ item, onHide, onRestore }: ItemHorizontalCa
             <p className="text-xs font-semibold">{item.ev}</p>
           </Badge>}
         </div>
-        <div className="flex gap-1 w-1/2">
+        <div className="flex gap-1 md:w-1/2">
           {onRestore && (
             <Button variant="outline" size="icon" className="cursor-pointer shrink-0" title="Restaurar item" onClick={onRestore}>
               <RotateCcw size={16} />
@@ -82,9 +82,9 @@ export function ItemHorizontalCard({ item, onHide, onRestore }: ItemHorizontalCa
               <EyeOff size={16} />
             </Button>
           )}
-          <Button className="flex-1 cursor-pointer" onClick={handleAddToCart}>
+          <Button className="sm:flex-1 cursor-pointer" onClick={handleAddToCart}>
             <ShoppingBasket />
-            <span className="text-xs">Adicionar</span>
+            <span className="text-xs hidden md:inline">Adicionar</span>
           </Button>
         </div>
       </div>

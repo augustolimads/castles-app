@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMemo, useState } from "react";
 import type { Spell } from '../feiticos';
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 interface SpellsContentProps {
     spells: Spell[];
@@ -53,7 +54,10 @@ export function SpellsContent({ spells }: SpellsContentProps) {
     return (
         <div className="space-y-6">
             <div className="sticky top-2 bg-secondary py-4 px-4 border rounded-lg">
-                <h1 className="text-2xl font-bold mb-4">Grimório de Feitiços</h1>
+                <div className="flex gap-2">
+                    <SidebarTrigger variant='outline' size='lg' className="p-4" />
+                    <h1 className="text-2xl font-bold mb-4">Grimório de Feitiços</h1>
+                </div>
                 <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as typeof activeTab)}>
                     <TabsList className="grid w-full grid-cols-3 h-auto">
                         {casterTypes.map(type => (
