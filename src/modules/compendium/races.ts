@@ -19,7 +19,7 @@ export const races: Race[] = [
     {
         id: "anao",
         name: "Anão",
-        languages: "Comum, Anão, Gnomo, Goblinóide, Pequenino, Élfi- co, Ogro, Gigante, Troll",
+        languages: "Comum, Anão, Gnomo, Goblinóide, Pequenino, Élfico, Ogro, Gigante, Troll",
         size: "Pequeno",
         movement: "20ft (6m)",
         typicalClasses: "Fighter, Rogue, Barbarian, Cleric, Bard",

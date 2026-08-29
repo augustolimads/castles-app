@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased relative h-screen overflow-y-hidden md:overflow-auto md:h-auto`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased relative min-h-screen overflow-auto md:h-auto`}
       >
         <StorageMigration />
         <AuthProvider>

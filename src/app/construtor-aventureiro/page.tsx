@@ -885,19 +885,34 @@ export default function AdventurerConstructor() {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="step1">
-            1. Atributos
+            <span className="md:hidden">1.</span>
+            <span className="hidden md:block">
+              1. Atributos
+            </span>
           </TabsTrigger>
           <TabsTrigger value="step2" disabled={!canAccessStep2}>
-            2. Raça/Classe
+            <span className="md:hidden">2.</span>
+            <span className="hidden md:block">
+              2. Raça/Classe
+            </span>
           </TabsTrigger>
           <TabsTrigger value="step3" disabled={!canAccessStep3}>
-            3. Atrib. Primários
+            <span className="md:hidden">3.</span>
+            <span className="hidden md:block">
+              3. Atrib. Primários
+            </span>
           </TabsTrigger>
           <TabsTrigger value="step4" disabled={!canAccessStep4}>
-            4. Realocar Pontos
+            <span className="md:hidden">4.</span>
+            <span className="hidden md:block">
+              4. Realocar Pontos
+            </span>
           </TabsTrigger>
           <TabsTrigger value="step5" disabled={!canAccessStep5}>
-            5. Detalhes Finais
+            <span className="md:hidden">5.</span>
+            <span className="hidden md:block">
+              5. Detalhes Finais
+            </span>
           </TabsTrigger>
         </TabsList>
 
@@ -963,7 +978,7 @@ export default function AdventurerConstructor() {
           </div>
 
           <div className="flex gap-4 items-center justify-between flex-wrap">
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <Button
                 type="button"
                 onClick={handleRollAttributes}
@@ -1297,7 +1312,7 @@ export default function AdventurerConstructor() {
             <CharGen.TextInput disabled label="Sobrecarga" id="carryingCapacity" value={carryingCapacity} />
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex justify-between flex-wrap gap-2">
             <Button variant="outline" onClick={() => setActiveTab("step4")}>
               ← Voltar
             </Button>
