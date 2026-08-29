@@ -4,6 +4,7 @@ import { syncedLocalStorage } from '@/lib/sync';
 import { useEffect, useState } from 'react';
 import { createNewCharacter, deleteCharacterFromStorage, saveCharacterToStorage } from './stores/character';
 import type { CharacterSheet, SheetType } from './types';
+import { assignSheetToDefaultGroup, removeSheetFromAllGroups } from './use-sheet-groups';
 
 const SHEETS_STORAGE_KEY = 'castles-character-sheets';
 const SHEETS_UPDATED_EVENT = 'sheets-updated';
@@ -61,6 +62,7 @@ export function useSheets(filterType?: SheetType) {
     // Salvar o sheet na lista
     const allSheets = getStoredSheets();
     saveSheets([...allSheets, newSheet]);
+    assignSheetToDefaultGroup(newSheet.id);
 
     // Criar o character completo no store com dados básicos
     const newCharacter = createNewCharacter({
@@ -89,6 +91,7 @@ export function useSheets(filterType?: SheetType) {
   const deleteSheet = (id: string) => {
     const allSheets = getStoredSheets();
     saveSheets(allSheets.filter(sheet => sheet.id !== id));
+    removeSheetFromAllGroups(id);
 
     // Deletar o character correspondente (formato unificado - uma única entrada)
     deleteCharacterFromStorage(id);

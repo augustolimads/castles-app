@@ -8,6 +8,8 @@ import type { CharacterSheet } from '../../types';
 interface SheetCardProps {
   sheet: CharacterSheet;
   onDelete: (id: string) => void;
+  onDragStart: (sheetId: string) => void;
+  onDragEnd: () => void;
 }
 
 const typeLabels = {
@@ -22,7 +24,12 @@ const typeColors = {
   monstro: 'destructive',
 } as const;
 
-export function SheetCard({ sheet, onDelete }: SheetCardProps) {
+export function SheetCard({
+  sheet,
+  onDelete,
+  onDragStart,
+  onDragEnd,
+}: SheetCardProps) {
   const handleCardClick = () => {
     window.open(`/fichas/${sheet.id}`, '_blank');
   };
@@ -34,73 +41,55 @@ export function SheetCard({ sheet, onDelete }: SheetCardProps) {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleCardClick();
-    }
-  };
-
   return (
-    <div
-      role="button"
-      tabIndex={0}
-      className="relative group cursor-pointer rounded-lg overflow-hidden border bg-card hover:shadow-lg transition-all duration-200 text-left w-full"
-      onClick={handleCardClick}
-      onKeyDown={handleKeyDown}
+    <article
+      draggable
+      onDragStart={() => onDragStart(sheet.id)}
+      onDragEnd={onDragEnd}
+      className="rounded-lg border bg-card p-3 cursor-grab active:cursor-grabbing"
     >
-      {/* Content */}
-      <div className="relative p-4 flex gap-4">
-        {/* Portrait */}
-        <div className="shrink-0">
-          <div 
-            className="w-20 h-20 rounded-full bg-cover bg-center border-2 border-border"
-            style={{ 
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={handleCardClick}
+          className="flex min-w-0 flex-1 items-center gap-3 text-left"
+        >
+          <div
+            className="h-12 w-12 shrink-0 rounded-md bg-cover bg-center border"
+            style={{
               backgroundImage: `url(${sheet.portrait || '/placeholder-portrait.jpg'})`,
               backgroundColor: '#ccc'
             }}
           />
-        </div>
 
-        {/* Info */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-2 mb-2">
-            <h3 className="font-semibold text-lg truncate">{sheet.name}</h3>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleDelete}
-              className="opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8 p-0"
-              title="Excluir ficha"
-            >
-              <Trash2 size={16} />
-            </Button>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold leading-tight">{sheet.name}</p>
+            <p className="truncate text-xs text-muted-foreground">
+              {sheet.race || 'Sem raça'} - {sheet.class || 'Sem classe'}
+            </p>
           </div>
+        </button>
 
-          <div className="space-y-1 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <span className="font-medium">Raça:</span>
-              <span>{sheet.race}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="font-medium">Classe:</span>
-              <span>{sheet.class}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="font-medium">Nível:</span>
-              <Badge variant="outline" className="h-5">
-                {sheet.level}
-              </Badge>
-            </div>
-          </div>
+        <Badge variant="outline" className="h-6 shrink-0">
+          Nv. {sheet.level}
+        </Badge>
 
-          <div className="mt-2">
-            <Badge variant={typeColors[sheet.type]}>
-              {typeLabels[sheet.type]}
-            </Badge>
-          </div>
-        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleDelete}
+          className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+          title="Excluir ficha"
+        >
+          <Trash2 size={15} />
+        </Button>
       </div>
-    </div>
+
+      <div className="mt-3 flex items-center gap-2">
+        <Badge variant={typeColors[sheet.type]}>
+          {typeLabels[sheet.type]}
+        </Badge>
+      </div>
+    </article>
   );
 }

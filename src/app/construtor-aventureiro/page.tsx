@@ -25,7 +25,7 @@ import {
   treasureFormula
 } from "@/modules/data/gameData";
 import { saveCharacterToStorage } from "@/modules/fichas/stores/character";
-import { CharacterState } from "@/modules/fichas/types";
+import type { CharacterState } from "@/modules/fichas/types";
 import { useSheets } from "@/modules/fichas/use-sheets";
 import { DiceRoll } from "@dice-roller/rpg-dice-roller";
 import { useRouter } from "next/navigation";

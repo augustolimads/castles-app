@@ -12,12 +12,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { SheetType } from '../../types';
 
 interface CreateSheetDialogProps {
-  type: SheetType;
   onCreateSheet: (sheet: {
     type: SheetType;
     portrait: string;
@@ -34,10 +34,11 @@ const typeLabels = {
   monstro: 'Monstro',
 };
 
-export function CreateSheetDialog({ type, onCreateSheet }: CreateSheetDialogProps) {
+export function CreateSheetDialog({ onCreateSheet }: CreateSheetDialogProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
+    type: 'personagem' as SheetType,
     name: '',
     race: '',
     class: '',
@@ -76,12 +77,12 @@ export function CreateSheetDialog({ type, onCreateSheet }: CreateSheetDialogProp
     if (!formData.name.trim()) return;
 
     const newSheetId = onCreateSheet({
-      type,
       ...formData,
     });
 
     // Reset form
     setFormData({
+      type: 'personagem',
       name: '',
       race: '',
       class: '',
@@ -97,18 +98,37 @@ export function CreateSheetDialog({ type, onCreateSheet }: CreateSheetDialogProp
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Nova Ficha de {typeLabels[type]}</Button>
+        <Button>Nova Ficha</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-125">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Criar Nova Ficha de {typeLabels[type]}</DialogTitle>
+            <DialogTitle>Criar Nova Ficha</DialogTitle>
             <DialogDescription>
               Preencha os dados básicos da ficha. Você poderá editar detalhes depois.
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="sheet-type">Tipo da ficha</Label>
+              <Select
+                value={formData.type}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, type: value as SheetType }))
+                }
+              >
+                <SelectTrigger id="sheet-type">
+                  <SelectValue placeholder="Selecione um tipo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="personagem">{typeLabels.personagem}</SelectItem>
+                  <SelectItem value="npc">{typeLabels.npc}</SelectItem>
+                  <SelectItem value="monstro">{typeLabels.monstro}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             <div className="grid gap-2">
               <Label htmlFor="name">Nome *</Label>
               <Input
