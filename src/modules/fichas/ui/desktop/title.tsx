@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, ShoppingBasket } from "lucide-react";
 
 interface IAction {
     title: string;
@@ -11,10 +11,11 @@ interface TitleProps {
     name: string;
     primary?: IAction;
     secondary?: IAction;
+    cart?: IAction;
     search?: IAction;
 }
 
-function Title({ name, primary, secondary, search }: TitleProps) {
+function Title({ name, primary, secondary, cart, search }: TitleProps) {
     return (
         <div className="flex items-center justify-between">
             <h2 className="font-bold text-xl text-left pb-1">{name}</h2>
@@ -30,30 +31,41 @@ function Title({ name, primary, secondary, search }: TitleProps) {
                     </button>
                 )}
 
-                {search?.action && (
-                    <button
-                        type="button"
-                        className="cursor-pointer flex justify-center"
-                        onClick={() => search.action?.()}
-                        title={search.title}
-                    >
-                        <Search size={20} />
-                    </button>
-                )}
+              {cart?.action && (
+                  <button
+                      type="button"
+                      className="cursor-pointer flex justify-center"
+                      onClick={() => cart.action?.()}
+                      title={cart.title}
+                  >
+                      <ShoppingBasket size={20} />
+                  </button>
+              )}
 
-                {primary?.action && (
-                    <button
-                        type="button"
-                        className="cursor-pointer flex justify-center"
-                        onClick={() => primary.action?.()}
-                        title={primary.title}
-                    >
-                        <Plus />
-                    </button>
-                )}
-            </div>
-        </div>
-    );
+              {search?.action && (
+                  <button
+                      type="button"
+                      className="cursor-pointer flex justify-center"
+                      onClick={() => search.action?.()}
+                      title={search.title}
+                  >
+                      <Search size={20} />
+                  </button>
+              )}
+
+              {primary?.action && (
+                  <button
+                      type="button"
+                      className="cursor-pointer flex justify-center"
+                      onClick={() => primary.action?.()}
+                      title={primary.title}
+                  >
+                      <Plus />
+                  </button>
+              )}
+          </div>
+      </div>
+  );
 }
 
 export default Title;
