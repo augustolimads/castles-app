@@ -153,14 +153,14 @@ function Abilities() {
                                 onInput={(e) => updateAbility(ability.id, 'title', e.currentTarget.value)}
                             />
                             <textarea
-                                className="input min-h-20 w-full py-2"
+                                className="input min-h-20 w-full py-2 font-normal!"
                                 placeholder="Description"
                                 value={ability.description}
                                 onFocus={(e) => e.currentTarget.select()}
                                 onInput={(e) => updateAbility(ability.id, 'description', e.currentTarget.value)}
                             />
                             <input
-                                className="input w-full"
+                                className="input w-full font-normal!"
                                 placeholder="Origin"
                                 value={ability.origin}
                                 onFocus={(e) => e.currentTarget.select()}
