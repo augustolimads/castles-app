@@ -5,8 +5,8 @@ import { Backpack, NotebookText, Sprout, Swords, Wand } from 'lucide-react';
 
 const tabConfig = [
     { id: 'combat', label: 'Combate', Icon: Swords },
-    { id: 'abilities', label: 'Habilidades', Icon: Sprout },
     { id: 'inventory', label: 'Inventário', Icon: Backpack },
+    { id: 'abilities', label: 'Habilidades', Icon: Sprout },
     { id: 'spells', label: 'Feitiços', Icon: Wand },
     { id: 'notes', label: 'Notas', Icon: NotebookText },
 ] as const;

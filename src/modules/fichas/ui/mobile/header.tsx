@@ -22,29 +22,29 @@ import { saveCharacter, useCharacterStore } from '@/modules/fichas/stores/charac
 import { useEffect } from 'react'
 
 const raceOptions = [
-    'Anao',
-    'Elfo',
-    'Gnomo',
-    'Halfling',
-    'Humano',
-    'Meio-Elfo',
-    'Meio-Orc',
+    { label: 'Anão', value: 'anao' },
+    { label: 'Elfo', value: 'elfo' },
+    { label: 'Gnomo', value: 'gnomo' },
+    { label: 'Halfling', value: 'halfling' },
+    { label: 'Humano', value: 'humano' },
+    { label: 'Meio-Elfo', value: 'meio-elfo' },
+    { label: 'Meio-Orc', value: 'meio-orc' },
 ]
 
 const classOptions = [
-    'Assassino',
-    'Barbaro',
-    'Bardo',
-    'Clerigo',
-    'Druida',
-    'Combatente',
-    'Ilusionista',
-    'Cavaleiro',
-    'Monge',
-    'Paladino',
-    'Explorador',
-    'Trapaceiro',
-    'Mago',
+    { label: 'Assassino', value: 'assassino' },
+    { label: 'Barbaro', value: 'barbaro' },
+    { label: 'Bardo', value: 'bardo' },
+    { label: 'Clerigo', value: 'clerigo' },
+    { label: 'Druida', value: 'druida' },
+    { label: 'Combatente', value: 'combatente' },
+    { label: 'Ilusionista', value: 'ilusionista' },
+    { label: 'Cavaleiro', value: 'cavaleiro' },
+    { label: 'Monge', value: 'monge' },
+    { label: 'Paladino', value: 'paladino' },
+    { label: 'Explorador', value: 'explorador' },
+    { label: 'Trapaceiro', value: 'trapaceiro' },
+    { label: 'Mago', value: 'mago' },
 ]
 
 function Header() {
@@ -78,9 +78,15 @@ function Header() {
         }
     }, [character.info, updateCharacter])
 
-    function updateInfoField(id: 'name' | 'race' | 'charClass' | 'level' | 'xp' | 'nextLevel', value: string | number) {
+    function updateInfoField(id: 'name' | 'portrait' | 'race' | 'charClass' | 'level' | 'xp' | 'nextLevel', value: string | number) {
         if (id === 'name') {
             updateCharacter({ name: String(value) })
+            saveCharacter()
+            return
+        }
+
+        if (id === 'portrait') {
+            updateCharacter({ portrait: String(value) })
             saveCharacter()
             return
         }
@@ -123,9 +129,9 @@ function Header() {
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Informacoes do personagem</DialogTitle>
+                        <DialogTitle>Informações do personagem</DialogTitle>
                         <DialogDescription>
-                            Ajuste os dados basicos da ficha.
+                            Ajuste os dados básicos da ficha.
                         </DialogDescription>
                     </DialogHeader>
 
@@ -140,20 +146,32 @@ function Header() {
                             />
                         </div>
 
+                        <div className="space-y-2">
+                            <Label htmlFor="character-portrait">URL da imagem do avatar</Label>
+                            <Input
+                                id="character-portrait"
+                                type="url"
+                                value={character.portrait}
+                                placeholder="https://..."
+                                onFocus={(event) => event.target.select()}
+                                onChange={(event) => updateInfoField('portrait', event.target.value)}
+                            />
+                        </div>
+
                         <div className="grid grid-cols-2 gap-3">
                             <div className="space-y-2">
-                                <Label htmlFor="character-race">Raca</Label>
+                                <Label htmlFor="character-race">Raça</Label>
                                 <Select
                                     value={character.info.race}
                                     onValueChange={(value) => updateInfoField('race', value)}
                                 >
                                     <SelectTrigger id="character-race" className="w-full">
-                                        <SelectValue placeholder="Selecione uma raca" />
+                                        <SelectValue placeholder="Selecione uma raça" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {raceOptions.map((option) => (
-                                            <SelectItem key={option} value={option}>
-                                                {option}
+                                            <SelectItem key={option.value} value={option.value}>
+                                                {option.label}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -170,8 +188,8 @@ function Header() {
                                     </SelectTrigger>
                                     <SelectContent>
                                         {classOptions.map((option) => (
-                                            <SelectItem key={option} value={option}>
-                                                {option}
+                                            <SelectItem key={option.value} value={option.value}>
+                                                {option.label}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -181,11 +199,12 @@ function Header() {
 
                         <div className="grid grid-cols-3 gap-3">
                             <div className="space-y-2">
-                                <Label htmlFor="character-level">Nivel</Label>
+                                <Label htmlFor="character-level">Nível</Label>
                                 <Input
                                     id="character-level"
                                     type="number"
                                     min={1}
+                                    max={24}
                                     value={character.info.level}
                                     onFocus={(event) => event.target.select()}
                                     onChange={(event) => updateInfoField('level', Math.max(1, Number(event.target.value) || 1))}
@@ -203,7 +222,7 @@ function Header() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="character-max-xp">XP maximo</Label>
+                                <Label htmlFor="character-max-xp">XP máximo</Label>
                                 <Input
                                     id="character-max-xp"
                                     type="number"

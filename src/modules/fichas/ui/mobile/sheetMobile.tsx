@@ -18,7 +18,7 @@ interface SheetMobileProps {
 }
 
 function SheetMobile({ currentSheetId }: SheetMobileProps) {
-  const [selectedTab, setSelectedTab] = useState("inventory");
+  const [selectedTab, setSelectedTab] = useState("combat");
 
   return (
     <div className="flex flex-col gap-2">
