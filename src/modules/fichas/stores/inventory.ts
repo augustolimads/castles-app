@@ -75,3 +75,17 @@ export const useEquipmentsStore = create<EquipmentsState>((set) => ({
 export function setDeleteEquipments(value: boolean) {
     useEquipmentsStore.getState().setDeleteMode(value);
 }
+
+interface ItemsState {
+    isDeleteMode: boolean;
+    setDeleteMode: (value: boolean) => void;
+}
+
+export const useItemsStore = create<ItemsState>((set) => ({
+    isDeleteMode: false,
+    setDeleteMode: (value) => set({ isDeleteMode: value }),
+}));
+
+export function setDeleteItems(value: boolean) {
+    useItemsStore.getState().setDeleteMode(value);
+}

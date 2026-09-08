@@ -20,6 +20,8 @@ function Combat() {
 
     const [isEquipmentSearchOpen, setIsEquipmentSearchOpen] = useState(false);
     const [isWeaponSearchOpen, setIsWeaponSearchOpen] = useState(false);
+    const [draggedEquipmentId, setDraggedEquipmentId] = useState<string | null>(null);
+    const [draggedWeaponId, setDraggedWeaponId] = useState<string | null>(null);
 
     // Extrai número de CA do campo effect (ex: "CA +1" -> 1, "CA+8" -> 8)
     function extractAC(effect: string): number {
@@ -95,6 +97,46 @@ function Combat() {
         setDeleteEquipments(!equipments.isDeleteMode);
     }
 
+    function reorderById<T extends { id: string }>(list: T[], sourceId: string, targetId: string) {
+        const sourceIndex = list.findIndex((item) => item.id === sourceId);
+        const targetIndex = list.findIndex((item) => item.id === targetId);
+
+        if (sourceIndex < 0 || targetIndex < 0 || sourceIndex === targetIndex) {
+            return list;
+        }
+
+        const nextList = [...list];
+        const [movedItem] = nextList.splice(sourceIndex, 1);
+        nextList.splice(targetIndex, 0, movedItem);
+        return nextList;
+    }
+
+    function handleEquipmentDragStart(id: string) {
+        setDraggedEquipmentId(id);
+    }
+
+    function handleEquipmentDrop(targetId: string) {
+        if (!draggedEquipmentId || draggedEquipmentId === targetId) {
+            return;
+        }
+
+        const nextEquipments = reorderById(inventory.equipments, draggedEquipmentId, targetId);
+        if (nextEquipments === inventory.equipments) {
+            return;
+        }
+
+        handleInputChange();
+        useInventoryStore.getState().updateInventory({
+            equipments: nextEquipments,
+        });
+        saveCharacter();
+        setDraggedEquipmentId(null);
+    }
+
+    function handleEquipmentDragEnd() {
+        setDraggedEquipmentId(null);
+    }
+
     function newWeapon() {
         handleInputChange();
         useInventoryStore.getState().updateInventory({
@@ -125,6 +167,32 @@ function Combat() {
         setDeleteWeapons(!weapons.isDeleteMode);
     }
 
+    function handleWeaponDragStart(id: string) {
+        setDraggedWeaponId(id);
+    }
+
+    function handleWeaponDrop(targetId: string) {
+        if (!draggedWeaponId || draggedWeaponId === targetId) {
+            return;
+        }
+
+        const nextWeapons = reorderById(inventory.weapons, draggedWeaponId, targetId);
+        if (nextWeapons === inventory.weapons) {
+            return;
+        }
+
+        handleInputChange();
+        useInventoryStore.getState().updateInventory({
+            weapons: nextWeapons,
+        });
+        saveCharacter();
+        setDraggedWeaponId(null);
+    }
+
+    function handleWeaponDragEnd() {
+        setDraggedWeaponId(null);
+    }
+
     return (
         <div className="overflow-hidden flex flex-col gap-2">
             <Title
@@ -149,7 +217,15 @@ function Combat() {
                     <span>EV</span>
                 </div>
                 {inventory.equipments.map((data) => (
-                    <Equipment key={data.id} newEquipment={newEquipment} deleteEquipment={deleteEquipment} data={data} />
+                    <Equipment
+                        key={data.id}
+                        newEquipment={newEquipment}
+                        deleteEquipment={deleteEquipment}
+                        data={data}
+                        onDragStart={handleEquipmentDragStart}
+                        onDrop={handleEquipmentDrop}
+                        onDragEnd={handleEquipmentDragEnd}
+                    />
                 ))}
             </div>
             <hr />
@@ -160,7 +236,7 @@ function Combat() {
                     action: newWeapon,
                 }}
                 secondary={{
-                    title: weapons.isDeleteMode ? 'rolar' : 'deletar',
+                    title: weapons.isDeleteMode ? 'mover' : 'deletar',
                     action: modeToggleDeleteWeapon,
                 }}
                 search={{
@@ -176,7 +252,15 @@ function Combat() {
                     <span>EV</span>
                 </div>
                 {inventory.weapons.map((data) => (
-                    <Weapon key={data.id} newWeapon={newWeapon} deleteWeapon={deleteWeapon} data={data} />
+                    <Weapon
+                        key={data.id}
+                        newWeapon={newWeapon}
+                        deleteWeapon={deleteWeapon}
+                        data={data}
+                        onDragStart={handleWeaponDragStart}
+                        onDrop={handleWeaponDrop}
+                        onDragEnd={handleWeaponDragEnd}
+                    />
                 ))}
             </div>
 

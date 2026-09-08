@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import { handleInputChange } from '../../appChanges';
 import { saveCharacter, useCharacterStore } from '../../stores/character';
-import { useInventoryStore } from '../../stores/inventory';
+import { setDeleteItems, useInventoryStore, useItemsStore } from '../../stores/inventory';
 import Item from './item';
 import { ItemSearchModal } from './item-search-modal';
 import TextInput from './text-input';
@@ -16,8 +16,10 @@ function Inventory() {
     const updateCharacter = useCharacterStore((state) => state.updateCharacter);
     const inventory = useInventoryStore();
     const updateInventory = useInventoryStore((state) => state.updateInventory);
+    const itemsStore = useItemsStore();
     const { items } = useItems();
     const [isItemSearchOpen, setIsItemSearchOpen] = useState(false);
+    const [draggedItemId, setDraggedItemId] = useState<string | null>(null);
 
     function handleSelectItem(item: ItemType) {
         handleInputChange();
@@ -122,6 +124,51 @@ function Inventory() {
         handleInputChange();
     }
 
+    function modeToggleDeleteItem() {
+        setDeleteItems(!itemsStore.isDeleteMode);
+    }
+
+    function reorderById<T extends { id: string }>(list: T[], sourceId: string, targetId: string) {
+        const sourceIndex = list.findIndex((item) => item.id === sourceId);
+        const targetIndex = list.findIndex((item) => item.id === targetId);
+
+        if (sourceIndex < 0 || targetIndex < 0 || sourceIndex === targetIndex) {
+            return list;
+        }
+
+        const nextList = [...list];
+        const [movedItem] = nextList.splice(sourceIndex, 1);
+        nextList.splice(targetIndex, 0, movedItem);
+        return nextList;
+    }
+
+    function handleItemDragStart(id: string) {
+        setDraggedItemId(id);
+    }
+
+    function handleItemDrop(targetId: string) {
+        if (!draggedItemId || draggedItemId === targetId) {
+            return;
+        }
+
+        const nextItems = reorderById(inventory.items, draggedItemId, targetId);
+        if (nextItems === inventory.items) {
+            return;
+        }
+
+        handleInputChange();
+        updateInventory({
+            ...inventory,
+            items: nextItems,
+        });
+        saveCharacter();
+        setDraggedItemId(null);
+    }
+
+    function handleItemDragEnd() {
+        setDraggedItemId(null);
+    }
+
     return (
         <div id="Inventory" className="flex flex-col gap-4 h-full pb-12 justify-between">
             <div className="flex flex-col gap-2 flex-1">
@@ -130,6 +177,10 @@ function Inventory() {
                     primary={{
                         title: 'Novo Item',
                         action: newItem,
+                    }}
+                    secondary={{
+                        title: itemsStore.isDeleteMode ? 'voltar' : 'deletar',
+                        action: modeToggleDeleteItem,
                     }}
                     search={{
                         title: 'Buscar Item',
@@ -144,7 +195,14 @@ function Inventory() {
                     </div>
 
                     {inventory.items.map((data) => (
-                        <Item key={data.id} data={data} newItem={newItem} />
+                        <Item
+                            key={data.id}
+                            data={data}
+                            newItem={newItem}
+                            onDragStart={handleItemDragStart}
+                            onDrop={handleItemDrop}
+                            onDragEnd={handleItemDragEnd}
+                        />
                     ))}
                 </div>
             </div>

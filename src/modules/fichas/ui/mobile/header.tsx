@@ -28,6 +28,7 @@ const raceOptions = [
     { label: 'Halfling', value: 'halfling' },
     { label: 'Humano', value: 'humano' },
     { label: 'Meio-Elfo', value: 'meio-elfo' },
+    { label: 'Meio-Humano', value: 'meio-humano' },
     { label: 'Meio-Orc', value: 'meio-orc' },
 ]
 

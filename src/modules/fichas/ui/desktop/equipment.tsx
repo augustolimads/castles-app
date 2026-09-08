@@ -1,7 +1,7 @@
 'use client';
 
-import { X } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { GripVertical, X } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 import { handleInputChange } from '../../appChanges';
 import { saveCharacter } from '../../stores/character';
 import { useEquipmentsStore, useInventoryStore } from '../../stores/inventory';
@@ -17,11 +17,13 @@ interface EquipmentProps {
     newEquipment: () => void;
     deleteEquipment: (id: string) => void;
     data: EquipmentData;
+    onDragStart: (id: string) => void;
+    onDrop: (id: string) => void;
+    onDragEnd: () => void;
 }
 
-function Equipment({ newEquipment, deleteEquipment, data }: EquipmentProps) {
+function Equipment({ newEquipment, deleteEquipment, data, onDragStart, onDrop, onDragEnd }: EquipmentProps) {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [isHovered, setIsHovered] = useState(false);
     const equipments = useEquipmentsStore();
 
     useEffect(() => {
@@ -53,20 +55,33 @@ function Equipment({ newEquipment, deleteEquipment, data }: EquipmentProps) {
         <div
             id={data.id}
             className="flex gap-2"
-            draggable
         >
             {equipments.isDeleteMode && (
                 <button
                     type="button"
                     className="w-12 cursor-pointer"
                     onClick={() => deleteEquipment(data.id)}
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
                 >
-                    {isHovered && <X size={12} />}
+                    <X size={12} />
                 </button>
             )}
-            {!equipments.isDeleteMode && <div className="w-12" />}
+            {!equipments.isDeleteMode && (
+                <button
+                    type="button"
+                    aria-label="Mover equipamento"
+                    draggable
+                    onDragStart={() => onDragStart(data.id)}
+                    onDragOver={(event) => event.preventDefault()}
+                    onDrop={(event) => {
+                        event.preventDefault();
+                        onDrop(data.id);
+                    }}
+                    onDragEnd={onDragEnd}
+                    className="w-12 flex items-center justify-center cursor-grab active:cursor-grabbing text-muted-foreground/70"
+                >
+                    <GripVertical size={14} />
+                </button>
+            )}
             <input
                 id="name"
                 className="input w-full"

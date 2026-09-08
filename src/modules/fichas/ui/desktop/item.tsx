@@ -1,10 +1,10 @@
 'use client'
 
-import { X } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { GripVertical, X } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 import { handleInputChange } from '../../appChanges';
 import { saveCharacter } from '../../stores/character';
-import { useInventoryStore } from '../../stores/inventory';
+import { useInventoryStore, useItemsStore } from '../../stores/inventory';
 
 interface ItemData {
     id: string;
@@ -17,13 +17,16 @@ interface ItemData {
 interface ItemProps {
     data: ItemData;
     newItem: () => void;
+    onDragStart: (id: string) => void;
+    onDrop: (id: string) => void;
+    onDragEnd: () => void;
 }
 
-function Item({ data, newItem }: ItemProps) {
+function Item({ data, newItem, onDragStart, onDrop, onDragEnd }: ItemProps) {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [isHovered, setIsHovered] = useState(false);
     const inventory = useInventoryStore();
     const updateInventory = useInventoryStore((state) => state.updateInventory);
+    const itemsStore = useItemsStore();
 
     useEffect(() => {
         inputRef.current?.focus();
@@ -74,17 +77,32 @@ function Item({ data, newItem }: ItemProps) {
         <div
             id={data.id}
             className="flex gap-2"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            draggable
         >
-            <button
-                type="button"
-                className="w-12 cursor-pointer"
-                onClick={() => deleteItem(data.id)}
-            >
-                {isHovered && <X size={12} />}
-            </button>
+            {itemsStore.isDeleteMode ? (
+                <button
+                    type="button"
+                    className="w-12 cursor-pointer"
+                    onClick={() => deleteItem(data.id)}
+                >
+                    <X size={12} />
+                </button>
+            ) : (
+                <button
+                    type="button"
+                    aria-label="Mover item"
+                    draggable
+                    onDragStart={() => onDragStart(data.id)}
+                    onDragOver={(event) => event.preventDefault()}
+                    onDrop={(event) => {
+                        event.preventDefault();
+                        onDrop(data.id);
+                    }}
+                    onDragEnd={onDragEnd}
+                    className="w-12 flex items-center justify-center cursor-grab active:cursor-grabbing text-muted-foreground/70"
+                >
+                    <GripVertical size={14} />
+                </button>
+            )}
             <input
                 id="qtd"
                 className="input w-8"

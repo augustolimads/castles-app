@@ -1,12 +1,10 @@
 'use client';
 
-import { DicesIcon, X } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { GripVertical, X } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 import { handleInputChange } from '../../appChanges';
 import { saveCharacter } from '../../stores/character';
 import { useInventoryStore, useWeaponsStore } from '../../stores/inventory';
-import { setRollDice } from '../../stores/rollDice';
-import { useDiscordStore } from '../../stores/sheet';
 
 interface WeaponData {
     id: string;
@@ -20,11 +18,13 @@ interface WeaponProps {
     newWeapon: () => void;
     deleteWeapon: (id: string) => void;
     data: WeaponData;
+    onDragStart: (id: string) => void;
+    onDrop: (id: string) => void;
+    onDragEnd: () => void;
 }
 
-function Weapon({ newWeapon, deleteWeapon, data }: WeaponProps) {
+function Weapon({ newWeapon, deleteWeapon, data, onDragStart, onDrop, onDragEnd }: WeaponProps) {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [isHovered, setIsHovered] = useState(false);
     const weapons = useWeaponsStore();
 
     useEffect(() => {
@@ -52,24 +52,10 @@ function Weapon({ newWeapon, deleteWeapon, data }: WeaponProps) {
         saveCharacter();
     }
 
-    function handleClick() {
-        setRollDice(`1d20+${data.dmg}`);
-        useDiscordStore.getState().setTitle(data.name);
-        useDiscordStore.getState().setIsWeaponRoll(true);
-        useDiscordStore.getState().setWeaponAttackMod(data.bth);
-    }
-
     return (
         <div
             id={data.id}
-            role="button"
-            tabIndex={0}
             className="flex gap-2"
-            onMouseEnter={() => setIsHovered(true)}
-            onFocus={() => void 0}
-            onMouseLeave={() => setIsHovered(false)}
-            onBlur={() => void 0}
-            draggable
         >
             {weapons.isDeleteMode ? (
                 <button
@@ -77,11 +63,23 @@ function Weapon({ newWeapon, deleteWeapon, data }: WeaponProps) {
                     className="w-8 cursor-pointer"
                     onClick={() => deleteWeapon(data.id)}
                 >
-                    {isHovered && <X size={12} />}
+                    <X size={12} />
                 </button>
             ) : (
-                <button type="button" className="w-8 cursor-pointer" onClick={handleClick}>
-                    <DicesIcon size={14} />
+                    <button
+                        type="button"
+                        aria-label="Mover arma"
+                        draggable
+                        onDragStart={() => onDragStart(data.id)}
+                        onDragOver={(event) => event.preventDefault()}
+                        onDrop={(event) => {
+                            event.preventDefault();
+                            onDrop(data.id);
+                        }}
+                        onDragEnd={onDragEnd}
+                        className="w-8 flex items-center justify-center cursor-grab active:cursor-grabbing text-muted-foreground/70"
+                    >
+                        <GripVertical size={14} />
                 </button>
             )}
             <input
