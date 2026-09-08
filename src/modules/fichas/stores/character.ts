@@ -84,6 +84,7 @@ const initialState: CharacterState = {
         torches: 0,
         conditions: ''
     },
+    abilities: [],
     notes: ''
 };
 
@@ -357,6 +358,7 @@ export function loadCharacter(charId: string): CharacterState | null {
             treasure: { ...initialState.treasure, ...characterData.treasure },
             encumbrance: { ...initialState.encumbrance, ...characterData.encumbrance },
             tracking: { ...initialState.tracking, ...characterData.tracking },
+            abilities: Array.isArray(characterData.abilities) ? characterData.abilities : [],
         };
         useCharacterStore.getState().setCharacter(mergedData);
         updateTitle();

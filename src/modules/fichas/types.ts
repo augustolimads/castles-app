@@ -74,6 +74,13 @@ export interface InventoryData {
   items: IItem[];
 }
 
+export interface CharacterAbility {
+  id: string;
+  title: string;
+  description: string;
+  origin: string;
+}
+
 export interface Attribute {
   value: number;
   type: number; // 1 = primário, 2 = secundário, 3 = terciário (padrão)
@@ -138,6 +145,7 @@ export interface CharacterState {
     torches: number;
     conditions: string;
   };
+  abilities: CharacterAbility[];
   notes: string;
 }
 
