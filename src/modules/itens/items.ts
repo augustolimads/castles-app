@@ -2365,7 +2365,7 @@ export const items: Item[] = [
   {
     "id": "ID-156-20260103155224",
     "type": "escudo",
-    "name": "Grande, Aço",
+    "name": "Escudo Grande, Aço",
     "gold": 20,
     "ev": 4,
     "obs": "",
@@ -2380,7 +2380,7 @@ export const items: Item[] = [
   {
     "id": "ID-157-20260103155224",
     "type": "escudo",
-    "name": "Grande, Madeira",
+    "name": "Escudo Grande, Madeira",
     "gold": 7,
     "ev": 4,
     "obs": "",
@@ -3043,7 +3043,7 @@ export const items: Item[] = [
   {
     "id": "ID-201-20260103155224",
     "type": "escudo",
-    "name": "Médio, Aço",
+    "name": "Escudo Médio, Aço",
     "gold": 15,
     "ev": 3,
     "obs": "",
@@ -3058,7 +3058,7 @@ export const items: Item[] = [
   {
     "id": "ID-202-20260103155224",
     "type": "escudo",
-    "name": "Médio, Madeira",
+    "name": "Escudo Médio, Madeira",
     "gold": 5,
     "ev": 3,
     "obs": "",
@@ -3225,7 +3225,7 @@ export const items: Item[] = [
   {
     "id": "ID-212-20260103155224",
     "type": "escudo",
-    "name": "Pequeno, Aço",
+    "name": "Escudo Pequeno, Aço",
     "gold": 9,
     "ev": 2,
     "obs": "",
@@ -3240,7 +3240,7 @@ export const items: Item[] = [
   {
     "id": "ID-213-20260103155224",
     "type": "escudo",
-    "name": "Pequeno, Madeira",
+    "name": "Escudo Pequeno, Madeira",
     "gold": 3,
     "ev": 2,
     "obs": "",
