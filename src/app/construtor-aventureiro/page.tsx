@@ -797,6 +797,7 @@ export default function AdventurerConstructor() {
           torches: 0,
           conditions: ''
         },
+        abilities: [],
         notes: notesText
       };
 
