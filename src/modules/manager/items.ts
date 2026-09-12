@@ -14,6 +14,12 @@ export const items = [
         isBlocked: false,
     },
     {
+        title: "Compendium",
+        url: "/compendium",
+        icon: BookSearch,
+        isBlocked: false,
+    },
+    {
         title: "Containers & Bagagens",
         url: "/containers",
         icon: Backpack,
