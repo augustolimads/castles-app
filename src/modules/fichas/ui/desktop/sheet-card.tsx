@@ -43,7 +43,7 @@ export function SheetCard({
         <button
           type="button"
           onClick={handleCardClick}
-          className="flex items-center gap-3 text-left"
+          className="flex items-center gap-3 text-left cursor-pointer"
         >
           <div
             className="h-12 w-12 shrink-0 rounded-md bg-cover bg-center border"
@@ -55,12 +55,12 @@ export function SheetCard({
         </button>
 
         <div>
-          <div className="">
+          <button onClick={handleCardClick} type="button" className="flex flex-col text-left cursor-pointer">
             <p className="truncate text-sm font-semibold leading-tight w-37 md:w-auto">{sheet.name}</p>
             <p className="truncate text-xs text-muted-foreground">
               {sheet.race || 'Sem raça'} - {sheet.class || 'Sem classe'}
             </p>
-          </div>
+          </button>
 
           <Badge variant="outline" className="h-6 shrink-0">
             Nv. {sheet.level}

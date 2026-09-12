@@ -2,13 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { SheetType } from '../../types';
+import Link from "next/link";
 
 interface CreateSheetDialogProps {
   onCreateSheet: (sheet: {
@@ -98,7 +99,7 @@ export function CreateSheetDialog({ onCreateSheet }: CreateSheetDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Nova Ficha</Button>
+        <Button className="cursor-pointer">Nova Ficha</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-125">
         <form onSubmit={handleSubmit}>
@@ -198,10 +199,11 @@ export function CreateSheetDialog({ onCreateSheet }: CreateSheetDialogProps) {
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button className="cursor-pointer" type="button" variant="outline" onClick={() => setOpen(false)}>
               Cancelar
             </Button>
-            <Button type="submit">Criar Ficha</Button>
+            {formData.type !== "monstro" && <Link href="/construtor-aventureiro"><Button type="button" className="cursor-pointer">Gerar personagem</Button></Link>}
+            <Button className="cursor-pointer" type="submit">Criar Ficha Vazia</Button>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -2,12 +2,6 @@ import { Backpack, BookSearch, Clock, FileSpreadsheet, HandCoinsIcon, PersonStan
 
 export const items = [
     {
-        title: "Construtor de Aventureiro",
-        url: "/construtor-aventureiro",
-        icon: User2Icon,
-        isBlocked: false,
-    },
-    {
         title: "Fichas",
         url: "/fichas",
         icon: FileSpreadsheet,
@@ -25,23 +19,23 @@ export const items = [
         icon: Backpack,
         isBlocked: false,
     },
-    {
-        title: "Raças",
-        url: "/racas",
-        icon: PersonStanding,
-        isBlocked: false,
-    },
-    {
-        title: "Classes",
-        url: "/classes",
-        icon: SignpostBig,
-        isBlocked: false,
-    },
-    {
-        title: "Feitiços",
-        url: "/feiticos",
-        icon: Wand,
-    },
+    // {
+    //     title: "Raças",
+    //     url: "/racas",
+    //     icon: PersonStanding,
+    //     isBlocked: false,
+    // },
+    // {
+    //     title: "Classes",
+    //     url: "/classes",
+    //     icon: SignpostBig,
+    //     isBlocked: false,
+    // },
+    // {
+    //     title: "Feitiços",
+    //     url: "/feiticos",
+    //     icon: Wand,
+    // },
     {
         title: "Escudo do mestre",
         url: "/escudo-do-mestre",

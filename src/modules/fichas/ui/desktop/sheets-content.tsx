@@ -134,13 +134,13 @@ export function SheetsContent() {
                 }}
                 autoFocus
               />
-              <Button onClick={handleCreateGroup}>Criar</Button>
-              <Button variant="outline" onClick={() => setShowNewGroupInput(false)}>
+              <Button className="cursor-pointer" onClick={handleCreateGroup}>Criar</Button>
+              <Button className="cursor-pointer" variant="outline" onClick={() => setShowNewGroupInput(false)}>
                 Cancelar
               </Button>
             </>
           ) : (
-            <Button variant="outline" onClick={() => setShowNewGroupInput(true)}>
+            <Button className="cursor-pointer" variant="outline" onClick={() => setShowNewGroupInput(true)}>
               <Plus size={16} className="mr-2" />
               Novo grupo
             </Button>
@@ -185,7 +185,7 @@ export function SheetsContent() {
                       type="button"
                       onClick={() => startRenameGroup(group.id, group.name)}
                       disabled={isDefaultGroup}
-                      className="truncate text-left text-lg font-semibold disabled:cursor-default"
+                      className="cursor-pointer truncate text-left text-lg font-semibold disabled:cursor-default"
                     >
                       {group.name}
                     </button>
@@ -198,7 +198,7 @@ export function SheetsContent() {
                     variant="ghost"
                     size="sm"
                     onClick={() => deleteGroup(group.id)}
-                    className="text-muted-foreground hover:text-destructive"
+                    className="text-muted-foreground hover:text-destructive cursor-pointer"
                     title="Excluir grupo"
                   >
                     <Trash2 size={16} className="mr-1" />
