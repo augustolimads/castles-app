@@ -88,6 +88,7 @@ Arquivos principais:
 3. Deploy.
 4. Atualize no Supabase Authentication:
 
+
 - `Site URL` para domínio de produção
 - `Redirect URL` para `https://seu-dominio.com/auth/callback`
 
