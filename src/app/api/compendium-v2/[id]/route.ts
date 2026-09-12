@@ -1,7 +1,7 @@
 import { createServerClient } from "@/lib/supabase/server";
 import {
     deleteCompendiumEntry,
-    getCompendiumEntryById,
+    getCompendiumEntryByIdCached,
     updateCompendiumEntry,
 } from "@/modules/compendium-v2/data/repository";
 import {
@@ -9,6 +9,7 @@ import {
     isCompendiumCategory,
     normalizeTags,
 } from "@/modules/compendium-v2/domain/types";
+import { revalidateTag } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +29,7 @@ export async function GET(_request: Request, context: RouteContext) {
   }
 
   try {
-    const entry = await getCompendiumEntryById(supabase, user.id, id);
+      const entry = await getCompendiumEntryByIdCached(supabase, user.id, id);
 
     if (!entry) {
       return Response.json({ error: "Not found" }, { status: 404 });
@@ -93,6 +94,10 @@ export async function PATCH(request: Request, context: RouteContext) {
       return Response.json({ error: "Not found" }, { status: 404 });
     }
 
+      revalidateTag(`compendium-v2:${user.id}`, "max");
+      revalidateTag(`compendium-v2:${user.id}:list`, "max");
+      revalidateTag(`compendium-v2:${user.id}:item:${id}`, "max");
+
     return Response.json(updated);
   } catch (error) {
     console.error("[compendium-v2][PATCH]", error);
@@ -120,6 +125,10 @@ export async function DELETE(_request: Request, context: RouteContext) {
     if (!deleted) {
       return Response.json({ error: "Not found" }, { status: 404 });
     }
+
+      revalidateTag(`compendium-v2:${user.id}`, "max");
+      revalidateTag(`compendium-v2:${user.id}:list`, "max");
+      revalidateTag(`compendium-v2:${user.id}:item:${id}`, "max");
 
     return Response.json({ success: true });
   } catch (error) {

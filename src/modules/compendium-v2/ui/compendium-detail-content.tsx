@@ -42,9 +42,7 @@ export function CompendiumDetailContent({ id }: CompendiumDetailContentProps) {
     setError(null);
 
     try {
-      const response = await fetch(`/api/compendium-v2/${id}`, {
-        cache: "no-store",
-      });
+        const response = await fetch(`/api/compendium-v2/${id}`);
       const data = (await response.json()) as
         | CompendiumEntry
         | { error?: string };
@@ -209,67 +207,67 @@ export function CompendiumDetailContent({ id }: CompendiumDetailContentProps) {
                               remarkPlugins={[remarkGfm]}
                               rehypePlugins={[rehypeSanitize]}
                               components={{
-                    h1: ({ ...props }) => (
-                        <h1
-                            {...props}
-                            className="mb-4 border-b pb-2 text-3xl font-extrabold tracking-tight"
-                        />
-                    ),
-                    h2: ({ ...props }) => (
-                        <h2 {...props} className="mb-3 mt-8 text-2xl font-bold" />
-                    ),
-                    h3: ({ ...props }) => (
-                        <h3
-                            {...props}
-                            className="mb-2 mt-6 text-xl font-semibold"
-                        />
-                    ),
-                    p: ({ ...props }) => (
-                        <p
-                            {...props}
-                            className="mb-4 leading-7 text-foreground/95"
-                        />
-                    ),
-                    ul: ({ ...props }) => (
-                        <ul
-                            {...props}
-                            className="mb-4 list-disc space-y-1 pl-6 marker:text-foreground"
-                        />
-                    ),
-                    ol: ({ ...props }) => (
-                        <ol
-                            {...props}
-                            className="mb-4 list-decimal space-y-1 pl-6 marker:font-semibold"
-                        />
-                    ),
-                    li: ({ ...props }) => <li {...props} className="pl-1" />,
-                    a: ({ ...props }) => (
-                        <a
-                            {...props}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-medium underline underline-offset-4"
-                        />
-                    ),
-                    table: ({ ...props }) => (
-                        <div className="mb-4 overflow-x-auto rounded border">
-                            <table
-                                {...props}
-                                className="w-full border-collapse text-left"
-                            />
-                        </div>
-                    ),
-                    th: ({ ...props }) => (
-                        <th
-                            {...props}
-                            className="border-b bg-muted/40 px-3 py-2 font-semibold"
-                        />
-                    ),
-                    td: ({ ...props }) => (
-                        <td {...props} className="border-b px-3 py-2 align-top" />
-                    ),
-                    code: ({ className, children, ...props }) => {
-                        const isBlock = className?.includes("language-");
+                                  h1: ({ ...props }) => (
+                                      <h1
+                                          {...props}
+                                          className="mb-4 border-b pb-2 text-3xl font-extrabold tracking-tight"
+                                      />
+                                  ),
+                                  h2: ({ ...props }) => (
+                                      <h2 {...props} className="mb-3 mt-8 text-2xl font-bold" />
+                                  ),
+                                  h3: ({ ...props }) => (
+                                      <h3
+                                          {...props}
+                                          className="mb-2 mt-6 text-xl font-semibold"
+                                      />
+                                  ),
+                                  p: ({ ...props }) => (
+                                      <p
+                                          {...props}
+                                          className="mb-4 leading-7 text-foreground/95"
+                                      />
+                                  ),
+                                  ul: ({ ...props }) => (
+                                      <ul
+                                          {...props}
+                                          className="mb-4 list-disc space-y-1 pl-6 marker:text-foreground"
+                                      />
+                                  ),
+                                  ol: ({ ...props }) => (
+                                      <ol
+                                          {...props}
+                                          className="mb-4 list-decimal space-y-1 pl-6 marker:font-semibold"
+                                      />
+                                  ),
+                                  li: ({ ...props }) => <li {...props} className="pl-1" />,
+                                  a: ({ ...props }) => (
+                                      <a
+                                          {...props}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="font-medium underline underline-offset-4"
+                                      />
+                                  ),
+                                  table: ({ ...props }) => (
+                                      <div className="mb-4 overflow-x-auto rounded border">
+                                          <table
+                                              {...props}
+                                              className="w-full border-collapse text-left"
+                                          />
+                                      </div>
+                                  ),
+                                  th: ({ ...props }) => (
+                                      <th
+                                          {...props}
+                                          className="border-b bg-muted/40 px-3 py-2 font-semibold"
+                                      />
+                                  ),
+                                  td: ({ ...props }) => (
+                                      <td {...props} className="border-b px-3 py-2 align-top" />
+                                  ),
+                                  code: ({ className, children, ...props }) => {
+                                      const isBlock = className?.includes("language-");
 
                       if (isBlock) {
                           return (

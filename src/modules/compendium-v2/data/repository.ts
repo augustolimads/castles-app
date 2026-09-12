@@ -1,5 +1,6 @@
 import type { Database } from "@/lib/supabase/types";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { unstable_cache } from "next/cache";
 import {
     type CompendiumEntry,
     type CompendiumListResponse,
@@ -31,6 +32,18 @@ type DBCompendiumInsert =
 
 type DBCompendiumUpdate =
   Database["public"]["Tables"]["compendium_v2_entries"]["Update"];
+
+function buildListCacheKey(userId: string, query: ListQuery): string {
+    return JSON.stringify({
+        userId,
+        page: query.page,
+        perPage: query.perPage,
+        search: query.search ?? "",
+        category: query.category ?? "",
+        tags: query.tags ?? [],
+        sort: query.sort ?? "updated_desc",
+    });
+}
 
 function coerceCompendiumData(
     value: DBCompendiumRow["data"],
@@ -122,6 +135,24 @@ export async function listCompendiumEntries(
   };
 }
 
+export async function listCompendiumEntriesCached(
+    supabase: SupabaseClient<Database>,
+    userId: string,
+    query: ListQuery,
+): Promise<CompendiumListResponse> {
+    const cacheKey = buildListCacheKey(userId, query);
+    const getCached = unstable_cache(
+        async () => listCompendiumEntries(supabase, userId, query),
+        ["compendium-v2-list", cacheKey],
+        {
+            revalidate: 60,
+            tags: [`compendium-v2:${userId}`, `compendium-v2:${userId}:list`],
+        },
+    );
+
+    return getCached();
+}
+
 export async function getCompendiumEntryById(
   supabase: SupabaseClient<Database>,
   userId: string,
@@ -138,6 +169,23 @@ export async function getCompendiumEntryById(
   if (!data) return null;
 
   return mapRow(data);
+}
+
+export async function getCompendiumEntryByIdCached(
+    supabase: SupabaseClient<Database>,
+    userId: string,
+    id: string,
+): Promise<CompendiumEntry | null> {
+    const getCached = unstable_cache(
+        async () => getCompendiumEntryById(supabase, userId, id),
+        ["compendium-v2-item", userId, id],
+        {
+            revalidate: 60,
+            tags: [`compendium-v2:${userId}`, `compendium-v2:${userId}:item:${id}`],
+        },
+    );
+
+    return getCached();
 }
 
 export async function createCompendiumEntry(

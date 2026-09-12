@@ -107,9 +107,7 @@ export function CompendiumListContent() {
       setError(null);
 
       try {
-        const response = await fetch(`/api/compendium-v2?${queryString}`, {
-          cache: "no-store",
-        });
+          const response = await fetch(`/api/compendium-v2?${queryString}`);
         const data = (await response.json()) as
           | CompendiumListResponse
           | { error?: string };

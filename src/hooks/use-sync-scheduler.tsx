@@ -1,6 +1,6 @@
 "use client";
 
-import { fullSync, processSyncQueue } from "@/lib/sync";
+import { processSyncQueue } from "@/lib/sync";
 import { isCloudSyncEnabled } from "@/lib/sync/feature-flags";
 import { useSyncStatusStore } from "@/lib/sync/sync-status-store";
 import { useAuthStore } from "@/modules/auth/use-auth";
@@ -34,28 +34,29 @@ export function useSyncScheduler() {
 
       const interval = setInterval(() => {
           if (!navigator.onLine) return;
-        processSyncQueue().catch((err) => {
-            console.error("[SyncScheduler] Erro no polling:", err);
-            toast.error("Erro ao sincronizar, tentando novamente...");
-        });
+          processSyncQueue().catch((err) => {
+              console.error("[SyncScheduler] Erro no polling:", err);
+              toast.error("Erro ao sincronizar, tentando novamente...");
+          });
     }, SYNC_INTERVAL_MS);
 
       return () => clearInterval(interval);
-    }, [cloudSyncEnabled, user]);
+  }, [cloudSyncEnabled, user]);
 
-    // Listener de reconexão: processa fila e faz fullSync ao voltar online
+    // Listener de reconexão: processa fila ao voltar online.
+    // fullSync fica para gatilhos explícitos (ex.: login/migração/ação manual).
     useEffect(() => {
         if (!cloudSyncEnabled || !user) return;
 
       const handleOnline = () => {
           console.log("[SyncScheduler] Voltou online — processando fila...");
           setStatus("syncing");
-        fullSync().catch((err) => {
+        processSyncQueue().catch((err) => {
             console.error(
                 "[SyncScheduler] Erro ao sincronizar ao voltar online:",
                 err,
             );
-          toast.error("Erro ao sincronizar, tentando novamente...");
+            toast.error("Erro ao sincronizar, tentando novamente...");
       });
     };
 
@@ -71,7 +72,7 @@ export function useSyncScheduler() {
           window.removeEventListener("online", handleOnline);
           window.removeEventListener("offline", handleOffline);
       };
-    }, [cloudSyncEnabled, user, setStatus]);
+  }, [cloudSyncEnabled, user, setStatus]);
 }
 
 /**

@@ -2,7 +2,7 @@ import { createServerClient } from "@/lib/supabase/server";
 import {
     type CompendiumListSort,
     createCompendiumEntry,
-    listCompendiumEntries,
+    listCompendiumEntriesCached,
 } from "@/modules/compendium-v2/data/repository";
 import {
     type CompendiumData,
@@ -10,6 +10,7 @@ import {
     normalizeTags,
     parseTagsInput,
 } from "@/modules/compendium-v2/domain/types";
+import { revalidateTag } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +57,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const data = await listCompendiumEntries(supabase, user.id, {
+      const data = await listCompendiumEntriesCached(supabase, user.id, {
       page,
       perPage,
       search,
@@ -122,6 +123,10 @@ export async function POST(request: Request) {
       tags: normalizeTags(body.tags),
       data: body.data,
     });
+
+      revalidateTag(`compendium-v2:${user.id}`, "max");
+      revalidateTag(`compendium-v2:${user.id}:list`, "max");
+      revalidateTag(`compendium-v2:${user.id}:item:${created.id}`, "max");
 
     return Response.json(created, { status: 201 });
   } catch (error) {
