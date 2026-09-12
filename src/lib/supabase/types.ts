@@ -38,33 +38,69 @@ export interface Database {
 					created_at?: string;
 					last_sync_at?: string | null;
 				};
-			Relationships: [];
-		  };
-		  user_data: {
+				Relationships: [];
+			};
+			user_data: {
+				Row: {
+					id: string;
+					user_id: string;
+					data_key: string;
+					data_value: Json;
+					updated_at: string;
+				};
+				Insert: {
+					id?: string;
+					user_id: string;
+					data_key: string;
+					data_value: Json;
+					updated_at?: string;
+				};
+				Update: {
+					id?: string;
+					user_id?: string;
+					data_key?: string;
+					data_value?: Json;
+					updated_at?: string;
+				};
+				Relationships: [];
+			};
+		  compendium_v2_entries: {
 			  Row: {
 				  id: string;
 				  user_id: string;
-				  data_key: string;
-				  data_value: Json;
+				  nome: string;
+				  thumbnail: string | null;
+				  data: Json;
+				  category: string;
+				  tags: string[];
+				  created_at: string;
 				  updated_at: string;
 			  };
 			  Insert: {
 				  id?: string;
 				  user_id: string;
-				  data_key: string;
-				  data_value: Json;
+				  nome: string;
+				  thumbnail?: string | null;
+				  data: Json;
+				  category: string;
+				  tags?: string[];
+				  created_at?: string;
 				  updated_at?: string;
 			  };
 			  Update: {
 				  id?: string;
 				  user_id?: string;
-				  data_key?: string;
-				  data_value?: Json;
+				  nome?: string;
+				  thumbnail?: string | null;
+				  data?: Json;
+				  category?: string;
+				  tags?: string[];
+				  created_at?: string;
 				  updated_at?: string;
 			  };
-		  Relationships: [];
-		};
-	};
+			  Relationships: [];
+		  };
+	  };
 	  Views: Record<string, never>;
 	  Functions: Record<string, never>;
 	  Enums: Record<string, never>;

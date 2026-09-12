@@ -28,17 +28,38 @@ CREATE TABLE IF NOT EXISTS user_data (
 );
 
 -- ============================================
+-- 2.1 Tabela de Compendium v2
+-- ============================================
+CREATE TABLE IF NOT EXISTS compendium_v2_entries (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES user_profiles(id) ON DELETE CASCADE,
+  nome TEXT NOT NULL,
+  thumbnail TEXT,
+  data JSONB NOT NULL,
+  category TEXT NOT NULL,
+  tags TEXT[] NOT NULL DEFAULT '{}',
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- ============================================
 -- 3. Índices para Performance
 -- ============================================
 CREATE INDEX IF NOT EXISTS idx_user_data_user_id ON user_data(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_data_key ON user_data(data_key);
 CREATE INDEX IF NOT EXISTS idx_user_data_updated_at ON user_data(updated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_compendium_v2_user_id ON compendium_v2_entries(user_id);
+CREATE INDEX IF NOT EXISTS idx_compendium_v2_category ON compendium_v2_entries(category);
+CREATE INDEX IF NOT EXISTS idx_compendium_v2_tags ON compendium_v2_entries USING GIN(tags);
+CREATE INDEX IF NOT EXISTS idx_compendium_v2_nome ON compendium_v2_entries(nome);
+CREATE INDEX IF NOT EXISTS idx_compendium_v2_updated_at ON compendium_v2_entries(updated_at DESC);
 
 -- ============================================
 -- 4. Habilitar Row Level Security (RLS)
 -- ============================================
 ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_data ENABLE ROW LEVEL SECURITY;
+ALTER TABLE compendium_v2_entries ENABLE ROW LEVEL SECURITY;
 
 -- ============================================
 -- 5. Políticas RLS para user_profiles
@@ -80,6 +101,29 @@ CREATE POLICY "Users can update own data"
 DROP POLICY IF EXISTS "Users can delete own data" ON user_data;
 CREATE POLICY "Users can delete own data"
   ON user_data FOR DELETE
+  USING (auth.uid() = user_id);
+
+-- ============================================
+-- 6.1 Políticas RLS para compendium_v2_entries
+-- ============================================
+DROP POLICY IF EXISTS "Users can view own compendium v2" ON compendium_v2_entries;
+CREATE POLICY "Users can view own compendium v2"
+  ON compendium_v2_entries FOR SELECT
+  USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can insert own compendium v2" ON compendium_v2_entries;
+CREATE POLICY "Users can insert own compendium v2"
+  ON compendium_v2_entries FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can update own compendium v2" ON compendium_v2_entries;
+CREATE POLICY "Users can update own compendium v2"
+  ON compendium_v2_entries FOR UPDATE
+  USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can delete own compendium v2" ON compendium_v2_entries;
+CREATE POLICY "Users can delete own compendium v2"
+  ON compendium_v2_entries FOR DELETE
   USING (auth.uid() = user_id);
 
 -- ============================================
