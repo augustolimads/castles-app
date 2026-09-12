@@ -69,7 +69,9 @@ export async function PATCH(request: Request, context: RouteContext) {
     return Response.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  if (body.category && !isCompendiumCategory(body.category)) {
+    const category = body.category;
+
+    if (category !== undefined && !isCompendiumCategory(category)) {
     return Response.json({ error: "Invalid category" }, { status: 400 });
   }
 
@@ -82,7 +84,7 @@ export async function PATCH(request: Request, context: RouteContext) {
           : body.thumbnail?.trim()
             ? body.thumbnail
             : null,
-      category: body.category,
+        category,
       tags: body.tags ? normalizeTags(body.tags) : undefined,
       data: body.data,
     });

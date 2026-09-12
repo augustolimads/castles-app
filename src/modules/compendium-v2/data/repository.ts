@@ -24,12 +24,26 @@ type DBCompendiumInsert =
 type DBCompendiumUpdate =
   Database["public"]["Tables"]["compendium_v2_entries"]["Update"];
 
+function coerceCompendiumData(
+    value: DBCompendiumRow["data"],
+): CompendiumEntry["data"] {
+    if (value && typeof value === "object") {
+        return value as CompendiumEntry["data"];
+    }
+
+    return {
+        version: 1,
+        format: "markdown",
+        content: value == null ? "" : String(value),
+    };
+}
+
 function mapRow(row: DBCompendiumRow): CompendiumEntry {
   return {
     id: row.id,
     nome: row.nome,
     thumbnail: row.thumbnail,
-    data: row.data,
+      data: coerceCompendiumData(row.data),
     category: row.category as CompendiumEntry["category"],
     tags: normalizeTags(row.tags),
     created_at: row.created_at,
@@ -117,7 +131,7 @@ export async function createCompendiumEntry(
     user_id: userId,
     nome: input.nome,
     thumbnail: input.thumbnail ?? null,
-    data: input.data,
+      data: input.data as DBCompendiumInsert["data"],
     category: input.category,
     tags: normalizeTags(input.tags),
   };
@@ -143,7 +157,9 @@ export async function updateCompendiumEntry(
 
   if (input.nome !== undefined) payload.nome = input.nome;
   if (input.thumbnail !== undefined) payload.thumbnail = input.thumbnail;
-  if (input.data !== undefined) payload.data = input.data;
+    if (input.data !== undefined) {
+        payload.data = input.data as DBCompendiumUpdate["data"];
+    }
   if (input.category !== undefined) payload.category = input.category;
   if (input.tags !== undefined) payload.tags = normalizeTags(input.tags);
 
