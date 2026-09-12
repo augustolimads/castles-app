@@ -13,7 +13,15 @@ interface ListQuery {
   search?: string;
   category?: string;
   tags?: string[];
+    sort?: CompendiumListSort;
 }
+
+export type CompendiumListSort =
+    | "updated_desc"
+    | "nome_asc"
+    | "nome_desc"
+    | "category_asc"
+    | "category_desc";
 
 type DBCompendiumRow =
   Database["public"]["Tables"]["compendium_v2_entries"]["Row"];
@@ -79,7 +87,17 @@ export async function listCompendiumEntries(
     builder = builder.contains("tags", normalizedTags);
   }
 
+    const sort = query.sort ?? "updated_desc";
+    const sortColumn =
+        sort === "nome_asc" || sort === "nome_desc"
+            ? "nome"
+            : sort === "category_asc" || sort === "category_desc"
+                ? "category"
+                : "updated_at";
+    const sortAscending = sort === "nome_asc" || sort === "category_asc";
+
   const { data, error, count } = await builder
+      .order(sortColumn, { ascending: sortAscending })
     .order("updated_at", { ascending: false })
     .range(from, to);
 

@@ -1,5 +1,6 @@
 import { createServerClient } from "@/lib/supabase/server";
 import {
+    type CompendiumListSort,
     createCompendiumEntry,
     listCompendiumEntries,
 } from "@/modules/compendium-v2/data/repository";
@@ -11,6 +12,18 @@ import {
 } from "@/modules/compendium-v2/domain/types";
 
 export const dynamic = "force-dynamic";
+
+const allowedSorts: CompendiumListSort[] = [
+    "updated_desc",
+    "nome_asc",
+    "nome_desc",
+    "category_asc",
+    "category_desc",
+];
+
+function isCompendiumListSort(value: string): value is CompendiumListSort {
+    return allowedSorts.includes(value as CompendiumListSort);
+}
 
 function toPositiveInt(value: string | null, fallback: number): number {
   const parsed = Number.parseInt(value ?? "", 10);
@@ -34,6 +47,8 @@ export async function GET(request: Request) {
   const search = searchParams.get("search") ?? undefined;
   const category = searchParams.get("category") ?? undefined;
   const tagsParam = searchParams.get("tags") ?? "";
+    const rawSort = searchParams.get("sort") ?? "updated_desc";
+    const sort = isCompendiumListSort(rawSort) ? rawSort : "updated_desc";
   const tags = tagsParam ? parseTagsInput(tagsParam) : [];
 
   if (category && !isCompendiumCategory(category)) {
@@ -47,6 +62,7 @@ export async function GET(request: Request) {
       search,
       category,
       tags,
+        sort,
     });
 
     return Response.json(data);

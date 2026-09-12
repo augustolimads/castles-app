@@ -3,6 +3,7 @@
 import { Pagination } from "@/components/ui/pagination";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import type { CompendiumListSort } from "../data/repository";
 import type { CompendiumListResponse } from "../domain/types";
 import { parseTagsInput } from "../domain/types";
 import { CompendiumTable } from "./compendium-table";
@@ -35,6 +36,8 @@ export function CompendiumListContent() {
   const search = searchParams.get("search") ?? "";
   const category = searchParams.get("category") ?? "";
   const tags = searchParams.get("tags") ?? "";
+    const sort =
+        (searchParams.get("sort") as CompendiumListSort | null) ?? "updated_desc";
 
   const queryString = useMemo(() => {
     const params = new URLSearchParams();
@@ -44,15 +47,17 @@ export function CompendiumListContent() {
     if (search.trim()) params.set("search", search.trim());
     if (category.trim()) params.set("category", category.trim());
     if (tags.trim()) params.set("tags", tags.trim());
+      if (sort !== "updated_desc") params.set("sort", sort);
 
     return params.toString();
-  }, [page, search, category, tags]);
+  }, [page, search, category, sort, tags]);
 
   const updateSearchParams = useCallback(
     (updates: {
       search?: string;
       category?: string;
       tags?: string;
+        sort?: CompendiumListSort;
       page?: number;
     }) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -77,6 +82,11 @@ export function CompendiumListContent() {
         if (updates.page <= 1) params.delete("page");
         else params.set("page", String(updates.page));
       }
+
+          if (updates.sort !== undefined) {
+              if (updates.sort === "updated_desc") params.delete("sort");
+              else params.set("sort", updates.sort);
+          }
 
       const query = params.toString();
       router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
@@ -192,6 +202,10 @@ export function CompendiumListContent() {
             items={items}
             onOpenItem={(id) => router.push(`/compendium/${id}`)}
             onEditItem={(id) => router.push(`/compendium/${id}?edit=1`)}
+                      sort={sort}
+                      onSortChange={(nextSort) =>
+                          updateSearchParams({ sort: nextSort, page: 1 })
+                      }
           />
 
           {items.length === 0 && (

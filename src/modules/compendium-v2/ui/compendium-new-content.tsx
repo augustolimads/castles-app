@@ -1,5 +1,6 @@
 "use client";
 
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CompendiumForm, type CompendiumFormValue } from "./compendium-form";
@@ -44,10 +45,15 @@ export function CompendiumNewContent() {
   return (
     <div className="space-y-4">
       <header className="rounded-lg border bg-secondary p-4">
-        <h1 className="text-xl font-semibold">Novo item do compendium</h1>
-        <p className="text-sm text-muted-foreground">
-          Preencha os campos e salve para criar um novo registro.
-        </p>
+              <div className="flex items-start gap-3">
+                  <SidebarTrigger variant="outline" size="lg" className="p-4" />
+                  <div>
+                      <h1 className="text-xl font-semibold">Novo item do compendium</h1>
+                      <p className="text-sm text-muted-foreground">
+                          Preencha os campos e salve para criar um novo registro.
+                      </p>
+                  </div>
+              </div>
       </header>
 
       {error && <p className="text-sm text-destructive">{error}</p>}

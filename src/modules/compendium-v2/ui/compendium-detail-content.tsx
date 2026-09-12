@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -208,16 +209,30 @@ export function CompendiumDetailContent({ id }: CompendiumDetailContentProps) {
       )}
 
       {isEditing && (
-        <div className="rounded-lg border bg-card p-4">
-          <CompendiumForm
-            initialValue={entry}
-            submitLabel={saving ? "Salvando..." : "Salvar"}
-            loading={saving}
-            onSubmit={handleSave}
-            onDelete={handleDelete}
-            onCancel={() => toggleEdit(false)}
-          />
-        </div>
+              <>
+                  <header className="rounded-lg border bg-secondary p-4">
+                      <div className="flex items-start gap-3">
+                          <SidebarTrigger variant="outline" size="lg" className="p-4" />
+                          <div>
+                              <h1 className="text-xl font-semibold">
+                                  Editar item do compendium
+                              </h1>
+                              <p className="text-sm text-muted-foreground">{entry.nome}</p>
+                          </div>
+                      </div>
+                  </header>
+
+                  <div className="rounded-lg border bg-card p-4">
+                      <CompendiumForm
+                          initialValue={entry}
+                          submitLabel={saving ? "Salvando..." : "Salvar"}
+                          loading={saving}
+                          onSubmit={handleSave}
+                          onDelete={handleDelete}
+                          onCancel={() => toggleEdit(false)}
+                      />
+                  </div>
+              </>
       )}
     </div>
   );

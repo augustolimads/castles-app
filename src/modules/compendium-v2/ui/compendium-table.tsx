@@ -9,29 +9,65 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { Pencil } from "lucide-react";
+import { ArrowDownAZ, ArrowUpAZ, Pencil } from "lucide-react";
 import Image from "next/image";
+import type { CompendiumListSort } from "../data/repository";
 import type { CompendiumListItem } from "../domain/types";
 
 interface CompendiumTableProps {
   items: CompendiumListItem[];
   onOpenItem: (id: string) => void;
   onEditItem: (id: string) => void;
+    sort: CompendiumListSort;
+    onSortChange: (sort: CompendiumListSort) => void;
 }
 
 export function CompendiumTable({
   items,
   onOpenItem,
   onEditItem,
+    sort,
+    onSortChange,
 }: CompendiumTableProps) {
+    const nextNameSort: CompendiumListSort =
+        sort === "nome_asc" ? "nome_desc" : "nome_asc";
+    const nextCategorySort: CompendiumListSort =
+        sort === "category_asc" ? "category_desc" : "category_asc";
+
   return (
     <div className="rounded-lg border bg-card">
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="w-20">Thumb</TableHead>
-            <TableHead>Nome</TableHead>
-            <TableHead className="w-40">Categoria</TableHead>
+                      <TableHead>
+                          <button
+                              type="button"
+                              className="inline-flex items-center gap-1 hover:text-foreground"
+                              onClick={() => onSortChange(nextNameSort)}
+                          >
+                              Nome
+                              {sort === "nome_desc" ? (
+                                  <ArrowDownAZ className="h-4 w-4" />
+                              ) : (
+                                  <ArrowUpAZ className="h-4 w-4" />
+                              )}
+                          </button>
+                      </TableHead>
+                      <TableHead className="w-40">
+                          <button
+                              type="button"
+                              className="inline-flex items-center gap-1 hover:text-foreground"
+                              onClick={() => onSortChange(nextCategorySort)}
+                          >
+                              Categoria
+                              {sort === "category_desc" ? (
+                                  <ArrowDownAZ className="h-4 w-4" />
+                              ) : (
+                                  <ArrowUpAZ className="h-4 w-4" />
+                              )}
+                          </button>
+                      </TableHead>
             <TableHead>Tags</TableHead>
             <TableHead className="w-24 text-right">Ações</TableHead>
           </TableRow>
