@@ -6,6 +6,9 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import rehypeSanitize from "rehype-sanitize";
+import remarkGfm from "remark-gfm";
 import type { CompendiumEntry } from "../domain/types";
 import { CompendiumForm, type CompendiumFormValue } from "./compendium-form";
 
@@ -201,9 +204,58 @@ export function CompendiumDetailContent({ id }: CompendiumDetailContentProps) {
           )}
 
           <article className="rounded-lg border bg-card p-4">
-            <pre className="whitespace-pre-wrap break-words text-sm leading-6">
-              {markdownContent}
-            </pre>
+                      <div className="prose prose-sm max-w-none dark:prose-invert sm:prose-base">
+                          <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              rehypePlugins={[rehypeSanitize]}
+                              components={{
+                                  a: ({ ...props }) => (
+                                      <a
+                                          {...props}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="underline"
+                                      />
+                                  ),
+                                  table: ({ ...props }) => (
+                                      <div className="overflow-x-auto">
+                                          <table {...props} className="w-full text-left" />
+                                      </div>
+                                  ),
+                                  th: ({ ...props }) => (
+                                      <th
+                                          {...props}
+                                          className="border-b px-2 py-1 font-semibold"
+                                      />
+                                  ),
+                                  td: ({ ...props }) => (
+                                      <td {...props} className="border-b px-2 py-1 align-top" />
+                                  ),
+                                  code: ({ className, children, ...props }) => {
+                                      const isBlock = className?.includes("language-");
+
+                                      if (isBlock) {
+                                          return (
+                                              <code
+                                                  {...props}
+                                                  className={`${className} block rounded bg-muted px-3 py-2`}
+                                              >
+                                                  {children}
+                                              </code>
+                                          );
+                                      }
+
+                                      return (
+                                          <code {...props} className="rounded bg-muted px-1 py-0.5">
+                                              {children}
+                                          </code>
+                                      );
+                                  },
+                              }}
+                          >
+                              {markdownContent}
+                          </ReactMarkdown>
+                      </div>
           </article>
         </>
       )}
