@@ -2,6 +2,12 @@ import { Backpack, BookSearch, Clock, FileSpreadsheet, HandCoinsIcon, PersonStan
 
 export const items = [
     {
+        title: "Gerar Personagem",
+        url: "/construtor-aventureiro",
+        icon: User2Icon,
+        isBlocked: false,
+    },
+    {
         title: "Fichas",
         url: "/fichas",
         icon: FileSpreadsheet,

@@ -41,6 +41,44 @@ const initialAttributes: CharacterAttributes = {
   carisma: 10
 };
 
+type GeneratedCharacterContext = {
+  selectedRace: string;
+  selectedClass: string;
+  attributes: CharacterAttributes;
+  primeAttributes: string[];
+  secondaryAttributes: string[];
+  totalModifier: number;
+  rollAttempts: number;
+};
+
+const attributeKeys = Object.keys(initialAttributes) as (keyof CharacterAttributes)[];
+
+const pickRandom = <T,>(options: T[]): T => {
+  if (options.length === 0) {
+    throw new Error('Não há opções disponíveis para a rolagem.');
+  }
+
+  return options[Math.floor(Math.random() * options.length)];
+};
+
+const pickWeighted = <T,>(options: { value: T; weight: number }[]): T => {
+  const totalWeight = options.reduce((sum, option) => sum + option.weight, 0);
+  if (options.length === 0 || totalWeight <= 0) {
+    throw new Error('Não há opções válidas para a rolagem ponderada.');
+  }
+
+  let roll = Math.random() * totalWeight;
+
+  for (const option of options) {
+    roll -= option.weight;
+    if (roll < 0) {
+      return option.value;
+    }
+  }
+
+  return options[options.length - 1].value;
+};
+
 const createInitialPrimeAttributeStates = () => ({
   forca: {
     label: 'Força',
@@ -189,14 +227,13 @@ export default function AdventurerConstructor() {
       const classKey = selectedClass;
       const primes = primeAttributes[classKey] || [];
 
-      const newPrimeStates = { ...primeAttributeStates };
-
-      // Sempre garante que os atributos prime da classe estejam marcados
-      primes.forEach(attr => {
-        newPrimeStates[attr].checked = true;
+      setPrimeAttributeStates(previousStates => {
+        const newPrimeStates = { ...previousStates };
+        primes.forEach(attr => {
+          newPrimeStates[attr].checked = true;
+        });
+        return newPrimeStates;
       });
-
-      setPrimeAttributeStates(newPrimeStates);
     }
   }, [selectedClass]); // Só executa quando a classe muda
 
@@ -338,6 +375,165 @@ export default function AdventurerConstructor() {
     setRollAttempts(prev => prev + 1);
   };
 
+  const handleQuickCharacter = () => {
+    let generatedAttributes: CharacterAttributes;
+    let attempts = 0;
+    let rolledModifierTotal: number;
+
+    do {
+      generatedAttributes = {
+        forca: new DiceRoll('3d6').total,
+        destreza: new DiceRoll('3d6').total,
+        constituicao: new DiceRoll('3d6').total,
+        inteligencia: new DiceRoll('3d6').total,
+        sabedoria: new DiceRoll('3d6').total,
+        carisma: new DiceRoll('3d6').total
+      };
+      attempts += 1;
+      rolledModifierTotal = Object.values(generatedAttributes)
+        .reduce((sum, value) => sum + calculateModifier(value), 0);
+    } while (rolledModifierTotal < 1);
+
+    const raceWeights: Record<string, number> = {
+      humano: 55,
+      elfo: 10,
+      anao: 10,
+      pequenino: 5,
+      'meio-elfo-humano': 5,
+      'meio-elfo-elfo': 5,
+      'meio-orc': 5,
+      gnomo: 5
+    };
+    const eligibleRaces = charRaces
+      .filter(({ id }) => {
+        const bonuses = racialBonuses[id] || {};
+        const raceModifierTotal = attributeKeys.reduce((sum, attribute) => {
+          return sum + calculateModifier(generatedAttributes[attribute] + (bonuses[attribute] || 0));
+        }, 0);
+        return raceModifierTotal >= 0;
+      })
+      .map(({ id }) => ({ value: id, weight: raceWeights[id] }));
+    const race = pickWeighted(eligibleRaces);
+    const racialBonusesForRace = racialBonuses[race] || {};
+    const attributesWithRacialBonus = { ...generatedAttributes };
+    attributeKeys.forEach(attribute => {
+      attributesWithRacialBonus[attribute] += racialBonusesForRace[attribute] || 0;
+    });
+    const modifiers = Object.fromEntries(
+      attributeKeys.map(attribute => [attribute, calculateModifier(attributesWithRacialBonus[attribute])])
+    ) as Record<keyof CharacterAttributes, number>;
+    const highestModifier = Math.max(...Object.values(modifiers));
+    const highestAttributes = attributeKeys.filter(attribute => modifiers[attribute] === highestModifier);
+    const eligibleClasses = highestAttributes.length === attributeKeys.length
+      ? charClasses
+      : charClasses.filter(({ id }) => (primeAttributes[id] || []).some(attribute => highestAttributes.includes(attribute as keyof CharacterAttributes)));
+    const characterClass = pickRandom(eligibleClasses).id;
+    const requiredPrimes = primeAttributes[characterClass] || [];
+    const maxPrimesForRace = race.startsWith('humano') ? 3 : Math.max(2, requiredPrimes.length);
+    const selectedPrimes = new Set<string>(requiredPrimes);
+    const racePreferredAttributes: Record<string, (keyof CharacterAttributes)[]> = {
+      anao: ['constituicao', 'forca'],
+      elfo: ['inteligencia', 'sabedoria', 'destreza'],
+      'meio-elfo-elfo': ['inteligencia', 'sabedoria', 'destreza'],
+      pequenino: ['destreza', 'sabedoria'],
+      'meio-orc': ['forca', 'destreza', 'constituicao'],
+      gnomo: ['inteligencia', 'carisma', 'constituicao']
+    };
+    const classSecondaryPriorities: Record<string, (keyof CharacterAttributes)[]> = {
+      barbaro: ['forca'],
+      bardo: ['inteligencia'],
+      cavaleiro: ['forca'],
+      clerigo: ['forca'],
+      combatente: ['constituicao', 'destreza'],
+      explorador: ['destreza'],
+      ilusionista: ['carisma', 'sabedoria'],
+      lutador: ['destreza', 'forca'],
+      paladino: ['sabedoria', 'forca'],
+      trapaceiro: ['inteligencia', 'sabedoria'],
+      assassino: ['sabedoria', 'carisma', 'inteligencia']
+    };
+
+    while (selectedPrimes.size < maxPrimesForRace) {
+      const availableAttributes = attributeKeys.filter(attribute => !selectedPrimes.has(attribute));
+      const classPriorityOptions = selectedPrimes.size === requiredPrimes.length
+        ? (classSecondaryPriorities[characterClass] || [])
+          .filter(attribute => !selectedPrimes.has(attribute) && modifiers[attribute] >= 0)
+        : [];
+
+      if (classPriorityOptions.length > 0) {
+        selectedPrimes.add(pickRandom(classPriorityOptions));
+        continue;
+      }
+
+      const positiveAttributes = availableAttributes.filter(attribute => modifiers[attribute] > 0);
+      const nonNegativeAttributes = availableAttributes.filter(attribute => modifiers[attribute] >= 0);
+      const candidates = positiveAttributes.length > 0
+        ? positiveAttributes
+        : nonNegativeAttributes.length > 0
+          ? nonNegativeAttributes
+          : availableAttributes;
+      const options = race.startsWith('humano')
+        ? candidates.filter(attribute => {
+          const bestAvailableModifier = Math.max(...candidates.map(candidate => modifiers[candidate]));
+          return modifiers[attribute] === bestAvailableModifier;
+        })
+        : candidates;
+      const preferredAttributes = racePreferredAttributes[race] || [];
+      const additionalPrime = pickWeighted(options.map(attribute => ({
+        value: attribute,
+        weight: preferredAttributes.includes(attribute) ? 2 : 1
+      })));
+      selectedPrimes.add(additionalPrime);
+    }
+
+    const secondaryCandidates = attributeKeys.filter(attribute => !selectedPrimes.has(attribute));
+    const selectedSecondaries: string[] = [];
+    while (selectedSecondaries.length < 2) {
+      const nextSecondary = pickRandom(secondaryCandidates);
+      selectedSecondaries.push(nextSecondary);
+      secondaryCandidates.splice(secondaryCandidates.indexOf(nextSecondary), 1);
+    }
+
+    const primeStates = createInitialPrimeAttributeStates();
+    selectedPrimes.forEach(attribute => {
+      primeStates[attribute as keyof typeof primeStates].checked = true;
+    });
+    const secondaryStates = createInitialPrimeAttributeStates();
+    selectedSecondaries.forEach(attribute => {
+      secondaryStates[attribute as keyof typeof secondaryStates].checked = true;
+    });
+    const nextRollAttempts = rollAttempts + attempts;
+    const generatedCharacter: GeneratedCharacterContext = {
+      selectedRace: race,
+      selectedClass: characterClass,
+      attributes: attributesWithRacialBonus,
+      primeAttributes: [...selectedPrimes],
+      secondaryAttributes: selectedSecondaries,
+      totalModifier: Object.values(modifiers).reduce((sum, modifier) => sum + modifier, 0),
+      rollAttempts: nextRollAttempts
+    };
+
+    setBaseAttributes(generatedAttributes);
+    setSelectedRace(race);
+    setSelectedClass(characterClass);
+    setRollAttempts(nextRollAttempts);
+    setPrimeAttributeStates(primeStates);
+    setSecondaryAttributeStates(secondaryStates);
+    setPointAdjustments({
+      forca: 0,
+      destreza: 0,
+      constituicao: 0,
+      inteligencia: 0,
+      sabedoria: 0,
+      carisma: 0
+    });
+    setCanSelectRaceClass(true);
+    setShowSpells(['mago', 'ilusionista', 'clerigo', 'druida'].includes(characterClass));
+    handleRollFinalDetails(generatedCharacter);
+    setCanRollFinalDetails(true);
+    setActiveTab('step5');
+  };
+
   // Função para rolar atributos com 4d6 (descarta o menor)
   const handleRollAttributes4d6 = () => {
     const roll4d6DropLowest = () => {
@@ -368,9 +564,10 @@ export default function AdventurerConstructor() {
   };
 
   // Função para rolar detalhes finais
-  const handleRollFinalDetails = () => {
-    const classKey = selectedClass; // já é o ID da classe
-    const raceKey = selectedRace.toLowerCase().split(' ')[0];
+  const handleRollFinalDetails = (character?: GeneratedCharacterContext) => {
+    const classKey = character?.selectedClass || selectedClass;
+    const raceKey = (character?.selectedRace || selectedRace).toLowerCase().split(' ')[0];
+    const attributes = character?.attributes || finalAttributes;
 
     // Variáveis para armazenar os dados gerados
     let generatedHp = '';
@@ -386,7 +583,7 @@ export default function AdventurerConstructor() {
     // Calcular HP
     if (hpFormula[classKey]) {
       const hpRoll = new DiceRoll(hpFormula[classKey]);
-      const conMod = calculateModifier(finalAttributes.constituicao);
+      const conMod = calculateModifier(attributes.constituicao);
       const totalHp = Math.max(1, hpRoll.total + conMod);
       generatedHp = totalHp.toString();
       setHp(generatedHp);
@@ -421,11 +618,11 @@ export default function AdventurerConstructor() {
     setDescription(generatedDescription);
 
     // Calcular capacidade de carga
-    generatedCarryingCapacity = finalAttributes.forca.toString();
+    generatedCarryingCapacity = attributes.forca.toString();
     setCarryingCapacity(generatedCarryingCapacity);
 
     // Gerar magias se for classe conjuradora
-    if (showSpells && spellsByClass[classKey as keyof typeof spellsByClass]) {
+    if (['mago', 'ilusionista', 'clerigo', 'druida'].includes(classKey) && spellsByClass[classKey as keyof typeof spellsByClass]) {
       const spellData = spellsByClass[classKey as keyof typeof spellsByClass];
       const counts = spellCount[classKey];
 
@@ -443,26 +640,26 @@ export default function AdventurerConstructor() {
 
       generatedSpells = { level0: level0Spells, level1: level1Spells };
       setSpells(generatedSpells);
+    } else {
+      setSpells(generatedSpells);
     }
 
     // Enviar automaticamente para Discord se webhook estiver configurado
     if (discordWebhook.trim()) {
-      // Usar os dados gerados localmente ao invés de depender dos estados
-      setTimeout(() => {
-        sendToDiscordWithData({
-          selectedRace,
-          selectedClass,
-          generatedHp,
-          generatedAge,
-          generatedHeight,
-          generatedWeight,
-          generatedGender,
-          generatedDescription,
-          generatedTreasure,
-          generatedCarryingCapacity,
-          generatedSpells
-        });
-      }, 100);
+      sendToDiscordWithData({
+        selectedRace: character?.selectedRace || selectedRace,
+        selectedClass: character?.selectedClass || selectedClass,
+        generatedHp,
+        generatedAge,
+        generatedHeight,
+        generatedWeight,
+        generatedGender,
+        generatedDescription,
+        generatedTreasure,
+        generatedCarryingCapacity,
+        generatedSpells,
+        character
+      });
     }
   };
 
@@ -600,19 +797,25 @@ export default function AdventurerConstructor() {
     generatedTreasure: string;
     generatedCarryingCapacity: string;
     generatedSpells: { level0: string[]; level1: string[] };
+    character?: GeneratedCharacterContext;
   }) => {
     if (!discordWebhook.trim()) {
       return; // Não faz nada se não há webhook
     }
 
     try {
-      const selectedPrimes = Object.entries(primeAttributeStates)
-        .filter(([_, state]) => state.checked)
-        .map(([attr, _]) => attr.charAt(0).toUpperCase() + attr.slice(1));
+      const selectedPrimes = generatedData.character
+        ? generatedData.character.primeAttributes.map(attribute => attribute.charAt(0).toUpperCase() + attribute.slice(1))
+        : Object.entries(primeAttributeStates)
+          .filter(([_, state]) => state.checked)
+          .map(([attr, _]) => attr.charAt(0).toUpperCase() + attr.slice(1));
 
-      const selectedSecondaries = Object.entries(secondaryAttributeStates)
-        .filter(([_, state]) => state.checked)
-        .map(([attr, _]) => attr.charAt(0).toUpperCase() + attr.slice(1));
+      const selectedSecondaries = generatedData.character
+        ? generatedData.character.secondaryAttributes.map(attribute => attribute.charAt(0).toUpperCase() + attribute.slice(1))
+        : Object.entries(secondaryAttributeStates)
+          .filter(([_, state]) => state.checked)
+          .map(([attr, _]) => attr.charAt(0).toUpperCase() + attr.slice(1));
+      const characterAttributes = generatedData.character?.attributes || finalAttributes;
 
       const characterData = {
         race: generatedData.selectedRace,
@@ -622,23 +825,25 @@ export default function AdventurerConstructor() {
         height: generatedData.generatedHeight,
         weight: generatedData.generatedWeight,
         description: generatedData.generatedDescription,
-        attributes: finalAttributes,
+        attributes: characterAttributes,
         modifiers: {
-          forca: calculateModifier(finalAttributes.forca),
-          destreza: calculateModifier(finalAttributes.destreza),
-          constituicao: calculateModifier(finalAttributes.constituicao),
-          inteligencia: calculateModifier(finalAttributes.inteligencia),
-          sabedoria: calculateModifier(finalAttributes.sabedoria),
-          carisma: calculateModifier(finalAttributes.carisma)
+          forca: calculateModifier(characterAttributes.forca),
+          destreza: calculateModifier(characterAttributes.destreza),
+          constituicao: calculateModifier(characterAttributes.constituicao),
+          inteligencia: calculateModifier(characterAttributes.inteligencia),
+          sabedoria: calculateModifier(characterAttributes.sabedoria),
+          carisma: calculateModifier(characterAttributes.carisma)
         },
-        totalModifier: totalModifier,
+        totalModifier: generatedData.character?.totalModifier ?? totalModifier,
         primeAttributes: selectedPrimes,
         secondaryAttributes: selectedSecondaries,
         hp: generatedData.generatedHp,
         treasure: generatedData.generatedTreasure,
         carryingCapacity: generatedData.generatedCarryingCapacity,
-        spells: showSpells ? generatedData.generatedSpells : null,
-        rollAttempts: rollAttempts
+        spells: ['mago', 'ilusionista', 'clerigo', 'druida'].includes(generatedData.selectedClass)
+          ? generatedData.generatedSpells
+          : null,
+        rollAttempts: generatedData.character?.rollAttempts ?? rollAttempts
       };
 
       const discordMessage = formatDiscordMessage(characterData);
@@ -993,6 +1198,13 @@ export default function AdventurerConstructor() {
               >
                 Rolar atributos (4d6)
               </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleQuickCharacter}
+              >
+                Gerar personagem rápido
+              </Button>
             </div>
             <p className="flex gap-1">
               <span>Tentativas:</span>
@@ -1272,7 +1484,7 @@ export default function AdventurerConstructor() {
           <h2 className="text-xl font-semibold">5. Rolar detalhes finais e feitiços aprendidos</h2>
 
           <Button
-            onClick={handleRollFinalDetails}
+            onClick={() => handleRollFinalDetails()}
             disabled={!canRollFinalDetails}
           >
             Rolar detalhes finais
@@ -1320,6 +1532,9 @@ export default function AdventurerConstructor() {
             <div className="flex gap-2">
               <Button variant="outline" onClick={handleResetCharacter}>
                 Começar de novo
+              </Button>
+              <Button variant="outline" onClick={handleQuickCharacter}>
+                Gerar personagem rápido
               </Button>
               <Button onClick={handleCreateSheet}>
                 Criar ficha
