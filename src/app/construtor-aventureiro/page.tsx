@@ -280,11 +280,11 @@ export default function AdventurerConstructor() {
   // Efeito para mostrar magias se for classe conjuradora
   useEffect(() => {
     if (selectedClass) {
-      setShowSpells(['mago', 'ilusionista', 'clerigo', 'druida'].includes(selectedClass));
+      setShowSpells(['mago', 'ilusionista', 'clerigo', 'druida'].includes(selectedClass) || selectedRace === 'gnomo');
     } else {
-      setShowSpells(false);
+      setShowSpells(selectedRace === 'gnomo');
     }
-  }, [selectedClass]);
+  }, [selectedClass, selectedRace]);
 
   // Efeito para marcar atributos prime da classe automaticamente
   useEffect(() => {
@@ -757,10 +757,12 @@ export default function AdventurerConstructor() {
       const level1Spells = shuffleArray(spellData[1]).slice(0, counts[1]);
 
       generatedSpells = { level0: level0Spells, level1: level1Spells };
-      setSpells(generatedSpells);
-    } else {
-      setSpells(generatedSpells);
     }
+
+    if ((character?.selectedRace || selectedRace) === 'gnomo') {
+      generatedSpells.level1.push('orbes dançantes', 'som fantasma', 'prestidigitação');
+    }
+    setSpells(generatedSpells);
 
     // Enviar automaticamente para Discord se webhook estiver configurado
     if (discordWebhook.trim()) {
@@ -1198,6 +1200,93 @@ export default function AdventurerConstructor() {
   const canAccessStep3 = selectedRace !== '' && selectedClass !== '';
   const canAccessStep4 = canAccessStep3 && selectedPrimeCount >= Math.min(2, maxPrimes) && selectedSecondaryCount === 2;
   const canAccessStep5 = canAccessStep4; // Realocação é opcional, então pode pular
+  const markdownRaceName = charRaces.find(race => race.id === selectedRace)?.name.split(' (')[0] || selectedRace;
+  const markdownClassData = charClasses.find(characterClass => characterClass.id === selectedClass);
+  const nextLevelExperience = markdownClassData?.levels.find(level => level.level === 2)?.experience ?? 0;
+  const firstLevelData = markdownClassData?.levels.find(level => level.level === 1);
+  const markdownAttributes: [string, keyof CharacterAttributes][] = [
+    ['FOR', 'forca'],
+    ['DeS', 'destreza'],
+    ['Con', 'constituicao'],
+    ['Int', 'inteligencia'],
+    ['SAB', 'sabedoria'],
+    ['CAR', 'carisma']
+  ];
+  const markdownPrimaryAttributes = new Set(
+    markdownAttributes
+      .filter(([, attribute]) => primeAttributeStates[attribute].checked)
+      .map(([, attribute]) => attribute)
+  );
+  const markdownAttributeHeaders = markdownAttributes.map(([label, attribute]) => {
+    const marker = markdownPrimaryAttributes.has(attribute)
+      ? '▲'
+      : secondaryAttributeStates[attribute].checked
+        ? '●'
+        : '';
+    return `**${label}${marker}**`;
+  });
+  const markdownAttributeValues = markdownAttributes.map(([, attribute]) => `${finalAttributes[attribute]}`);
+  const formatMarkdownSpellList = (level: number, spellList: string[]) => {
+    return spellList.map(spell => `[${level}] [[${spell}]]`).join('\n');
+  };
+  const markdownLevelZeroSpells = showSpells ? formatMarkdownSpellList(0, spells.level0) : '';
+  const markdownLevelOneSpells = showSpells ? formatMarkdownSpellList(1, spells.level1) : '';
+  const spellSlotBaseCounts: Record<string, { level0: number; level1: number; bonusAttribute: keyof CharacterAttributes }> = {
+    clerigo: { level0: 3, level1: 1, bonusAttribute: 'sabedoria' },
+    druida: { level0: 3, level1: 1, bonusAttribute: 'sabedoria' },
+    ilusionista: { level0: 4, level1: 2, bonusAttribute: 'inteligencia' },
+    mago: { level0: 4, level1: 2, bonusAttribute: 'inteligencia' }
+  };
+  const spellSlotBaseCount = spellSlotBaseCounts[selectedClass];
+  const markdownSpellSlots = spellSlotBaseCount
+    ? [
+      spellSlotBaseCount.level0,
+      spellSlotBaseCount.level1 + (calculateModifier(finalAttributes[spellSlotBaseCount.bonusAttribute]) > 0 ? 1 : 0),
+      ...Array<number>(8).fill(0)
+    ]
+    : Array<number>(10).fill(0);
+  const markdownGold = treasure ? treasure.replace(/\s*PO$/, '') : '[preencher]';
+  const markdownDexterityModifier = calculateModifier(finalAttributes.destreza);
+  const markdownArmorClass = 10 + markdownDexterityModifier;
+  const markdownMovement = ['anao', 'gnomo', 'pequenino'].includes(selectedRace) ? '20ft' : '30ft';
+  const markdownEncumbranceRating = finalAttributes.forca
+    + (markdownPrimaryAttributes.has('forca') ? 3 : 0)
+    + (markdownPrimaryAttributes.has('constituicao') ? 3 : 0);
+  const markdownSummary = [
+    `[[${markdownRaceName}]] | [[${markdownClassData?.name || selectedClass}]] | **AL:** [preencher] | **NV** 1 | **XP:** 0 / ${nextLevelExperience}`,
+    '',
+    `| ${markdownAttributeHeaders.join(' | ')} |`,
+    '| ----- | -------- | -------- | ------- | ---------- | -------- |',
+    `| ${markdownAttributeValues.join(' | ')} |`,
+    '',
+    `**PV** ${hp || '[preencher]'}/${hp || '[preencher]'} | **CA** ${markdownArmorClass} | **BBA** ${firstLevelData?.attackBonus || '[preencher]'} | **MOV** ${markdownMovement}`,
+    '- **Línguas** comum,',
+    '---',
+    `**Equipamentos** (0/${markdownEncumbranceRating})`,
+    `- ${markdownGold} ouro`,
+    '**Mochila** (0/8)',
+    '- [preencher item da mochila]',
+    '---',
+    '**Magias Conhecidas**',
+    markdownLevelZeroSpells,
+    markdownLevelOneSpells,
+    '',
+    '**Magias Memorizadas**',
+    '[0]',
+    '[1]',
+    '',
+    '| 0   | 1   | 2   | 3   | 4   | 5   | 6   | 7   | 8   | 9   |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+    `| ${markdownSpellSlots.map(count => count || '').join(' | ')} |`,
+    '',
+    '---',
+    '**Background**',
+    `- Idade: ${age || '[preencher]'}`,
+    `- Altura: ${height || '[preencher]'}`,
+    `- Peso: ${weight || '[preencher]'}`,
+    `- Gênero: ${gender || '[preencher]'}`,
+    `- Traço marcante: ${description || '[preencher]'}`
+  ].join('\n');
 
   return (
     <div className="flex flex-col gap-8 pt-8 max-w-4xl mx-auto">
@@ -1790,6 +1879,31 @@ export default function AdventurerConstructor() {
                 </Badge>
               </p>
             </div>
+          </div>
+
+          <div className="border-t pt-6 space-y-3">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <h4 className="text-sm font-medium">Markdown para Obsidian</h4>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={!canAccessStep3 || !hp}
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(markdownSummary);
+                    toast.success('Resumo copiado em Markdown.');
+                  } catch (error) {
+                    console.error('Erro ao copiar o resumo em Markdown:', error);
+                    toast.error('Não foi possível copiar o resumo. Verifique as permissões da área de transferência.');
+                  }
+                }}
+              >
+                Copiar Markdown
+              </Button>
+            </div>
+            <pre className="max-h-96 overflow-auto whitespace-pre-wrap rounded-md bg-background p-4 text-sm">
+              {markdownSummary}
+            </pre>
           </div>
         </div>
       )}
