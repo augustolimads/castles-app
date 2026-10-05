@@ -1,7 +1,7 @@
 import { permanentRedirect } from 'next/navigation'
 
 function Home() {
-    permanentRedirect('/fichas')
+    permanentRedirect('/construtor-aventureiro')
   return (
     <></>
   )

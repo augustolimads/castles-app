@@ -53,6 +53,72 @@ type GeneratedCharacterContext = {
 
 const attributeKeys = Object.keys(initialAttributes) as (keyof CharacterAttributes)[];
 
+const classWeights: Record<string, number> = {
+  assassino: 2,
+  barbaro: 2,
+  bardo: 2,
+  cavaleiro: 2,
+  clerigo: 8,
+  combatente: 10,
+  druida: 2,
+  explorador: 2,
+  ilusionista: 2,
+  lutador: 1,
+  mago: 8,
+  paladino: 1,
+  trapaceiro: 10
+};
+
+const classesByRace: Record<string, string[]> = {
+  anao: ['combatente', 'trapaceiro', 'barbaro', 'clerigo', 'bardo'],
+  elfo: ['combatente', 'explorador', 'trapaceiro', 'mago', 'druida', 'cavaleiro', 'bardo'],
+  gnomo: ['trapaceiro', 'ilusionista', 'druida', 'bardo'],
+  'meio-orc': ['combatente', 'explorador', 'trapaceiro', 'assassino', 'barbaro', 'lutador', 'clerigo', 'cavaleiro'],
+  pequenino: ['combatente', 'explorador', 'trapaceiro', 'clerigo', 'druida', 'bardo']
+};
+
+const classRequiredNonNegativeAttributes: Record<string, (keyof CharacterAttributes)[]> = {
+  assassino: ['destreza'],
+  barbaro: ['constituicao', 'forca', 'destreza'],
+  bardo: ['carisma', 'forca', 'destreza'],
+  cavaleiro: ['carisma', 'forca', 'destreza'],
+  clerigo: ['sabedoria', 'forca'],
+  combatente: ['forca', 'constituicao'],
+  druida: ['sabedoria', 'destreza'],
+  explorador: ['destreza', 'sabedoria'],
+  ilusionista: ['inteligencia', 'carisma'],
+  lutador: ['forca', 'destreza', 'constituicao', 'sabedoria'],
+  mago: ['inteligencia'],
+  paladino: ['forca', 'constituicao', 'carisma'],
+  trapaceiro: ['destreza', 'inteligencia']
+};
+
+const racialClassWeightBonuses: Record<string, Record<string, number>> = {
+  anao: { combatente: 2 },
+  elfo: { explorador: 2, druida: 2, bardo: 2 },
+  gnomo: { ilusionista: 3, druida: 2 },
+  'meio-orc': { barbaro: 2, explorador: 2, assassino: 2 }
+};
+
+const physicalAttributeClasses = new Set([
+  'barbaro',
+  'cavaleiro',
+  'combatente',
+  'explorador',
+  'lutador',
+  'paladino',
+  'trapaceiro',
+  'assassino'
+]);
+
+const mentalAttributeClasses = new Set([
+  'bardo',
+  'clerigo',
+  'druida',
+  'ilusionista',
+  'mago'
+]);
+
 const pickRandom = <T,>(options: T[]): T => {
   if (options.length === 0) {
     throw new Error('Não há opções disponíveis para a rolagem.');
@@ -407,10 +473,24 @@ export default function AdventurerConstructor() {
     const eligibleRaces = charRaces
       .filter(({ id }) => {
         const bonuses = racialBonuses[id] || {};
+        const raceAttributes = { ...generatedAttributes };
+        attributeKeys.forEach(attribute => {
+          raceAttributes[attribute] += bonuses[attribute] || 0;
+        });
         const raceModifierTotal = attributeKeys.reduce((sum, attribute) => {
-          return sum + calculateModifier(generatedAttributes[attribute] + (bonuses[attribute] || 0));
+          return sum + calculateModifier(raceAttributes[attribute]);
         }, 0);
-        return raceModifierTotal >= 0;
+        if (raceModifierTotal < 0) {
+          return false;
+        }
+
+        const allowedClasses = charClasses.filter(({ id: classId }) => {
+          const isAllowedForRace = !classesByRace[id] || classesByRace[id].includes(classId);
+          const meetsAttributeRequirements = (classRequiredNonNegativeAttributes[classId] || [])
+            .every(attribute => calculateModifier(raceAttributes[attribute]) >= 0);
+          return isAllowedForRace && meetsAttributeRequirements;
+        });
+        return allowedClasses.length > 0;
       })
       .map(({ id }) => ({ value: id, weight: raceWeights[id] }));
     const race = pickWeighted(eligibleRaces);
@@ -419,15 +499,53 @@ export default function AdventurerConstructor() {
     attributeKeys.forEach(attribute => {
       attributesWithRacialBonus[attribute] += racialBonusesForRace[attribute] || 0;
     });
+    const physicalAttributeTotal = attributesWithRacialBonus.forca
+      + attributesWithRacialBonus.destreza
+      + attributesWithRacialBonus.constituicao;
+    const mentalAttributeTotal = attributesWithRacialBonus.inteligencia
+      + attributesWithRacialBonus.sabedoria
+      + attributesWithRacialBonus.carisma;
+    const attributeGroupWeightBonus = physicalAttributeTotal > mentalAttributeTotal
+      ? physicalAttributeClasses
+      : mentalAttributeTotal > physicalAttributeTotal
+        ? mentalAttributeClasses
+        : null;
     const modifiers = Object.fromEntries(
       attributeKeys.map(attribute => [attribute, calculateModifier(attributesWithRacialBonus[attribute])])
     ) as Record<keyof CharacterAttributes, number>;
-    const highestModifier = Math.max(...Object.values(modifiers));
-    const highestAttributes = attributeKeys.filter(attribute => modifiers[attribute] === highestModifier);
-    const eligibleClasses = highestAttributes.length === attributeKeys.length
-      ? charClasses
-      : charClasses.filter(({ id }) => (primeAttributes[id] || []).some(attribute => highestAttributes.includes(attribute as keyof CharacterAttributes)));
-    const characterClass = pickRandom(eligibleClasses).id;
+    const sortedModifierValues = [...new Set(Object.values(modifiers))].sort((a, b) => b - a);
+    const highestModifier = sortedModifierValues[0];
+    const relevantModifiers = highestModifier <= 1
+      ? sortedModifierValues.filter(value => value >= highestModifier - 1)
+      : [highestModifier];
+    const relevantAttributes = attributeKeys.filter(attribute => relevantModifiers.includes(modifiers[attribute]));
+    const raceEligibleClasses = charClasses.filter(({ id }) => !classesByRace[race] || classesByRace[race].includes(id));
+    const classesMeetingAttributeRequirements = raceEligibleClasses.filter(({ id }) =>
+      (classRequiredNonNegativeAttributes[id] || [])
+        .every(attribute => modifiers[attribute] >= 0)
+    );
+    const classesMatchingHighestAttributes = relevantAttributes.length === attributeKeys.length
+      ? classesMeetingAttributeRequirements
+      : classesMeetingAttributeRequirements.filter(({ id }) => {
+        const matchesPrimaryAttribute = (primeAttributes[id] || [])
+          .some(attribute => relevantAttributes.includes(attribute as keyof CharacterAttributes));
+        const isCombatantPhysicalAttributeException = id === 'combatente'
+          && (
+            (modifiers.constituicao >= 2 && relevantAttributes.includes('constituicao'))
+            || (modifiers.destreza >= 2 && relevantAttributes.includes('destreza'))
+          );
+
+        return matchesPrimaryAttribute || isCombatantPhysicalAttributeException;
+      });
+    const eligibleClasses = classesMatchingHighestAttributes.length > 0
+      ? classesMatchingHighestAttributes
+      : classesMeetingAttributeRequirements;
+    const characterClass = pickWeighted(eligibleClasses.map(({ id }) => ({
+      value: id,
+      weight: classWeights[id]
+        + (racialClassWeightBonuses[race]?.[id] || 0)
+        + (attributeGroupWeightBonus?.has(id) ? 4 : 0)
+    })));
     const requiredPrimes = primeAttributes[characterClass] || [];
     const maxPrimesForRace = race.startsWith('humano') ? 3 : Math.max(2, requiredPrimes.length);
     const selectedPrimes = new Set<string>(requiredPrimes);
