@@ -1206,9 +1206,9 @@ export default function AdventurerConstructor() {
   const firstLevelData = markdownClassData?.levels.find(level => level.level === 1);
   const markdownAttributes: [string, keyof CharacterAttributes][] = [
     ['FOR', 'forca'],
-    ['DeS', 'destreza'],
-    ['Con', 'constituicao'],
-    ['Int', 'inteligencia'],
+    ['DES', 'destreza'],
+    ['CON', 'constituicao'],
+    ['INT', 'inteligencia'],
     ['SAB', 'sabedoria'],
     ['CAR', 'carisma']
   ];
